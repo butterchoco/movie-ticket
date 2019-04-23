@@ -3,7 +3,6 @@ package com.adpro.movie.tmdb;
 import com.adpro.movie.Movie;
 import com.adpro.movie.MovieRepository;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,7 +39,7 @@ public class TMDBMovieScheduler {
             movieIds.add(movie.getId());
         }
 
-        Set<Long> existingMovieTmdbIds = movieRepository.findAllByTmdbId(movieIds)
+        Set<Long> existingMovieTmdbIds = movieRepository.findByTmdbId(movieIds)
                 .stream()
                 .map(Movie::getTmdbId)
                 .collect(Collectors.toSet());

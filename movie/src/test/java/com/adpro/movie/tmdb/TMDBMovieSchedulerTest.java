@@ -54,7 +54,7 @@ public class TMDBMovieSchedulerTest {
         given(tmdbRepository.getLastMovies())
                 .willReturn(List.of(oldTMDBMovie, newTMDBMovie));
 
-        given(movieRepository.findAllByTmdbId(any()))
+        given(movieRepository.findByTmdbId(any()))
                 .willReturn(List.of(oldMovie));
 
         given(tmdbRepository.getMovie(2L))
