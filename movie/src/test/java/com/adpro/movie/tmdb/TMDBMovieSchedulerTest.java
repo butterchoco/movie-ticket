@@ -34,36 +34,36 @@ public class TMDBMovieSchedulerTest {
 
     @Test
     public void givenNewMovie_thenInsertToDB() throws Exception {
-//        ObjectMapper mapper = new ObjectMapper();
-//
-//        PartialTMDBMovie oldTMDBMovie = mapper.readValue("{\"id\": 1, " +
-//                "\"original_title\": \"Fairuzi Adventures\"}", PartialTMDBMovie.class);
-//
-//        PartialTMDBMovie newTMDBMovie = mapper.readValue("{\"id\": 2," +
-//                "\"original_title\": \"[BUKAN] Fairuzi Adventures\"}", PartialTMDBMovie.class);
-//
-//        FullTMDBMovie fullNewTMDBMovie = mapper.readValue("{\"id\": 2," +
-//                "\"original_title\": \"[BUKAN] Fairuzi Adventures\"," +
-//                "\"runtime\": 120}", FullTMDBMovie.class);
-//
-//        Movie oldMovie = Movie.builder()
-//                .tmdbId(1L)
-//                .name("Fairuzi Adventures")
-//                .build();
-//
-//        given(tmdbRepository.getLastMovies())
-//                .willReturn(List.of(oldTMDBMovie, newTMDBMovie));
-//
-//        given(movieRepository.findAll())
-//                .willReturn(List.of(oldMovie));
-//
-//        given(tmdbRepository.getMovie(2L))
-//                .willReturn(fullNewTMDBMovie);
-//
-//        tmdbMovieScheduler.updateMovieList();
-//
-//        then(tmdbRepository)
-//                .should()
-//                .getMovie(2L);
+        ObjectMapper mapper = new ObjectMapper();
+
+        PartialTMDBMovie oldTMDBMovie = mapper.readValue("{\"id\": 1, " +
+                "\"original_title\": \"Fairuzi Adventures\"}", PartialTMDBMovie.class);
+
+        PartialTMDBMovie newTMDBMovie = mapper.readValue("{\"id\": 2," +
+                "\"original_title\": \"[BUKAN] Fairuzi Adventures\"}", PartialTMDBMovie.class);
+
+        FullTMDBMovie fullNewTMDBMovie = mapper.readValue("{\"id\": 2," +
+                "\"original_title\": \"[BUKAN] Fairuzi Adventures\"," +
+                "\"runtime\": 120}", FullTMDBMovie.class);
+
+        Movie oldMovie = Movie.builder()
+                .tmdbId(1L)
+                .name("Fairuzi Adventures")
+                .build();
+
+        given(tmdbRepository.getLastMovies())
+                .willReturn(List.of(oldTMDBMovie, newTMDBMovie));
+
+        given(movieRepository.findAll())
+                .willReturn(List.of(oldMovie));
+
+        given(tmdbRepository.getMovie(2L))
+                .willReturn(fullNewTMDBMovie);
+
+        tmdbMovieScheduler.updateMovieList();
+
+        then(tmdbRepository)
+                .should()
+                .getMovie(2L);
     }
 }

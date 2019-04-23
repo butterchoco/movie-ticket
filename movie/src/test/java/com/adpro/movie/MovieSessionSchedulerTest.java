@@ -31,32 +31,31 @@ public class MovieSessionSchedulerTest {
 
     @Test
     public void givenNoMovieSessionAlreadyCreatedForToday_thenCreateNewMovieSessions() {
-//        Disabled temporarily for SQL testing
-//        Movie newMovie = Movie.builder()
-//            .name("Fairuzi Adventures")
-//            .description("Petualangan seorang Fairuzi")
-//            .duration(Duration.ofMinutes(111))
-//            .posterUrl("sdada")
-//            .releaseDate(LocalDate.now())
-//            .build();
-//
-//        Movie oldMovie = Movie.builder()
-//            .name("[BUKAN] Fairuzi Adventures")
-//            .description("Petualangan seorang Fairuzi")
-//            .duration(Duration.ofMinutes(111))
-//            .posterUrl("sdada")
-//            .releaseDate(LocalDate.now().minusDays(10))
-//            .build();
-//
-//        given(movieRepository.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
-//                .willReturn(List.of(newMovie, oldMovie));
-//
-//        given(movieSessionRepository.findMovieSessionsByStartTimeAfter(any()))
-//                .willReturn(Collections.emptyList());
-//
-//        movieSessionScheduler.checkExistOrCreateMovieSession();
-//        then(movieSessionScheduler)
-//                .should()
-//                .createMovieSession(any());
+        Movie newMovie = Movie.builder()
+            .name("Fairuzi Adventures")
+            .description("Petualangan seorang Fairuzi")
+            .duration(Duration.ofMinutes(111))
+            .posterUrl("sdada")
+            .releaseDate(LocalDate.now())
+            .build();
+
+        Movie oldMovie = Movie.builder()
+            .name("[BUKAN] Fairuzi Adventures")
+            .description("Petualangan seorang Fairuzi")
+            .duration(Duration.ofMinutes(111))
+            .posterUrl("sdada")
+            .releaseDate(LocalDate.now().minusDays(10))
+            .build();
+
+        given(movieRepository.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
+                .willReturn(List.of(newMovie, oldMovie));
+
+        given(movieSessionRepository.findMovieSessionsByStartTimeAfter(any()))
+                .willReturn(Collections.emptyList());
+
+        movieSessionScheduler.checkExistOrCreateMovieSession();
+        then(movieSessionScheduler)
+                .should()
+                .createMovieSession(any());
     }
 }
