@@ -12,25 +12,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MovieSessionScheduler {
+public class MovieSessionCreator {
 
     private MovieRepository movieRepository;
     private MovieSessionRepository movieSessionRepository;
 
     @Autowired
-    public MovieSessionScheduler(MovieRepository movieRepository, MovieSessionRepository movieSessionRepository) {
+    public MovieSessionCreator(MovieRepository movieRepository, MovieSessionRepository movieSessionRepository) {
         this.movieRepository = movieRepository;
         this.movieSessionRepository = movieSessionRepository;
-    }
-
-    @Scheduled(cron = "0 0 0 * * *")
-    public void midnightCron() {
-        checkExistOrCreateMovieSession();
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        checkExistOrCreateMovieSession();
     }
 
     public void checkExistOrCreateMovieSession() {

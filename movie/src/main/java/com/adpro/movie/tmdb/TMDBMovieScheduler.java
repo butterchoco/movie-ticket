@@ -2,6 +2,7 @@ package com.adpro.movie.tmdb;
 
 import com.adpro.movie.Movie;
 import com.adpro.movie.MovieRepository;
+import com.adpro.movie.MovieSessionCreator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,11 +16,15 @@ import org.springframework.stereotype.Component;
 public class TMDBMovieScheduler {
     private TMDBRepository tmdbRepository;
     private MovieRepository movieRepository;
+    private MovieSessionCreator movieSessionCreator;
 
     @Autowired
-    public TMDBMovieScheduler(TMDBRepository tmdbRepository, MovieRepository movieRepository) {
+    public TMDBMovieScheduler(TMDBRepository tmdbRepository,
+                              MovieRepository movieRepository,
+                              MovieSessionCreator movieSessionCreator) {
         this.tmdbRepository = tmdbRepository;
         this.movieRepository = movieRepository;
+        this.movieSessionCreator = movieSessionCreator;
     }
 
     @Scheduled(cron = "0 0 0 * * *")
@@ -32,6 +37,7 @@ public class TMDBMovieScheduler {
         updateMovieList();
     }
 
+    @Autowired
     public void updateMovieList() {
         List<PartialTMDBMovie> movies = tmdbRepository.getLastMovies();
         List<Long> movieIds = new ArrayList<>();
@@ -52,5 +58,6 @@ public class TMDBMovieScheduler {
             }
         }
         movieRepository.saveAll(notExistMovies);
+        movieSessionCreator.checkExistOrCreateMovieSession();
     }
 }
