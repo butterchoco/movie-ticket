@@ -8,5 +8,5 @@ public interface MovieRepository extends PagingAndSortingRepository<Movie, Long>
     Movie findMovieByName(String name);
     List<Movie> findMoviesByReleaseDateAfterAndReleaseDateBefore(LocalDate after, LocalDate before);
     List<Movie> findMoviesByReleaseDateAfter(LocalDate date);
-    List<Movie> findByTmdbId(List<Long> tmdbIds);
+    List<Movie> findAll();
 }

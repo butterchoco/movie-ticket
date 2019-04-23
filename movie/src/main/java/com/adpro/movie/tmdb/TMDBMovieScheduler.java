@@ -39,7 +39,7 @@ public class TMDBMovieScheduler {
             movieIds.add(movie.getId());
         }
 
-        Set<Long> existingMovieTmdbIds = movieRepository.findByTmdbId(movieIds)
+        Set<Long> existingMovieTmdbIds = movieRepository.findAll()
                 .stream()
                 .map(Movie::getTmdbId)
                 .collect(Collectors.toSet());
