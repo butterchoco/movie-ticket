@@ -6,9 +6,7 @@ import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +14,11 @@ public class MovieSessionCreator {
 
     private MovieRepository movieRepository;
     private MovieSessionRepository movieSessionRepository;
+
+    /**
+     * For test.
+     */
+    protected MovieSessionCreator() {}
 
     @Autowired
     public MovieSessionCreator(MovieRepository movieRepository, MovieSessionRepository movieSessionRepository) {
