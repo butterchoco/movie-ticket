@@ -13,16 +13,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Movie implements Serializable {
 
     static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/w500";
@@ -52,15 +47,30 @@ public class Movie implements Serializable {
     @NotNull
     private Duration duration;
 
+    protected Movie() {}
+
+    public Movie(@NotNull Long tmdbId,
+                 @NotNull String name,
+                 @NotNull String description,
+                 @NotNull String posterUrl,
+                 @NotNull LocalDate releaseDate,
+                 @NotNull Duration duration) {
+        this.tmdbId = tmdbId;
+        this.name = name;
+        this.description = description;
+        this.posterUrl = posterUrl;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+    }
+
     public static Movie fromTMDBMovie(@NotNull FullTMDBMovie movie) {
-        return new MovieBuilder()
-                .tmdbId(movie.getId())
-                .name(movie.getOriginalTitle())
-                .description(movie.getOverview())
-                .posterUrl(BASE_POSTER_URL + movie.getPosterPath())
-                .releaseDate(movie.getReleaseDate())
-                .duration(movie.getDuration())
-                .build();
+        Long tmdbId = movie.getId();
+        String name = movie.getOriginalTitle();
+        String description = movie.getOverview();
+        String posterUrl = BASE_POSTER_URL + movie.getPosterPath();
+        LocalDate releaseDate = movie.getReleaseDate();
+        Duration duration = movie.getDuration();
+        return new Movie(tmdbId, name, description, posterUrl, releaseDate, duration);
     }
 
     /**
