@@ -6,31 +6,22 @@ import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MovieSessionScheduler {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class MovieSessionCreator {
 
     private MovieRepository movieRepository;
     private MovieSessionRepository movieSessionRepository;
 
     @Autowired
-    public MovieSessionScheduler(MovieRepository movieRepository, MovieSessionRepository movieSessionRepository) {
+    public MovieSessionCreator(MovieRepository movieRepository, MovieSessionRepository movieSessionRepository) {
         this.movieRepository = movieRepository;
         this.movieSessionRepository = movieSessionRepository;
-    }
-
-    @Scheduled(cron = "0 0 0 * * *")
-    public void midnightCron() {
-        checkExistOrCreateMovieSession();
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        checkExistOrCreateMovieSession();
     }
 
     public void checkExistOrCreateMovieSession() {
