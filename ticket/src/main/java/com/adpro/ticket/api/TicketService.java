@@ -1,7 +1,6 @@
 package com.adpro.ticket.api;
 
-import com.adpro.ticket.Booking;
-import com.adpro.ticket.Ticket;
+import com.adpro.ticket.model.Booking;
 
 import java.util.Optional;
 

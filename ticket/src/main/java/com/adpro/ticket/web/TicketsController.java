@@ -1,7 +1,6 @@
 package com.adpro.ticket.web;
 
-import com.adpro.ticket.Booking;
-import com.adpro.ticket.Ticket;
+import com.adpro.ticket.model.Booking;
 import com.adpro.ticket.api.TicketRequestModel;
 import com.adpro.ticket.api.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;

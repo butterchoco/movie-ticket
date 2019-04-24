@@ -2,11 +2,16 @@ package com.adpro.ticket;
 
 import com.adpro.ticket.api.TicketRequestModel;
 import com.adpro.ticket.api.TicketService;
+import com.adpro.ticket.model.Booking;
+import com.adpro.ticket.model.Ticket;
+import com.adpro.ticket.repository.BookingRepository;
+import com.adpro.ticket.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,11 +33,10 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Optional<Booking> orderTicket(TicketRequestModel r) {
         if (canOrderTicket(r)) {
-            Booking booking = bookingRepository.save(new Booking(r.getSessionId(), Booking.Status.PENDING));
-            List<Ticket> tickets = r.getSeatIds().stream()
-                    .map(seatId -> new Ticket(booking, seatId))
-                    .collect(Collectors.toList());
-            ticketRepository.saveAll(tickets);
+            Set<Ticket> tickets = r.getSeatIds().stream()
+                    .map(Ticket::new)
+                    .collect(Collectors.toSet());
+            Booking booking = bookingRepository.save(new Booking(r.getSessionId(), Booking.Status.PENDING, tickets));
             return Optional.of(booking);
         }
         return Optional.empty();
