@@ -7,17 +7,17 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestConfig.class)
-public class MovieSessionSchedulerTest {
+public class MovieSessionCreatorTest {
 
     @MockBean
     private MovieSessionRepository movieSessionRepository;
@@ -25,9 +25,13 @@ public class MovieSessionSchedulerTest {
     @MockBean
     private MovieRepository movieRepository;
 
-    @Autowired
-    @SpyBean
-    MovieSessionScheduler movieSessionScheduler;
+    private MovieSessionCreator movieSessionCreator;
+
+    @Before
+    public void init() {
+        movieSessionCreator = Mockito.spy(
+                new MovieSessionCreator(movieRepository, movieSessionRepository));
+    }
 
     @Test
     public void givenNoMovieSessionAlreadyCreatedForToday_thenCreateNewMovieSessions() {
@@ -53,8 +57,8 @@ public class MovieSessionSchedulerTest {
         given(movieSessionRepository.findMovieSessionsByStartTimeAfter(any()))
                 .willReturn(Collections.emptyList());
 
-        movieSessionScheduler.checkExistOrCreateMovieSession();
-        then(movieSessionScheduler)
+        movieSessionCreator.checkExistOrCreateMovieSession();
+        then(movieSessionCreator)
                 .should()
                 .createMovieSession(any());
     }
