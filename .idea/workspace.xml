@@ -2,8 +2,63 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c874e45b-403e-492a-a881-e2de40777e83" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/lombok.config" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/MainConfig.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/MovieApplication.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/seat/CloseSeat.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/seat/FarSeat.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/seat/MiddleSeat.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/seat/Seat.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/seat/SeatBook.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/seat/SeatController.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/seat/SeatHtmlController.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/seat/SideSeat.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/seat/Theatre.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/resources/static/css/seat.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/resources/static/img/arrow-left.png" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/resources/static/js/jquery-3.3.1.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/resources/static/js/seat.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/main/resources/templates/show-seat.html" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/test/java/com/adpro/MovieApplicationTest.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/test/java/com/adpro/TestConfig.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/test/java/com/adpro/movie/MovieListProxyTest.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/test/java/com/adpro/movie/MovieSessionSchedulerTest.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/test/java/com/adpro/movie/tmdb/TMDBMovieSchedulerTest.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/movie/src/test/java/com/adpro/movie/tmdb/TMDBRepositoryTest.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ticket/Procfile" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/Ticket.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/TicketRepository.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/TicketServiceImpl.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/api/TicketRequestModel.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/api/TicketService.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/web/TicketsController.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ticket/src/test/java/com/adpro/ticket/TicketApplicationTests.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/ticket/system.properties" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change beforePath="$PROJECT_DIR$/movie/mvnw" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/movie/mvnw.cmd" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/movie/pom.xml" afterPath="$PROJECT_DIR$/movie/pom.xml" />
+      <change beforePath="$PROJECT_DIR$/movie/src/main/java/com/adpro/movie/MovieApplication.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/movie/src/main/java/com/adpro/movie/MovieController.java" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/movie/MovieController.java" />
+      <change beforePath="$PROJECT_DIR$/movie/src/main/java/com/adpro/movie/MovieSessionScheduler.java" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/movie/MovieSessionScheduler.java" />
+      <change beforePath="$PROJECT_DIR$/movie/src/main/java/com/adpro/movie/tmdb/FullTMDBMovie.java" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/movie/tmdb/FullTMDBMovie.java" />
+      <change beforePath="$PROJECT_DIR$/movie/src/main/java/com/adpro/movie/tmdb/TMDBMovieScheduler.java" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/movie/tmdb/TMDBMovieScheduler.java" />
+      <change beforePath="$PROJECT_DIR$/movie/src/main/java/com/adpro/movie/tmdb/TMDBRepository.java" afterPath="$PROJECT_DIR$/movie/src/main/java/com/adpro/movie/tmdb/TMDBRepository.java" />
+      <change beforePath="$PROJECT_DIR$/movie/src/test/java/com/adpro/movie/MovieApplicationTests.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/parent.iml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change beforePath="$PROJECT_DIR$/purchase/mvnw" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/purchase/mvnw.cmd" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/purchase/pom.xml" afterPath="$PROJECT_DIR$/purchase/pom.xml" />
+      <change beforePath="$PROJECT_DIR$/ticket/mvnw" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ticket/mvnw.cmd" afterPath="" />
       <change beforePath="$PROJECT_DIR$/ticket/pom.xml" afterPath="$PROJECT_DIR$/ticket/pom.xml" />
+      <change beforePath="$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/DemoApplication.java" afterPath="$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/TicketApplication.java" />
+      <change beforePath="$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/web/HelloController.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ticket/src/test/java/com/adpro/ticket/DemoApplicationTests.java" afterPath="" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,10 +80,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PDFGenerator.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="PDFGenerator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PDFGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
+            <state relative-caret-position="288">
               <caret line="18" column="60" lean-forward="false" selection-start-line="18" selection-start-column="60" selection-end-line="18" selection-end-column="60" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -40,8 +95,8 @@
       <file leaf-file-name="PdfView.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PdfView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="26" column="73" lean-forward="true" selection-start-line="26" selection-start-column="73" selection-end-line="26" selection-end-column="73" />
+            <state relative-caret-position="221">
+              <caret line="26" column="73" lean-forward="false" selection-start-line="26" selection-start-column="73" selection-end-line="26" selection-end-column="73" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -49,7 +104,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="application.properties" pinned="false" current-in-tab="true">
+      <file leaf-file-name="application.properties" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ticket/src/main/resources/application.properties">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
@@ -62,8 +117,8 @@
       <file leaf-file-name="PdfController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PdfController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
-              <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+            <state relative-caret-position="257">
+              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -96,6 +151,7 @@
         <option value="$PROJECT_DIR$/ticket/pom.xml" />
         <option value="$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PdfController.java" />
         <option value="$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PdfView.java" />
+        <option value="$PROJECT_DIR$/ticket/src/main/resources/views.properties" />
       </list>
     </option>
   </component>
@@ -115,7 +171,7 @@
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
-      <flattenPackages />
+      <flattenPackages ProjectPane="false" />
       <showMembers />
       <showModules />
       <showLibraryContents />
@@ -128,8 +184,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -216,8 +271,9 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="PackagesPane" />
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -226,6 +282,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -336,36 +395,47 @@
       <updated>1554887648242</updated>
       <workItem from="1554887652660" duration="3339000" />
       <workItem from="1555158608461" duration="1495000" />
-      <workItem from="1555298794028" duration="894000" />
+      <workItem from="1555298794028" duration="1268000" />
+      <workItem from="1556005349279" duration="944000" />
+      <workItem from="1556097437860" duration="623000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5728000" />
+    <option name="totallyTimeSpent" value="7669000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="702" extended-state="0" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294893" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3294893" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3294893" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294893" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25767368" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2657512" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959612" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -385,6 +455,105 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/ticket/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PDFGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="18" column="60" lean-forward="false" selection-start-line="18" selection-start-column="60" selection-end-line="18" selection-end-column="60" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PdfView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="26" column="73" lean-forward="false" selection-start-line="26" selection-start-column="73" selection-end-line="26" selection-end-column="73" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/resources/application.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PdfController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="64">
+          <caret line="4" column="12" lean-forward="false" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PDFGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="18" column="60" lean-forward="false" selection-start-line="18" selection-start-column="60" selection-end-line="18" selection-end-column="60" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PdfView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="26" column="73" lean-forward="true" selection-start-line="26" selection-start-column="73" selection-end-line="26" selection-end-column="73" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/resources/application.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PdfController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/resources/views.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="40" lean-forward="false" selection-start-line="0" selection-start-column="40" selection-end-line="0" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ticket/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="64">
@@ -433,6 +602,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/AbstractITextPdfView.java" />
     <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/NetJSAbstractViewPDF.java" />
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/resources/views.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="40" lean-forward="true" selection-start-line="0" selection-start-column="40" selection-end-line="0" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ticket/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="64">
@@ -441,30 +617,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PdfController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PDFGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="18" column="60" lean-forward="false" selection-start-line="18" selection-start-column="60" selection-end-line="18" selection-end-column="60" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PdfView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="26" column="73" lean-forward="true" selection-start-line="26" selection-start-column="73" selection-end-line="26" selection-end-column="73" />
+        <state relative-caret-position="221">
+          <caret line="26" column="73" lean-forward="false" selection-start-line="26" selection-start-column="73" selection-end-line="26" selection-end-column="73" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -479,12 +635,102 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PdfController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket/src/main/java/com/adpro/ticket/PDFGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="18" column="60" lean-forward="false" selection-start-line="18" selection-start-column="60" selection-end-line="18" selection-end-column="60" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
   <component name="masterDetails">
     <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>parent</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="ProjectJDKs.UI">
         <settings>
           <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
           <splitter-proportions>
             <option name="proportions">
               <list>

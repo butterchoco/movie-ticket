@@ -1,7 +1,13 @@
 # Movie Ticket System
 
+![coverage](https://gitlab.com/ramadistra/spring/badges/master/coverage.svg)
+
 `Movie Ticket System` is an online platform to buy movie ticket.
 This project is created to complete Advanced Programming final project.
+
+## Services
+Movie: http://ap-c8-movie.herokuapp.com  
+Ticket: http://c8-tickets-api.herokuapp.com/
 
 ## Developer Section
 
@@ -16,3 +22,20 @@ active in these following ports:
 
 Do notice that if you want to start all the services, you need
 to open three terminal sessions and run each services independently.
+
+### Testing
+
+View Maven Windows with these steps:
+View -> Tool Windows -> Maven
+
+After that, on the right of Intellij you will see Maven Windows.
+Follow these steps:
+parent -> Lifecycle -> test -> run (green play button in Maven Windows, not main toolbar)
+parent -> Plugins -> jacoco -> jacoco:report-aggregate
+
+to view coverage, see file explorer (left window) then
+target -> site -> jacoco-aggregate -> right click on index.html -> open in browser
+
+### Deployment
+Run this command:
+git push heroku `git subtree split --prefix service-folder-name master`:master --force
