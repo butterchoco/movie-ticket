@@ -1,6 +1,6 @@
 package com.adpro.ticket.web;
 
-import com.adpro.ticket.Ticket;
+import com.adpro.ticket.model.Booking;
 import com.adpro.ticket.api.TicketRequestModel;
 import com.adpro.ticket.api.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class TicketsController {
 
     @PostMapping
     @RequestMapping("/tickets")
-    public ResponseEntity<Ticket> tickets(@RequestBody TicketRequestModel requestTicket) {
+    public ResponseEntity<Booking> tickets(@RequestBody TicketRequestModel requestTicket) {
         return ticketService.orderTicket(requestTicket)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().body(null));
@@ -31,7 +31,7 @@ public class TicketsController {
 
     @PostMapping
     @RequestMapping("/tickets/{ticketId}/verify")
-    public ResponseEntity<Ticket> verify(@PathVariable(name = "ticketId") Long ticketId) {
+    public ResponseEntity<Booking> verify(@PathVariable(name = "ticketId") Long ticketId) {
         return ticketService.verifyTicket(ticketId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().body(null));
