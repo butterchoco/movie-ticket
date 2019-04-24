@@ -28,11 +28,6 @@ public class Ticket {
     private Booking booking;
     private String seatId;
 
-    public Ticket(Booking booking, String seatId) {
-        this.booking = booking;
-        this.seatId = seatId;
-    }
-
     public Ticket(String seatId) {
         this.seatId = seatId;
     }
