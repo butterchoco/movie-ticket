@@ -1,3 +1,5 @@
+package com.adpro.ticket;
+
 import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -15,6 +17,7 @@ public class PDFGenerator {
     public static void main(String[] args) throws DocumentException, IOException {
         Document doc = new Document();
         try {
+            response.setContentType("application/pdf");
             PdfWriter writer = PdfWriter.getInstance(doc, response.getOutputStream());
             doc.open();
 
@@ -53,6 +56,30 @@ public class PDFGenerator {
             cellDate.setPaddingRight(10);
             cellDate.setHorizontalAlignment(Element.ALIGN_CENTER);
             cellDate.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            PdfPCell cellSeat = new PdfPCell(new Paragraph("Seat/Row:", fontSubHead));
+            cellSeat.setBorderColor(BaseColor.WHITE);
+            cellSeat.setPaddingRight(10);
+            cellSeat.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            cellSeat.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            PdfPCell cellSeatInfo = new PdfPCell(new Paragraph(ticket.getSeat(), fontSubHead));
+            cellSeatInfo.setBorderColor(BaseColor.WHITE);
+            cellSeatInfo.setPaddingRight(10);
+            cellSeatInfo.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellSeatInfo.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            PdfPCell cellAuditorium = new PdfPCell(new Paragraph("Auditorium:", fontSubHead));
+            cellSeat.setBorderColor(BaseColor.WHITE);
+            cellSeat.setPaddingRight(10);
+            cellSeat.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            cellSeat.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            PdfPCell cellAudiInfo = new PdfPCell(new Paragraph(ticket.getAudi(), fontSubHead));
+            cellSeatInfo.setBorderColor(BaseColor.WHITE);
+            cellSeatInfo.setPaddingRight(10);
+            cellSeatInfo.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellSeatInfo.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
             document.addAuthor("C-8 Advance Programming");
             document.addCreationDate();
