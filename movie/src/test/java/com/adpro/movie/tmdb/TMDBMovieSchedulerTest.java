@@ -66,4 +66,20 @@ public class TMDBMovieSchedulerTest {
                 .should()
                 .getMovie(2L);
     }
+
+    @Test
+    public void givenPostConstruct_thenUpdateMovieList() {
+        tmdbMovieScheduler.postConstruct();
+        then(tmdbMovieScheduler)
+                .should()
+                .updateMovieList();
+    }
+
+    @Test
+    public void givenMidnightCron_thenUpdateMovieList() {
+        tmdbMovieScheduler.midnightCron();
+        then(tmdbMovieScheduler)
+                .should()
+                .updateMovieList();
+    }
 }
