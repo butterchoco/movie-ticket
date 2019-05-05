@@ -14,6 +14,9 @@ import lombok.Data;
 @Data
 public abstract class TMDBMovie {
 
+    static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/w500";
+    static final String NO_POSTER_URL = "/img/no-poster.png";
+
     @NotNull
     @JsonProperty("id")
     private Long id;
@@ -36,4 +39,12 @@ public abstract class TMDBMovie {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate releaseDate;
 
+
+    public void setPosterPath(String posterPath) {
+        if (posterPath == null) {
+            this.posterPath = NO_POSTER_URL;
+        } else {
+            this.posterPath = BASE_POSTER_URL + posterPath;
+        }
+    }
 }

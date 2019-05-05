@@ -5,12 +5,14 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
-@RestController
+@Controller
 public class MovieController {
 
     private MovieRepository movieRepository;
@@ -32,8 +34,10 @@ public class MovieController {
     }
 
     @RequestMapping("/movies")
-    public List<Movie> movies() {
-        return movieListProxy.findMoviesByReleaseDateAfter(LocalDate.now().minusDays(7));
+    public String movies(Model model) {
+        List<Movie> movies = movieListProxy.findMoviesByReleaseDateAfter(LocalDate.now().minusDays(7));
+        model.addAttribute("movies", movies);
+        return "movies";
     }
 
     @RequestMapping("/movie/{movieId}")
