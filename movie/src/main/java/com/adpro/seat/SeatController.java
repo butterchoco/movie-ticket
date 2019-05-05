@@ -26,7 +26,7 @@ public class SeatController {
     @GetMapping("/seat")
     public @ResponseBody List<Theatre> seatAPI() { return this.theatreRepository.findAll(); }
 
-    @RequestMapping("/showing-seat")
+    @GetMapping("/showing-seat")
     public String showSeat(Model model) {
         model.addAttribute("theatre", "CGV");
         return "show-seat";
