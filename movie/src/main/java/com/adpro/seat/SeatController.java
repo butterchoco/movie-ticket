@@ -19,7 +19,7 @@ public class SeatController {
         return Theatre.getTheatres();
     }
 
-    @RequestMapping("/showing+seat")
+    @GetMapping("/showing-seat")
     public String showSeat(Model model) {
         model.addAttribute("theatre", "CGV");
         return "show-seat";

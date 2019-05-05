@@ -25,8 +25,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Movie implements Serializable {
 
-    static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/w500";
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
@@ -57,7 +55,7 @@ public class Movie implements Serializable {
                 .tmdbId(movie.getId())
                 .name(movie.getOriginalTitle())
                 .description(movie.getOverview())
-                .posterUrl(BASE_POSTER_URL + movie.getPosterPath())
+                .posterUrl(movie.getPosterPath())
                 .releaseDate(movie.getReleaseDate())
                 .duration(movie.getDuration())
                 .build();

@@ -4,15 +4,17 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.adpro.movie.Movie;
 import com.adpro.movie.MovieListProxy;
+import com.adpro.movie.MovieRepository;
 import com.adpro.movie.MovieSession;
 import com.adpro.movie.MovieSessionRepository;
+import com.adpro.seat.FarSeat;
 import com.adpro.seat.MiddleSeat;
 import com.adpro.seat.Theatre;
-import com.adpro.seat.FarSeat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,6 +46,9 @@ public class MovieApplicationTest {
 	@MockBean
 	private MovieSessionRepository movieSessionRepository;
 
+	@MockBean
+	private MovieRepository movieRepository;
+
 	@Test
 	public void contextLoads() {
 	}
@@ -60,7 +65,7 @@ public class MovieApplicationTest {
 				.build();
 
 		given(movieListProxy.findMoviesByReleaseDateAfter(any())).willReturn(List.of(movie));
-		this.mvc.perform(get("/movies"))
+		this.mvc.perform(post("/movies"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].id", is(1)))
 				.andExpect(jsonPath("$[0].description", is(movie.getDescription())))
@@ -94,7 +99,7 @@ public class MovieApplicationTest {
 		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
 				.willReturn(List.of(daySession, nightSession));
 
-		mvc.perform(get("/movie/1"))
+		mvc.perform(post("/movie/1"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].startTime",
 						is(dayTime.format(DateTimeFormatter.ISO_DATE_TIME))))
@@ -137,8 +142,50 @@ public class MovieApplicationTest {
 
     @Test
     public void ShowingSeat() throws Exception {
-        this.mvc.perform(get("/showing+seat"))
+        this.mvc.perform(get("/showing-seat"))
                 .andExpect(status().isOk());
-
     }
+
+	@Test
+	public void MoviesHtml() throws Exception {
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(111))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now())
+				.id(1L)
+				.build();
+
+		given(movieListProxy.findMoviesByReleaseDateAfter(any()))
+			.willReturn(List.of(movie));
+
+		this.mvc.perform(get("/movies"))
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void MovieHtml() throws Exception {
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(111))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now())
+				.id(1L)
+				.build();
+
+		LocalDateTime dayTime = LocalDateTime.of(1999, 8, 10, 10, 0);
+		LocalDateTime nightTime = LocalDateTime.of(1999, 8, 10, 19, 0);
+		MovieSession daySession = new MovieSession(movie, dayTime);
+		MovieSession nightSession = new MovieSession(movie, nightTime);
+
+		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
+				.willReturn(List.of(daySession, nightSession));
+		given(movieRepository.findMovieById(1L))
+				.willReturn(movie);
+
+		this.mvc.perform(get("/movie/1"))
+				.andExpect(status().isOk());
+	}
 }
