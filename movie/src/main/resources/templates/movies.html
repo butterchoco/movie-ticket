@@ -7,19 +7,20 @@
     <title>Now Showing</title>
     <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script type="text/javascript" src="js/movies.js"></script>
-    <link type="text/css" rel="stylesheet" href="css/movies.css">
+    <script type="text/javascript" src="/js/movies.js"></script>
+    <link type="text/css" rel="stylesheet" href="/css/movies.css">
 </head>
 <body>
     <div class="container my-5">
         <div class="row justify-content-md-center">
             <div class="col-12 col-md-9 col-xl-6">
-                <h3>Now Showing</h3>
+                <h3 class="main-color">Now Showing</h3>
                 <div class="row">
                     <div class="col-6 col-lg-4 my-2" th:each="movie : ${movies}">
                         <img class="img-thumbnail" src="/default.jpg"
                              th:attr="src=${movie.posterUrl},title=${movie.name},alt=${movie.name}" />
-                        <span th:text="${movie.name}">Endgame</span>
+                        <a class="main-color main-color-zoom" th:href="@{'/movie/' + ${movie.id}}"
+                           th:text="${movie.name}">Endgame</a>
                     </div>
                 </div>
             </div>
