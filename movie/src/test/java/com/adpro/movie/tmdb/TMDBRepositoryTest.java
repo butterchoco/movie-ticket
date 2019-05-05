@@ -68,7 +68,7 @@ public class TMDBRepositoryTest {
     public void givenNoRuntimeMovie_thenSetDefault() throws Exception {
         FullTMDBMovie fullTMDBMovie = mapper.readValue("{\"id\": 1," +
                 "\"original_title\": \"Fairuzi Adventures\"," +
-                "\"runtime\": null}", FullTMDBMovie.class);
+                "\"runtime\": null, \"poster_path\": \"fairuzi.jpg\"}", FullTMDBMovie.class);
         Call<FullTMDBMovie> fullTMDBMovieResponse = Calls.response(fullTMDBMovie);
         given(tmdbClient.movie(any(), any()))
                 .willReturn(fullTMDBMovieResponse);
@@ -109,5 +109,18 @@ public class TMDBRepositoryTest {
             tmdbRepository.getLastMovies();
             fail("Should throw Exception");
         } catch (RuntimeException e) {}
+    }
+
+    @Test
+    public void givenNoPosterPathMovie_thenSetNoPosterUrl() throws Exception {
+        FullTMDBMovie fullTMDBMovie = mapper.readValue("{\"id\": 1," +
+                "\"original_title\": \"Fairuzi Adventures\"," +
+                "\"poster_path\": null}", FullTMDBMovie.class);
+        Call<FullTMDBMovie> fullTMDBMovieResponse = Calls.response(fullTMDBMovie);
+        given(tmdbClient.movie(any(), any()))
+                .willReturn(fullTMDBMovieResponse);
+
+        FullTMDBMovie movie = tmdbRepository.getMovie(1L);
+        assertEquals(FullTMDBMovie.NO_POSTER_URL, movie.getPosterPath());
     }
 }
