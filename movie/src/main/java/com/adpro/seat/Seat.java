@@ -1,16 +1,32 @@
 package com.adpro.seat;
 
-public class Seat {
+import lombok.Data;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Data
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+@Table(name = "Seat")
+public class Seat implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Id_Seat")
     private Integer seatNumber;
 
+    @Column(name = "Bookable")
     private boolean isBooked;
 
+    @Column(name = "Seat_Type")
     public String type;
 
-    public Seat(boolean isBooked, int seatNumber) {
-        this.isBooked = isBooked;
+    public Seat(boolean isBooked) {
         this.seatNumber = seatNumber;
     }
+
+    public Seat() {}
 
     public Integer getSeatNumber() { return this.seatNumber;}
 
