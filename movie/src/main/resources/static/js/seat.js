@@ -26,7 +26,7 @@
                         }
                         middle += "<div onclick='createCallback("+i+")' id='sqr" + i + "' class='square white'>" + (i+1) + "</div>";
                         count += 1;
-                        if (count == rowDivision) {
+                        if (count == rowDivision || seat[i+1].type === "Far") {
                             middle += "</div>";
                             count = 0;
                         }

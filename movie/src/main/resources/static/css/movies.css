@@ -1,0 +1,15 @@
+.main-color {
+    color: #f34573;
+}
+
+.white-color {
+    color: #fff;
+}
+
+.main-color-bg {
+    background-color: #f34573;
+}
+
+.main-color-zoom:hover {
+    color: #f34573;
+}
