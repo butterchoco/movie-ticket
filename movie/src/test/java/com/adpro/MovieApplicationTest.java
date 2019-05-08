@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,5 +197,27 @@ public class MovieApplicationTest {
 
 		this.mvc.perform(get("/movie/1"))
 				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void testGetMovieSession() throws Exception {
+		long duration = 111;
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(duration))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now())
+				.id(1L)
+				.build();
+
+		LocalDateTime now = LocalDateTime.now();
+		MovieSession movieSession = new MovieSession(movie, now);
+
+		given(movieSessionRepository.findById(any())).willReturn(Optional.of(movieSession));
+
+		this.mvc.perform(post("/movie/session/1"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.movie.name", is("Fairuzi Adventures")));
 	}
 }
