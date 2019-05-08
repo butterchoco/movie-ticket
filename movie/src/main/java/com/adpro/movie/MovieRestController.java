@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 public class MovieRestController {
@@ -30,8 +29,13 @@ public class MovieRestController {
     }
 
     @PostMapping("/movie/{movieId}")
-    public List<MovieSession> movieSessions(@PathVariable Long movieId, Model model) {
+    public List<MovieSession> movieSessions(@PathVariable Long movieId) {
         LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         return movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(movieId, midnight);
+    }
+
+    @PostMapping("/movie/session/{movieSessionId}")
+    public MovieSession movieSession(@PathVariable Long movieSessionId) {
+        return movieSessionRepository.findById(movieSessionId).orElse(null);
     }
 }
