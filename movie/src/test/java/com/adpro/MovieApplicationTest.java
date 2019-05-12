@@ -113,7 +113,8 @@ public class MovieApplicationTest {
     @Test
     public void createTheatreAndSeat() throws Exception {
         Theatre theatre1 = new Theatre("A", 50);
-        theatre1.createRows();
+        Seat seat = new MiddleSeat(false);
+        theatre1.addSeatToRow(seat);
     }
 
 	@Test
@@ -125,7 +126,8 @@ public class MovieApplicationTest {
 	@Test
     public void checkBookingSeatAvailable() throws Exception {
         Theatre theatre1 = new Theatre("A", 50);
-        theatre1.createRows();
+        Seat seat = new MiddleSeat(false);
+        theatre1.addSeatToRow(seat);
         theatre1.getRows().get(0).booked();
         theatre1.getRows().get(0).unbooked();
     }
