@@ -112,9 +112,8 @@ public class MovieApplicationTest {
 
     @Test
     public void createTheatreAndSeat() throws Exception {
-        Theatre theatre1 = new Theatre(1, "A", 50);
-        Seat seat = new MiddleSeat(false);
-        theatre1.addSeatToRow(seat);
+        Theatre theatre1 = new Theatre("A", 50);
+        theatre1.createRows();
     }
 
 	@Test
@@ -125,16 +124,15 @@ public class MovieApplicationTest {
 
 	@Test
     public void checkBookingSeatAvailable() throws Exception {
-        Theatre theatre1 = new Theatre(1, "A", 50);
-        Seat seat = new MiddleSeat(false);
-        theatre1.addSeatToRow(seat);
+        Theatre theatre1 = new Theatre("A", 50);
+        theatre1.createRows();
         theatre1.getRows().get(0).booked();
         theatre1.getRows().get(0).unbooked();
     }
 
 	@Test
     public void synchronizeAPIWithTheatreAndSeat() throws Exception {
-        Theatre theatre1 = new Theatre(1, "CGV", 50);
+        Theatre theatre1 = new Theatre("CGV", 50);
         theatre1.createRows();
 
 		given(theatreRepository.findAll())

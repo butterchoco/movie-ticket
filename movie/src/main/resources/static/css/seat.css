@@ -306,3 +306,8 @@ option {
     background-color: #f34573;
     color: white;
 }
+
+div.row {
+    display: flex;
+    flex-direction: row;
+}
