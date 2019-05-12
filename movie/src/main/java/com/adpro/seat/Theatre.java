@@ -65,8 +65,12 @@ public class Theatre implements Serializable {
         return rows;
     }
 
-    public int getTheatreNumber() {
+    public int getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 }

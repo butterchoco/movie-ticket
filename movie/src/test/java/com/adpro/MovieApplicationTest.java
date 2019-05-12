@@ -135,6 +135,7 @@ public class MovieApplicationTest {
 	@Test
     public void synchronizeAPIWithTheatreAndSeat() throws Exception {
         Theatre theatre1 = new Theatre("CGV", 50);
+        theatre1.setId(1);
         theatre1.createRows();
 
 		given(theatreRepository.findAll())
@@ -142,7 +143,7 @@ public class MovieApplicationTest {
 
         this.mvc.perform(get("/seat"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].theatreNumber", is(theatre1.getTheatreNumber())))
+                .andExpect(jsonPath("$[0].id", is(theatre1.getId())))
                 .andExpect(jsonPath("$[0].description", is(theatre1.getDescription())))
                 .andExpect(jsonPath("$[0].seatCount", is(theatre1.getSeatCount())))
                 .andExpect(jsonPath("$[0].rows[0].type", is(theatre1.getRows().get(0).getType())))
@@ -151,7 +152,33 @@ public class MovieApplicationTest {
 
     @Test
     public void ShowingSeat() throws Exception {
-        this.mvc.perform(get("/showing-seat"))
+		Theatre theatre1 = new Theatre("CGV", 50);
+		theatre1.setId(1);
+		theatre1.createRows();
+
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(111))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now())
+				.id(1L)
+				.build();
+
+		LocalDateTime dayTime = LocalDateTime.of(1999, 8, 10, 10, 0);
+		LocalDateTime nightTime = LocalDateTime.of(1999, 8, 10, 19, 0);
+		MovieSession daySession = new MovieSession(movie, dayTime);
+		MovieSession nightSession = new MovieSession(movie, nightTime);
+
+		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
+				.willReturn(List.of(daySession, nightSession));
+		given(movieRepository.findMovieById(1L))
+				.willReturn(movie);
+
+		given(theatreRepository.findTheatreById(1))
+				.willReturn(theatre1);
+
+        this.mvc.perform(get("/showing-seat/1/1"))
                 .andExpect(status().isOk());
     }
 
