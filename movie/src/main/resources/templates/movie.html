@@ -1,42 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title th:text="${movie.name} + ' Detail'"></title>
-    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script type="text/javascript" src="/js/movies.js"></script>
-    <link type="text/css" rel="stylesheet" href="/css/movies.css">
+    <title th:text="${movie.name}"></title>
+    <th:block th:insert="fragments/default :: meta"></th:block>
 </head>
 <body>
-<div class="container my-5">
-    <div class="row justify-content-md-center">
-        <div class="col-12 col-md-10 col-xl-8">
-            <h3 class="main-color" th:text="${movie.name}"></h3>
-            <div class="row">
-                <div class="col-3">
-                    <img class="img-thumbnail"
-                         th:attr="src=${movie.posterUrl},title=${movie.name},alt=${movie.name}" />
+    <th:block th:insert="fragments/default :: navbar"></th:block>
+    <div class="container my-5">
+        <div class="row justify-content-md-center">
+            <div class="col-12 col-md-10 col-xl-8">
+                <h3 class="main-color" th:text="${movie.name}"></h3>
+                <div class="row">
+                    <div class="col-3">
+                        <img class="img-thumbnail"
+                             th:attr="src=${movie.posterUrl},title=${movie.name},alt=${movie.name}" />
+                    </div>
+                    <div class="col-9">
+                        <p th:text="${movie.description}"></p>
+                    </div>
                 </div>
-                <div class="col-9">
-                    <p th:text="${movie.description}"></p>
+                <div class="my-3" th:if="${not #lists.isEmpty(movieSessions)}">
+                    <h5 class="main-color">Show Time</h5>
+                    <div th:each="movieSession : ${movieSessions}">
+                        <span th:text="${#temporals.format(movieSession.startTime, 'HH:mm') + ' - ' +
+                            #temporals.format(movieSession.endTime, 'HH:mm')}"></span><br />
+                    </div>
+                    <button type="button" class="btn white-color main-color-bg btn-lg btn-block my-2">Buy Ticket Now</button>
+                </div>
+                <div class="my-3" th:if="${#lists.isEmpty(movieSessions)}">
+                    <h3 class="main-color text-center">Coming Soon</h3>
                 </div>
             </div>
-            <div class="my-3" >
-                <h5>Show Time</h5>
-                <div th:each="movieSession : ${movieSessions}">
-                    <span th:text="${#temporals.format(movieSession.startTime, 'HH:mm') + ' - ' +
-                        #temporals.format(movieSession.endTime, 'HH:mm')}"></span><br />
-                </div>
-            </div>
-            <button type="button" class="btn white-color main-color-bg btn-lg btn-block">Buy Ticket Now</button>
         </div>
     </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <th:block th:insert="fragments/default :: script"></th:block>
 </body>
 </html>
