@@ -38,13 +38,15 @@ public class MovieController {
     public String movies(Model model) {
         List<Movie> movies = movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(
                 LocalDate.now().minusDays(MovieListProxy.DAYS_SHOWED), LocalDate.now());
+        model.addAttribute("title", "Now Showing");
         model.addAttribute("movies", movies);
         return "movies";
     }
 
     @RequestMapping("/movies/upcoming")
     public String upcomingMovies(Model model) {
-        List<Movie> movies = movieListProxy.findMoviesByReleaseDateAfter(LocalDate.now());;
+        List<Movie> movies = movieListProxy.findMoviesByReleaseDateAfter(LocalDate.now());
+        model.addAttribute("title", "Upcoming Movies");
         model.addAttribute("movies", movies);
         return "movies";
     }
