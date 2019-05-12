@@ -17,10 +17,12 @@
                 <h3 class="main-color">Now Showing</h3>
                 <div class="row">
                     <div class="col-6 col-lg-4 my-2" th:each="movie : ${movies}">
-                        <img class="img-thumbnail" src="/default.jpg"
-                             th:attr="src=${movie.posterUrl},title=${movie.name},alt=${movie.name}" />
+                        <a class="main-color main-color-zoom" th:href="@{'/movie/' + ${movie.id}}">
+                            <img class="img-thumbnail" src="/default.jpg"
+                                 th:attr="src=${movie.posterUrl},title=${movie.name},alt=${movie.name}" />
+                        </a>
                         <a class="main-color main-color-zoom" th:href="@{'/movie/' + ${movie.id}}"
-                           th:text="${movie.name}">Endgame</a>
+                           th:text="${movie.name}"></a>
                     </div>
                 </div>
             </div>
