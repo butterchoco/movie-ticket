@@ -1,6 +1,8 @@
 package com.adpro.seat;
 
 import lombok.Data;
+import org.hibernate.annotations.NaturalId;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,9 +15,8 @@ import java.util.List;
 public class Theatre implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id_Theatre")
-    private Integer theatreNumber;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
     @Column(name = "Description")
     private String description;
@@ -27,8 +28,7 @@ public class Theatre implements Serializable {
     @ElementCollection(targetClass=Seat.class)
     private List<Seat> rows;
 
-    public Theatre(int theatreNumber, String description, int seatCount) {
-        this.theatreNumber = theatreNumber;
+    public Theatre(String description, int seatCount) {
         this.description = description;
         this.rows = new ArrayList<Seat>();
         this.seatCount = seatCount;
@@ -65,8 +65,12 @@ public class Theatre implements Serializable {
         return rows;
     }
 
-    public int getTheatreNumber() {
-        return theatreNumber;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 }

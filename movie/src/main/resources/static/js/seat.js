@@ -10,6 +10,7 @@
         }
 
         function ajaxSeat() {
+
         $.ajax({
             method: "GET",
             url: '/seat',
@@ -48,9 +49,17 @@
         });
         }
 
+        function ajaxMovie() {
+            $.ajax({
+                method: "GET",
+                url: "/movie/"
+            })
+        }
+
         $(document).ready(function () {
             $(window).load(function () {
                 $('.footer').hide();
                 ajaxSeat();
+                ajaxMovie();
             });
         });
