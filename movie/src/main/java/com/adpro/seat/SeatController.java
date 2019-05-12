@@ -28,16 +28,15 @@ public class SeatController {
     @GetMapping("/seat")
     public @ResponseBody List<Theatre> seatAPI() { return this.theatreRepository.findAll(); }
 
-    @GetMapping("/showing-seat/{theatreId}/{movieId}")
-    public String showSeat(@PathVariable Integer theatreId, @PathVariable Long movieId, Model model) {
+    @GetMapping("/showing-seat/{movieId}")
+    public String showSeat(@PathVariable Long movieId, Model model) {
         LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         List<MovieSession> movieSessions = movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(movieId, midnight);
-        System.out.println(movieSessions.size());
-        Theatre theatre = theatreRepository.findTheatreById(theatreId);
+        List<Theatre> theatres = theatreRepository.findAll();
         Movie movie = movieRepository.findMovieById(movieId);
         model.addAttribute("movie", movie);
         model.addAttribute("movieSessions", movieSessions);
-        model.addAttribute("theatre", theatre);
+        model.addAttribute("theatres", theatres);
         return "show-seat";
     }
 

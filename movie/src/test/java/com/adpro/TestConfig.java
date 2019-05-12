@@ -2,7 +2,9 @@ package com.adpro;
 
 import static org.mockito.Mockito.mock;
 
+import com.adpro.movie.MovieSessionCreator;
 import com.adpro.movie.tmdb.TMDBRepository;
+import com.adpro.seat.TheatreRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,12 @@ public class TestConfig {
     @Primary
     TMDBRepository getTMDBRepository() {
         return mock(TMDBRepository.class);
+    }
+
+    @Bean
+    @Primary
+    MovieSessionCreator getMovieSessionCreator() {
+        return mock(MovieSessionCreator.class);
     }
 
 }

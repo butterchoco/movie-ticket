@@ -32,6 +32,7 @@ public class Theatre implements Serializable {
         this.description = description;
         this.rows = new ArrayList<Seat>();
         this.seatCount = seatCount;
+        createRows();
     }
 
     public Theatre() {}

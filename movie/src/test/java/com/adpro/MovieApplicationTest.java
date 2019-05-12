@@ -98,8 +98,9 @@ public class MovieApplicationTest {
 
 		LocalDateTime dayTime = LocalDateTime.of(1999, 8, 10, 10, 0);
 		LocalDateTime nightTime = LocalDateTime.of(1999, 8, 10, 19, 0);
-		MovieSession daySession = new MovieSession(movie, dayTime);
-		MovieSession nightSession = new MovieSession(movie, nightTime);
+		Theatre theatre = new Theatre("A", 50);
+		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
+		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
 
 		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
 				.willReturn(List.of(daySession, nightSession));
@@ -169,8 +170,9 @@ public class MovieApplicationTest {
 
 		LocalDateTime dayTime = LocalDateTime.of(1999, 8, 10, 10, 0);
 		LocalDateTime nightTime = LocalDateTime.of(1999, 8, 10, 19, 0);
-		MovieSession daySession = new MovieSession(movie, dayTime);
-		MovieSession nightSession = new MovieSession(movie, nightTime);
+		Theatre theatre = new Theatre("A", 50);
+		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
+		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
 
 		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
 				.willReturn(List.of(daySession, nightSession));
@@ -180,7 +182,7 @@ public class MovieApplicationTest {
 		given(theatreRepository.findTheatreById(1))
 				.willReturn(theatre1);
 
-        this.mvc.perform(get("/showing-seat/1/1"))
+        this.mvc.perform(get("/showing-seat/1"))
                 .andExpect(status().isOk());
     }
 
@@ -215,8 +217,9 @@ public class MovieApplicationTest {
 
 		LocalDateTime dayTime = LocalDateTime.of(1999, 8, 10, 10, 0);
 		LocalDateTime nightTime = LocalDateTime.of(1999, 8, 10, 19, 0);
-		MovieSession daySession = new MovieSession(movie, dayTime);
-		MovieSession nightSession = new MovieSession(movie, nightTime);
+		Theatre theatre = new Theatre("A", 50);
+		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
+		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
 
 		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
 				.willReturn(List.of(daySession, nightSession));
@@ -240,7 +243,8 @@ public class MovieApplicationTest {
 				.build();
 
 		LocalDateTime now = LocalDateTime.now();
-		MovieSession movieSession = new MovieSession(movie, now);
+		Theatre theatre = new Theatre("A", 50);
+		MovieSession movieSession = new MovieSession(movie, now, theatre);
 
 		given(movieSessionRepository.findById(any())).willReturn(Optional.of(movieSession));
 

@@ -3,8 +3,11 @@ package com.adpro.movie;
 import static org.mockito.BDDMockito.*;
 
 import com.adpro.TestConfig;
+import com.adpro.seat.Theatre;
+import com.adpro.seat.TheatreRepository;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
@@ -25,15 +28,19 @@ public class MovieSessionCreatorTest {
     @MockBean
     private MovieRepository movieRepository;
 
+    @MockBean
+    private TheatreRepository theatreRepository;
+
     private MovieSessionCreator movieSessionCreator;
 
     @Before
     public void init() {
         movieSessionCreator = Mockito.spy(
-                new MovieSessionCreator(movieRepository, movieSessionRepository));
+                new MovieSessionCreator(movieRepository, movieSessionRepository, theatreRepository));
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void givenNoMovieSessionAlreadyCreatedForToday_thenCreateNewMovieSessions() {
         Movie newMovie = Movie.builder()
             .name("Fairuzi Adventures")
@@ -51,11 +58,20 @@ public class MovieSessionCreatorTest {
             .releaseDate(LocalDate.now().minusDays(10))
             .build();
 
+        Theatre theatre = new Theatre("A", 50);
+        List<Theatre> theatreList = mock(ArrayList.class);
+        given(theatreList.get(anyInt()))
+                .willReturn(theatre);
+
         given(movieRepository.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
                 .willReturn(List.of(newMovie, oldMovie));
 
         given(movieSessionRepository.findMovieSessionsByStartTimeAfter(any()))
                 .willReturn(Collections.emptyList());
+
+
+        given(theatreRepository.findAllByOrderByDescriptionDesc())
+                .willReturn(theatreList);
 
         movieSessionCreator.checkExistOrCreateMovieSession();
         then(movieSessionCreator)

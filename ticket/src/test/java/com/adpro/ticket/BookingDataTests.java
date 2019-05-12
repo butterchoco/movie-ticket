@@ -2,6 +2,7 @@ package com.adpro.ticket;
 
 import com.adpro.movie.Movie;
 import com.adpro.movie.MovieSession;
+import com.adpro.seat.Theatre;
 import com.adpro.ticket.api.BookingData;
 import com.adpro.ticket.model.Booking;
 import com.adpro.ticket.model.Ticket;
@@ -25,7 +26,8 @@ public class BookingDataTests {
                 .releaseDate(LocalDate.now())
                 .id(1L)
                 .build();
-        MovieSession movieSession = new MovieSession(movie, LocalDateTime.now());
+        Theatre theatre = new Theatre("A", 50);
+        MovieSession movieSession = new MovieSession(movie, LocalDateTime.now(), theatre);
 
         BookingData bookingData = new BookingData(booking, movieSession);
 
