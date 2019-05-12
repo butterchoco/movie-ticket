@@ -65,7 +65,7 @@ public class Theatre implements Serializable {
         return rows;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
