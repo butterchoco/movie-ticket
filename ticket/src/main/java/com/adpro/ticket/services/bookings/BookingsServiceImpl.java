@@ -1,9 +1,9 @@
-package com.adpro.ticket;
+package com.adpro.ticket.services.bookings;
 
-import com.adpro.ticket.api.BookingData;
-import com.adpro.ticket.api.MovieService;
-import com.adpro.ticket.api.TicketRequestModel;
-import com.adpro.ticket.api.TicketService;
+import com.adpro.ticket.api.bookings.BookingData;
+import com.adpro.ticket.api.movies.MovieService;
+import com.adpro.ticket.api.bookings.BookingRequestModel;
+import com.adpro.ticket.api.bookings.BookingService;
 import com.adpro.ticket.model.Booking;
 import com.adpro.ticket.model.Ticket;
 import com.adpro.ticket.repository.BookingRepository;
@@ -17,29 +17,29 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
-public class TicketServiceImpl implements TicketService {
+public class BookingsServiceImpl implements BookingService {
     private TicketRepository ticketRepository;
     private BookingRepository bookingRepository;
     private MovieService movieService;
 
     @Autowired
-    public TicketServiceImpl(TicketRepository ticketRepository, BookingRepository bookingRepository,
-            MovieService movieService) {
+    public BookingsServiceImpl(TicketRepository ticketRepository, BookingRepository bookingRepository,
+                               MovieService movieService) {
         this.ticketRepository = ticketRepository;
         this.bookingRepository = bookingRepository;
         this.movieService = movieService;
     }
 
     @Override
-    public boolean canOrderTicket(TicketRequestModel r) {
+    public boolean canCreateBooking(BookingRequestModel r) {
         return ticketRepository
                 .findBySessionIdAndSeatIdsAndStatus(r.getSessionId(), r.getSeatIds(), Booking.Status.VERIFIED)
                 .isEmpty();
     }
 
     @Override
-    public Optional<Booking> orderTicket(TicketRequestModel r) {
-        if (canOrderTicket(r)) {
+    public Optional<Booking> createBooking(BookingRequestModel r) {
+        if (canCreateBooking(r)) {
             Set<Ticket> tickets = r.getSeatIds().stream().map(Ticket::new).collect(Collectors.toSet());
             Booking booking = bookingRepository
                     .save(new Booking(r.getSessionId(), Booking.Status.PENDING, tickets, r.getEmail(), r.getPrice()));
@@ -49,7 +49,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Optional<Booking> verifyTicket(Long bookingId) {
+    public Optional<Booking> verifyBooking(Long bookingId) {
         Optional<Booking> bookingOptional = bookingRepository.findById(bookingId);
 
         if (!bookingOptional.isPresent()) {

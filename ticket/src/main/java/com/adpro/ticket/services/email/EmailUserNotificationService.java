@@ -1,5 +1,8 @@
-package com.adpro.ticket.api;
+package com.adpro.ticket.services.email;
 
+import com.adpro.ticket.api.bookings.BookingData;
+import com.adpro.ticket.api.notifications.MessageResponse;
+import com.adpro.ticket.api.notifications.UserNotificationService;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
