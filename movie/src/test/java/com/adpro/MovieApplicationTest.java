@@ -57,7 +57,7 @@ public class MovieApplicationTest {
 	}
 
 	@Test
-	public void testGetMovies() throws Exception {
+	public void testGetShowingMovies() throws Exception {
 		Movie movie = Movie.builder()
 				.name("Fairuzi Adventures")
 				.description("Petualangan seorang Fairuzi")
@@ -71,6 +71,29 @@ public class MovieApplicationTest {
 				.willReturn(List.of(movie));
 
 		this.mvc.perform(get("/api/movies/showing"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id", is(1)))
+				.andExpect(jsonPath("$[0].description", is(movie.getDescription())))
+				.andExpect(jsonPath("$[0].posterUrl", is(movie.getPosterUrl())))
+				.andExpect(jsonPath("$[0].releaseDate", is(movie.getReleaseDate().toString())))
+				.andExpect(jsonPath("$[0].duration", is("01:51:00")));
+	}
+
+	@Test
+	public void testGetUpcomingMovies() throws Exception {
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(111))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now().plusDays(7))
+				.id(1L)
+				.build();
+
+		given(movieListProxy.findMoviesByReleaseDateAfter(any()))
+				.willReturn(List.of(movie));
+
+		this.mvc.perform(get("/api/movies/upcoming"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].id", is(1)))
 				.andExpect(jsonPath("$[0].description", is(movie.getDescription())))
@@ -187,7 +210,7 @@ public class MovieApplicationTest {
     }
 
 	@Test
-	public void MoviesHtml() throws Exception {
+	public void ShowingMoviesHtml() throws Exception {
 		Movie movie = Movie.builder()
 				.name("Fairuzi Adventures")
 				.description("Petualangan seorang Fairuzi")
@@ -201,6 +224,24 @@ public class MovieApplicationTest {
 			.willReturn(List.of(movie));
 
 		this.mvc.perform(get("/movies/showing"))
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void UpcomingMoviesHtml() throws Exception {
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(111))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now().plusDays(7))
+				.id(1L)
+				.build();
+
+		given(movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
+				.willReturn(List.of(movie));
+
+		this.mvc.perform(get("/movies/upcoming"))
 				.andExpect(status().isOk());
 	}
 
