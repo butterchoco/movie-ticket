@@ -33,7 +33,7 @@ public class Movie implements Serializable {
     private LocalDate releaseDate;
     private Duration duration;
 
-    private void setDuration(String duration) {
+    public void setDuration(String duration) {
         this.duration = Duration.between(LocalTime.MIN, LocalTime.parse(duration));
     }
 

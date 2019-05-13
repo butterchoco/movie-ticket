@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-public class BookingDataTests {
+public class APITests {
     @Test
     public void testBookingData() {
         Booking booking = new Booking(1L, Booking.Status.VERIFIED, Set.of(new Ticket("1A")), "ramadistra@gmail.com", 12999);
@@ -33,5 +33,20 @@ public class BookingDataTests {
         Assert.assertEquals(booking.getStatus(), bookingData.getStatus());
         Assert.assertEquals(movieSession, bookingData.getMovieSession());
         Assert.assertEquals(booking.getTickets(), bookingData.getTickets());
+        Assert.assertEquals(booking.getPrice(), bookingData.getPrice());
+    }
+
+    @Test
+    public void testMovie() {
+        Movie movie = Movie.builder()
+                .name("Fairuzi Adventures")
+                .description("Petualangan seorang Fairuzi")
+                .posterUrl("sdada")
+                .releaseDate(LocalDate.now())
+                .id(1L)
+                .build();
+        movie.setDuration("01:30:00");
+
+        Assert.assertEquals(movie.getDuration(), Duration.ofMinutes(90));
     }
 }

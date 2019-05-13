@@ -68,6 +68,7 @@
                     <excludes>
                         <exclude>**/com/adpro/**/*Config.class</exclude>
                         <exclude>**/com/adpro/**/*Application.class</exclude>
+                        <exclude>**/com/adpro/**/utils/*.class</exclude>
                     </excludes>
                 </configuration>
 
