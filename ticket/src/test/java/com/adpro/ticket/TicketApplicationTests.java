@@ -38,7 +38,7 @@ public class TicketApplicationTests {
 
     @Test
     public void testCanOrderSeat() throws Exception {
-        String json = new ObjectMapper().writeValueAsString(new TicketRequestModel(1L, "1B"));
+        String json = new ObjectMapper().writeValueAsString(new TicketRequestModel(1L, "1B", "ramadistra@gmail.com", 12222));
         this.mvc.perform(post("/tickets").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(jsonPath("$.status", is("PENDING")))
                 .andExpect(status().isOk());
@@ -46,15 +46,15 @@ public class TicketApplicationTests {
 
     @Test
     public void testCannotOrderBookedSeat() throws Exception {
-        Booking booking = bookingRepository.save(new Booking(1L, Booking.Status.VERIFIED, Set.of(new Ticket("1A"))));
-        String json = new ObjectMapper().writeValueAsString(new TicketRequestModel(1L, "1A"));
+        Booking booking = bookingRepository.save(new Booking(1L, Booking.Status.VERIFIED, Set.of(new Ticket("1A")), "ramadistra@gmail.com", 12222));
+        String json = new ObjectMapper().writeValueAsString(new TicketRequestModel(1L, "1A", "ramadistra@gmail.com", 12222));
         this.mvc.perform(post("/tickets").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().is4xxClientError());
     }
 
     @Test
     public void testCanVerifyTicket() throws Exception {
-        Booking booking = bookingRepository.save(new Booking(2L, Booking.Status.PENDING, Set.of(new Ticket("1A"))));
+        Booking booking = bookingRepository.save(new Booking(2L, Booking.Status.PENDING, Set.of(new Ticket("1A")), "ramadistra@gmail.com", 12222));
         this.mvc.perform(post("/tickets/" + booking.getId() + "/verify"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status", is("VERIFIED")));
@@ -62,7 +62,7 @@ public class TicketApplicationTests {
 
     @Test
     public void testCancelledTicketNotVerified() throws Exception {
-        Booking booking = bookingRepository.save(new Booking(3L, Booking.Status.CANCELLED, Set.of(new Ticket("1A"))));
+        Booking booking = bookingRepository.save(new Booking(3L, Booking.Status.CANCELLED, Set.of(new Ticket("1A")), "ramadistra@gmail.com", 12222));
         this.mvc.perform(post("/tickets/" + booking.getId() + "/verify"))
                 .andExpect(jsonPath("$.status", is("CANCELLED")));
     }

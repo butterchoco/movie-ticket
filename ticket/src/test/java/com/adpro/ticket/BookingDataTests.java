@@ -1,7 +1,7 @@
 package com.adpro.ticket;
 
-import com.adpro.movie.Movie;
-import com.adpro.movie.MovieSession;
+import com.adpro.ticket.api.Movie;
+import com.adpro.ticket.api.MovieSession;
 import com.adpro.ticket.api.BookingData;
 import com.adpro.ticket.model.Booking;
 import com.adpro.ticket.model.Ticket;
@@ -16,7 +16,7 @@ import java.util.Set;
 public class BookingDataTests {
     @Test
     public void testBookingData() {
-        Booking booking = new Booking(1L, Booking.Status.VERIFIED, Set.of(new Ticket("1A")));
+        Booking booking = new Booking(1L, Booking.Status.VERIFIED, Set.of(new Ticket("1A")), "ramadistra@gmail.com", 12999);
         Movie movie = Movie.builder()
                 .name("Fairuzi Adventures")
                 .description("Petualangan seorang Fairuzi")
