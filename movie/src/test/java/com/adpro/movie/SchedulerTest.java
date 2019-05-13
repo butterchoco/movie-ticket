@@ -4,7 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import com.adpro.TestConfig;
 import com.adpro.movie.tmdb.FullTMDBMovie;
@@ -22,10 +23,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -82,8 +81,6 @@ public class SchedulerTest {
 
         given(tmdbRepository.getMovie(2L))
                 .willReturn(fullNewTMDBMovie);
-
-//        doCallRealMethod().when(scheduler).updateMovieList();
 
         scheduler.updateMovieList();
 

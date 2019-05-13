@@ -40,7 +40,6 @@ public class Scheduler {
         this.movieRepository = movieRepository;
         this.theatreRepository = theatreRepository;
         this.movieSessionRepository = movieSessionRepository;
-        System.out.println(tmdbRepository + " isi");
     }
 
     @Scheduled(cron = "0 0 0 * * *")
@@ -55,8 +54,8 @@ public class Scheduler {
 
     public void updateMovieSessionList() {
         updateMovieList();
-        checkExistOrCreateMovieSession();
         checkExistOrCreateTheatre();
+        checkExistOrCreateMovieSession();
     }
 
     void updateMovieList() {
@@ -111,6 +110,9 @@ public class Scheduler {
 
             for (int showTime : showTimes) {
                 List<Theatre> availableTheatre = availableTheatreOfShowTime.get(showTime);
+                if (availableTheatre.size() == 0) {
+                    throw new RuntimeException("Not enough theatre to show movies");
+                }
                 Theatre usedTheatre = availableTheatre.get(availableTheatre.size() - 1);
                 availableTheatre.remove(availableTheatre.size() - 1);
 
@@ -126,12 +128,21 @@ public class Scheduler {
         long count = theatreRepository.count();
         if (count == 0) {
             List<Theatre> theatreList = new ArrayList<>();
-            theatreList.add(new Theatre("A", 50));
+            theatreList.add(new Theatre("A", 40));
             theatreList.add(new Theatre("B", 40));
-            theatreList.add(new Theatre("C", 60));
-            theatreList.add(new Theatre("D", 70));
-            theatreList.add(new Theatre("E", 70));
-            theatreList.add(new Theatre("F", 70));
+            theatreList.add(new Theatre("C", 50));
+            theatreList.add(new Theatre("D", 50));
+            theatreList.add(new Theatre("E", 50));
+            theatreList.add(new Theatre("F", 50));
+            theatreList.add(new Theatre("G", 60));
+            theatreList.add(new Theatre("H", 60));
+            theatreList.add(new Theatre("I", 60));
+            theatreList.add(new Theatre("J", 60));
+            theatreList.add(new Theatre("K", 60));
+            theatreList.add(new Theatre("L", 70));
+            theatreList.add(new Theatre("M", 70));
+            theatreList.add(new Theatre("N", 70));
+            theatreList.add(new Theatre("O", 70));
             theatreRepository.saveAll(theatreList);
         }
     }
