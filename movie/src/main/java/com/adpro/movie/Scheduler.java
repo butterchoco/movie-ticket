@@ -62,15 +62,31 @@ public class Scheduler {
                 .map(Movie::getTmdbId)
                 .collect(Collectors.toSet());
 
-        List<Movie> notExistMovies = new ArrayList<>();
+        List<Long> notExistMovieIds = new ArrayList<>();
         for (PartialTMDBMovie movie: movies) {
             if (!existingMovieTmdbIds.contains(movie.getId())) {
-                FullTMDBMovie tmdbMovie = tmdbRepository.getMovie(movie.getId());
-                notExistMovies.add(Movie.fromTMDBMovie(tmdbMovie));
+                notExistMovieIds.add(movie.getId());
             }
         }
-        movieRepository.saveAll(notExistMovies);
+        getAndAddToDB(notExistMovieIds);
         return CompletableFuture.completedFuture(null);
+    }
+
+    void getAndAddToDB(List<Long> movieIds) {
+        List<CompletableFuture<FullTMDBMovie>> retrievedMovies = new ArrayList<>();
+        for (Long id: movieIds) {
+            retrievedMovies.add(CompletableFuture.supplyAsync(() -> tmdbRepository.getMovie(id)));
+        }
+        CompletableFuture.
+                allOf(retrievedMovies.toArray(new CompletableFuture[0]))
+                .join();
+
+        List<Movie> movies = retrievedMovies
+                .stream()
+                .map(CompletableFuture::join)
+                .map(Movie::fromTMDBMovie)
+                .collect(Collectors.toList());
+        movieRepository.saveAll(movies);
     }
 
     void checkExistOrCreateMovieSession() {

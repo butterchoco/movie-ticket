@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -167,5 +168,21 @@ public class SchedulerTest {
             scheduler.createMovieSession(List.of(movie));
             fail("Should throw Runtime Exception");
         } catch (RuntimeException e) {}
+    }
+
+    @Test
+    @SneakyThrows
+    public void givenMissingMovies_thenUpdateDBMovie() {
+        ObjectMapper mapper = new ObjectMapper();
+        FullTMDBMovie fullTMDBMovie = mapper.readValue("{\"id\": 1," +
+                "\"original_title\": \"Fairuzi Adventures\"," +
+                "\"runtime\": 120}", FullTMDBMovie.class);
+        given(tmdbRepository.getMovie(any()))
+                .willReturn(fullTMDBMovie);
+
+        scheduler.getAndAddToDB(List.of(1L));
+        then(movieRepository)
+                .should()
+                .saveAll(any());
     }
 }
