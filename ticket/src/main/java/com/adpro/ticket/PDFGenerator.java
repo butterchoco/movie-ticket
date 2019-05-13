@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -41,7 +42,22 @@ public class PDFGenerator {
             PDFont fontItalic = PDType1Font.HELVETICA_OBLIQUE;
             PDFont fontMono = PDType1Font.COURIER;
 
-            PDPage page = new PDPage(PDRectangle.A4);
+            PDPage page = new PDPage();
+            doc.addPage(page);
+            PDDocumentInformation pdd = doc.getDocumentInformation();
+
+            pdd.setAuthor("C8 Advance Programming Team");
+            pdd.setTitle("Avengers Ticket");
+
+            // Start a new content stream which will "hold" the to be created content
+            PDPageContentStream cos = new PDPageContentStream(doc, page);
+
+            cos.beginText();
+            cos.newLineAtOffset(25,700);
+            String line1 = "FASILKOM THEATRE";
+            cos.setFont(fontBold, 30);
+            cos.showText(line1);
+
             //Dummy Table
             float margin = 50;
             // starting y position is whole page height subtracted by top and bottom margin
@@ -57,7 +73,6 @@ public class PDFGenerator {
 
             BaseTable table = new BaseTable(yPosition, yStartNewPage, bottomMargin, tableWidth, margin, doc, page, true, drawContent);
 
-
             // the parameter is the row height
             Row<PDPage> headerRow = table.createRow(50);
             // the first parameter is the cell width
@@ -72,24 +87,32 @@ public class PDFGenerator {
 
             Row<PDPage> row = table.createRow(12);
             cell = row.createCell(50, "Movie:");
-            cell = row.createCell(50, booking.getMovie());
+            cell = row.createCell(50, "avengers");
 
             Row<PDPage> row1 = table.createRow(12);
             cell = row1.createCell(50, "Date:");
-            cell = row1.createCell(50, booking.getDate());
+            cell = row1.createCell(50, "12-2-2012");
 
             Row<PDPage> row2 = table.createRow(12);
             cell = row2.createCell(50, "Showtime:");
-            cell = row2.createCell(50, booking.getShowtime());
+            cell = row2.createCell(50, "17:55");
 
             Row<PDPage> row3 = table.createRow(12);
             cell = row3.createCell(50,"Seat/Row:");
-            cell = row3.createCell(50, booking.getSeat());
+            cell = row3.createCell(50, "A1");
 
             Row<PDPage> row4 = table.createRow(12);
             cell = row4.createCell(50, "Auditorium:");
-            cell = row4.createCell(50, booking.getAudi());
+            cell = row4.createCell(50, "6");
+
+            table.draw();
+
+            cos.endText();
+            cos.close();
+
             doc.save("ticket.pdf");
+            doc.close();
+            System.out.println("ticket printed");
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -97,73 +120,4 @@ public class PDFGenerator {
         }
     }
 
-//    public void generateMovieCell(){
-//        PdfPCell cellMovie = new PdfPCell(new Paragraph("Movie:", fontSubHead));
-//        cellMovie.setBorderColor(BaseColor.WHITE);
-//        cellMovie.setPaddingRight(10);
-//        cellMovie.setHorizontalAlignment(Element.ALIGN_RIGHT);
-//        cellMovie.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//
-//        PdfPCell cellMovieTitle = new PdfPCell(new Paragraph(ticket.getMovie(), fontSubHead));
-//        cellMovieTitle.setBorderColor(BaseColor.WHITE);
-//        cellMovieTitle.setPaddingRight(10);
-//        cellMovieTitle.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        cellMovieTitle.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//    }
-//
-//    public void generateShowtimeCell() {
-//        PdfPCell cellShowtime = new PdfPCell(new Paragraph("Showtime:", fontSubHead));
-//        cellShowtime.setBorderColor(BaseColor.WHITE);
-//        cellShowtime.setPaddingRight(10);
-//        cellShowtime.setHorizontalAlignment(Element.ALIGN_RIGHT);
-//        cellShowtime.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//
-//        PdfPCell cellTime = new PdfPCell(new Paragraph(ticket.getShowtime(), fontSubHead));
-//        cellDate.setBorderColor(BaseColor.WHITE);
-//        cellDate.setPaddingRight(10);
-//        cellDate.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        cellDate.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//    }
-//
-//    public void generateMovieDateCell() {
-//        PdfPCell cellShowtime = new PdfPCell(new Paragraph("Date:", fontSubHead));
-//        cellShowtime.setBorderColor(BaseColor.WHITE);
-//        cellShowtime.setPaddingRight(10);
-//        cellShowtime.setHorizontalAlignment(Element.ALIGN_RIGHT);
-//        cellShowtime.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//
-//        PdfPCell cellTime = new PdfPCell(new Paragraph(ticket.getDate(), fontSubHead));
-//        cellDate.setBorderColor(BaseColor.WHITE);
-//        cellDate.setPaddingRight(10);
-//        cellDate.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        cellDate.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//    }
-//
-//    public void generateSeatInfoCell() {
-//        PdfPCell cellSeat = new PdfPCell(new Paragraph("Seat/Row:", fontSubHead));
-//        cellSeat.setBorderColor(BaseColor.WHITE);
-//        cellSeat.setPaddingRight(10);
-//        cellSeat.setHorizontalAlignment(Element.ALIGN_RIGHT);
-//        cellSeat.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//
-//        PdfPCell cellSeatInfo = new PdfPCell(new Paragraph(ticket.getSeat(), fontSubHead));
-//        cellSeatInfo.setBorderColor(BaseColor.WHITE);
-//        cellSeatInfo.setPaddingRight(10);
-//        cellSeatInfo.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        cellSeatInfo.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//    }
-//
-//    public void generateAudiInfoCell() {
-//        PdfPCell cellAuditorium = new PdfPCell(new Paragraph("Auditorium:", fontSubHead));
-//        cellSeat.setBorderColor(BaseColor.WHITE);
-//        cellSeat.setPaddingRight(10);
-//        cellSeat.setHorizontalAlignment(Element.ALIGN_RIGHT);
-//        cellSeat.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//
-//        PdfPCell cellAudiInfo = new PdfPCell(new Paragraph(ticket.getAudi(), fontAudi));
-//        cellSeatInfo.setBorderColor(BaseColor.WHITE);
-//        cellSeatInfo.setPaddingRight(10);
-//        cellSeatInfo.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        cellSeatInfo.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//    }
 }
