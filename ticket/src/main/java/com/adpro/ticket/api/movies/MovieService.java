@@ -1,4 +1,4 @@
-package com.adpro.ticket.api;
+package com.adpro.ticket.api.movies;
 
 import retrofit2.http.POST;
 import retrofit2.http.Path;

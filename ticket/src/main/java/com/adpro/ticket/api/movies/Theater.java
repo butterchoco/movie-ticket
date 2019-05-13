@@ -1,4 +1,4 @@
-package com.adpro.ticket.api;
+package com.adpro.ticket.api.movies;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

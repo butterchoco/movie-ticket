@@ -1,6 +1,6 @@
 package com.adpro.ticket;
 
-import com.adpro.ticket.api.EmailClient;
+import com.adpro.ticket.services.email.EmailClient;
 import com.adpro.ticket.utils.BasicAuthInterceptor;
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;

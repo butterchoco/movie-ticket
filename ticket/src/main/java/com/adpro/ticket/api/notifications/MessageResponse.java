@@ -1,4 +1,4 @@
-package com.adpro.ticket.api;
+package com.adpro.ticket.api.notifications;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

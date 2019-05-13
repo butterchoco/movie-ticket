@@ -1,5 +1,6 @@
-package com.adpro.ticket.api;
+package com.adpro.ticket.api.bookings;
 
+import com.adpro.ticket.api.movies.MovieSession;
 import com.adpro.ticket.model.Booking;
 import com.adpro.ticket.model.Ticket;
 import lombok.AllArgsConstructor;
