@@ -21,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.awt.print.Book;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -91,6 +90,7 @@ public class TicketApplicationTests {
         this.mvc.perform(post("/tickets/" + booking.getId() + "/verify"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status", is("VERIFIED")));
+        Mockito.verify(mockEmailClient, Mockito.timeout(555)).sendEmail(Mockito.any());
     }
 
     @Test
