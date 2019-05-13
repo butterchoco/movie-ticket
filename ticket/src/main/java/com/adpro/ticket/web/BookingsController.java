@@ -25,15 +25,15 @@ public class BookingsController {
     }
 
     @PostMapping
-    @RequestMapping("/tickets")
-    public ResponseEntity<Booking> tickets(@RequestBody BookingRequestModel requestTicket) {
+    @RequestMapping("/bookings")
+    public ResponseEntity<Booking> bookings(@RequestBody BookingRequestModel requestTicket) {
         return bookingService.createBooking(requestTicket)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().body(null));
     }
 
     @PostMapping
-    @RequestMapping("/tickets/{bookingId}/verify")
+    @RequestMapping("/bookings/{bookingId}/verify")
     public ResponseEntity<Booking> verify(@PathVariable(name = "bookingId") Long bookingId) throws Exception {
         var ticket = bookingService.verifyBooking(bookingId).orElse(null);
 
