@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Cache the result from DB into memory for at least 5 minutes for every unique parameter given.
+ * Cache the result from DB into memory.
  */
 public class MovieListProxy implements MovieListRepository {
     private MovieRepository movieRepository;
