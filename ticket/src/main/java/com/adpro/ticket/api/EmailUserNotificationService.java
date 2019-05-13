@@ -22,6 +22,10 @@ public class EmailUserNotificationService implements UserNotificationService {
         this.templateEngine = templateEngine;
     }
 
+    private byte[] createAttachment(BookingData bookingData) {
+        return "Hello".getBytes();
+    }
+
     @Override
     public CompletableFuture<MessageResponse> sendBookingData(BookingData bookingData) {
         Context context = new Context();
@@ -34,10 +38,11 @@ public class EmailUserNotificationService implements UserNotificationService {
                 .addFormDataPart("text", "Payment has been verified. View E-Tickets now.")
                 .addFormDataPart("html", templateEngine.process("ticket-email", context))
                 .addFormDataPart("attachment", "E-Ticket.pdf",
-                        RequestBody.create(MediaType.parse("application/pdf"), "Howdy")
+                        RequestBody.create(MediaType.parse("application/pdf"), createAttachment(bookingData))
                 )
                 .setType(MediaType.get("multipart/form-data"))
                 .build();
+
         return emailClient.sendEmail(body);
     }
 }
