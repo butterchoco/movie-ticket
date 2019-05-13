@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -83,14 +84,21 @@ public class TicketApplicationTests {
 
     @Test
     public void testCanVerifyTicket() throws Exception {
+        var lock = new CountDownLatch(1);
+
         Booking booking = createBooking(2L, Booking.Status.PENDING);
         Mockito.when(mockMovieService.getMovieSessionById(Mockito.any())).thenReturn(CompletableFuture.completedFuture(createMovieSession()));
         Mockito.when(mockEmailClient.sendEmail(Mockito.any()))
-                .thenReturn(CompletableFuture.completedFuture(new MessageResponse("1", "Success!")));
+                .thenAnswer(i -> CompletableFuture.supplyAsync(() -> {
+                    lock.countDown();
+                    return new MessageResponse("1", "Success!");
+                }));
         this.mvc.perform(post("/tickets/" + booking.getId() + "/verify"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status", is("VERIFIED")));
-        Mockito.verify(mockEmailClient, Mockito.timeout(555)).sendEmail(Mockito.any());
+
+        lock.await();
+        Mockito.verify(mockEmailClient).sendEmail(Mockito.any());
     }
 
     @Test

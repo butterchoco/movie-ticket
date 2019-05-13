@@ -28,21 +28,20 @@ public class EmailUserNotificationService implements UserNotificationService {
 
     @Override
     public CompletableFuture<MessageResponse> sendBookingData(BookingData bookingData) {
-        Context context = new Context();
-        context.setVariable("booking", bookingData);
-
-        MultipartBody body = new MultipartBody.Builder()
-                .addFormDataPart("from", senderAddress)
-                .addFormDataPart("to", bookingData.getEmail())
-                .addFormDataPart("subject", "E-Ticket: " + bookingData.getMovieSession().getMovie().getName())
-                .addFormDataPart("text", "Payment has been verified. View E-Tickets now.")
-                .addFormDataPart("html", templateEngine.process("ticket-email", context))
-                .addFormDataPart("attachment", "E-Ticket.pdf",
-                        RequestBody.create(MediaType.parse("application/pdf"), createAttachment(bookingData))
-                )
-                .setType(MediaType.get("multipart/form-data"))
-                .build();
-
-        return emailClient.sendEmail(body);
+        return CompletableFuture.supplyAsync(() -> {
+            Context context = new Context();
+            context.setVariable("booking", bookingData);
+            return new MultipartBody.Builder()
+                    .addFormDataPart("from", senderAddress)
+                    .addFormDataPart("to", bookingData.getEmail())
+                    .addFormDataPart("subject", "E-Ticket: " + bookingData.getMovieSession().getMovie().getName())
+                    .addFormDataPart("text", "Payment has been verified. View E-Tickets now.")
+                    .addFormDataPart("html", templateEngine.process("ticket-email", context))
+                    .addFormDataPart("attachment", "E-Ticket.pdf",
+                            RequestBody.create(MediaType.parse("application/pdf"), createAttachment(bookingData))
+                    )
+                    .setType(MediaType.get("multipart/form-data"))
+                    .build();
+        }).thenCompose(emailClient::sendEmail);
     }
 }
