@@ -129,6 +129,9 @@ public class SchedulerTest {
         given(theatreList.get(anyInt()))
                 .willReturn(theatre);
 
+        given(theatreList.size())
+                .willReturn(1);
+
         given(movieRepository.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
                 .willReturn(List.of(newMovie, oldMovie));
 
