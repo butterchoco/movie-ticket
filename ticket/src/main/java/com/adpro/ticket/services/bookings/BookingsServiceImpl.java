@@ -9,6 +9,7 @@ import com.adpro.ticket.model.Ticket;
 import com.adpro.ticket.repository.BookingRepository;
 import com.adpro.ticket.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -66,6 +67,7 @@ public class BookingsServiceImpl implements BookingService {
     }
 
     @Override
+    @Async("asyncExecutor")
     public CompletableFuture<BookingData> getBookingData(Booking booking) {
         return movieService.getMovieSessionById(booking.getSessionId())
                 .thenApply(session -> new BookingData(booking, session));
