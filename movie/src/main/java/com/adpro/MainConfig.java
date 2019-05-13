@@ -7,10 +7,12 @@ import com.adpro.movie.tmdb.TMDBRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 @Configuration
+@EnableAsync
 public class MainConfig {
     @Bean
     @Autowired

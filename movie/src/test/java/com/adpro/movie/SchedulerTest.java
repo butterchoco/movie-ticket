@@ -1,5 +1,6 @@
 package com.adpro.movie;
 
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
@@ -90,22 +91,6 @@ public class SchedulerTest {
     }
 
     @Test
-    public void givenPostConstruct_thenUpdateMovieList() {
-        scheduler.postConstruct();
-        then(scheduler)
-                .should()
-                .updateMovieSessionList();
-    }
-
-    @Test
-    public void givenMidnightCron_thenUpdateMovieList() {
-        scheduler.midnightCron();
-        then(scheduler)
-                .should()
-                .updateMovieSessionList();
-    }
-
-    @Test
     @SuppressWarnings("unchecked")
     public void givenNoMovieSessionAlreadyCreatedForToday_thenCreateNewMovieSessions() {
         Movie newMovie = Movie.builder()
@@ -144,5 +129,43 @@ public class SchedulerTest {
         scheduler.checkExistOrCreateMovieSession();
         verify(scheduler)
                 .createMovieSession(any());
+    }
+
+    @Test
+    public void givenUpdateMovieSessionList_thenDoAllOperations() {
+        scheduler.updateMovieSessionList();
+        verify(scheduler)
+                .updateMovieList();
+        verify(scheduler)
+                .checkExistOrCreateTheatre();
+        verify(scheduler)
+                .checkExistOrCreateMovieSession();
+    }
+
+    @Test
+    public void givenNoTheatre_thenCreateTheatres() {
+        given(theatreRepository.count())
+                .willReturn(0L);
+        scheduler.checkExistOrCreateTheatre();
+        verify(theatreRepository)
+                .saveAll(any());
+    }
+
+    @Test
+    public void givenInsufficientTheatre_thenThrowRuntimeError() {
+        Movie movie = Movie.builder()
+                .name("Fairuzi Adventures")
+                .description("Petualangan seorang Fairuzi")
+                .duration(Duration.ofMinutes(111))
+                .posterUrl("sdada")
+                .releaseDate(LocalDate.now())
+                .build();
+
+        given(theatreRepository.findAllByOrderByDescriptionDesc())
+                .willReturn(Collections.emptyList());
+        try {
+            scheduler.createMovieSession(List.of(movie));
+            fail("Should throw Runtime Exception");
+        } catch (RuntimeException e) {}
     }
 }

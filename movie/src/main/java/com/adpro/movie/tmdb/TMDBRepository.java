@@ -28,6 +28,7 @@ public class TMDBRepository {
     @SneakyThrows
     public FullTMDBMovie getMovie(Long movieId) {
         FullTMDBMovie fullTMDBMovie = tmdbClient.movie(movieId, KEY).execute().body();
+
         if (fullTMDBMovie == null) {
             throw new RuntimeException("Got null from TMDB API");
         }

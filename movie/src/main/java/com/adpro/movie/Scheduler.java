@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -42,23 +42,15 @@ public class Scheduler {
         this.movieSessionRepository = movieSessionRepository;
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
-    public void midnightCron() {
-        updateMovieSessionList();
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        updateMovieSessionList();
-    }
-
     public void updateMovieSessionList() {
-        updateMovieList();
-        checkExistOrCreateTheatre();
+        CompletableFuture.allOf(
+                updateMovieList(),
+                checkExistOrCreateTheatre()).join();
         checkExistOrCreateMovieSession();
     }
 
-    void updateMovieList() {
+    @Async
+    public CompletableFuture<Void> updateMovieList() {
         List<PartialTMDBMovie> movies = tmdbRepository.getLastMovies();
         List<Long> movieIds = new ArrayList<>();
         for (TMDBMovie movie: movies) {
@@ -78,6 +70,7 @@ public class Scheduler {
             }
         }
         movieRepository.saveAll(notExistMovies);
+        return CompletableFuture.completedFuture(null);
     }
 
     void checkExistOrCreateMovieSession() {
@@ -92,7 +85,8 @@ public class Scheduler {
         }
     }
 
-    public void createMovieSession(List<Movie> movies) {
+    @Async
+    public CompletableFuture<Void> createMovieSession(List<Movie> movies) {
         LocalDate dateNow = LocalDate.now();
         List<MovieSession> willBeInsertedMovieSession = new ArrayList<>();
         Map<Integer, List<Theatre>> availableTheatreOfShowTime = new HashMap<>();
@@ -121,9 +115,11 @@ public class Scheduler {
             }
         }
         movieSessionRepository.saveAll(willBeInsertedMovieSession);
+        return CompletableFuture.completedFuture(null);
     }
 
-    void checkExistOrCreateTheatre() {
+    @Async
+    public CompletableFuture<Void> checkExistOrCreateTheatre() {
         long count = theatreRepository.count();
         if (count == 0) {
             List<Theatre> theatreList = new ArrayList<>();
@@ -144,5 +140,6 @@ public class Scheduler {
             theatreList.add(new Theatre("O", 70));
             theatreRepository.saveAll(theatreList);
         }
+        return CompletableFuture.completedFuture(null);
     }
 }
