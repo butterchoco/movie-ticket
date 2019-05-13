@@ -81,7 +81,6 @@ public class Scheduler {
     }
 
     void checkExistOrCreateMovieSession() {
-        System.out.println(tmdbRepository);
         List<Movie> movies = movieRepository.findMoviesByReleaseDateAfterAndReleaseDateBefore(
                 LocalDate.now().minusDays(14), LocalDate.now());
 

@@ -25,7 +25,7 @@
                         <span th:text="${#temporals.format(movieSession.startTime, 'HH:mm') + ' - ' +
                             #temporals.format(movieSession.endTime, 'HH:mm')}"></span><br />
                     </div>
-                    <button type="button" class="btn white-color main-color-bg btn-lg btn-block my-2">Buy Ticket Now</button>
+                    <a th:href="@{/showing-seat/{movieId}(movieId=${movie.id})}" class="btn white-color main-color-bg btn-lg btn-block my-2" role="button" aria-pressed="true">Buy Ticket Now</a>
                 </div>
                 <div class="my-3" th:if="${#lists.isEmpty(movieSessions)}">
                     <h3 class="main-color text-center">Coming Soon</h3>
