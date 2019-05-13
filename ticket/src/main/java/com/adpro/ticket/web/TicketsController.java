@@ -42,26 +42,6 @@ public class TicketsController {
                 .orElse(ResponseEntity.badRequest().body(null));
     }
 
-    @GetMapping("/sendEmail")
-    public String ticketPdf() {
-
-        Booking booking = new Booking(1L, Booking.Status.VERIFIED, Set.of(new Ticket("1A")), "ramadistra@gmail.com", 12999);
-        Movie movie = Movie.builder()
-                .name("Fairuzi Adventures")
-                .description("Petualangan seorang Fairuzi")
-                .duration(Duration.ofMinutes(111))
-                .posterUrl("sdada")
-                .releaseDate(LocalDate.now())
-                .id(1L)
-                .build();
-        MovieSession movieSession = new MovieSession(movie, LocalDateTime.now());
-
-
-        BookingData bookingData = new BookingData(booking, movieSession);
-        userNotificationService.sendBookingData(bookingData);
-        return "success";
-    }
-
     @PostMapping
     @RequestMapping("/tickets/{ticketId}/verify")
     public ResponseEntity<Booking> verify(@PathVariable(name = "ticketId") Long ticketId) throws Exception {
