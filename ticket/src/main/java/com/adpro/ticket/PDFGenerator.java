@@ -82,28 +82,38 @@ public class PDFGenerator {
             // vertical alignment
             cell.setValign(VerticalAlignment.MIDDLE);
             // border style
-            cell.setTopBorderStyle(new LineStyle(Color.WHITE, 10));
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
             table.addHeaderRow(headerRow);
 
             Row<PDPage> row = table.createRow(12);
             cell = row.createCell(50, "Movie:");
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
             cell = row.createCell(50, "avengers");
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
 
             Row<PDPage> row1 = table.createRow(12);
             cell = row1.createCell(50, "Date:");
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
             cell = row1.createCell(50, "12-2-2012");
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
 
             Row<PDPage> row2 = table.createRow(12);
             cell = row2.createCell(50, "Showtime:");
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
             cell = row2.createCell(50, "17:55");
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
 
             Row<PDPage> row3 = table.createRow(12);
             cell = row3.createCell(50,"Seat/Row:");
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
             cell = row3.createCell(50, "A1");
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
 
             Row<PDPage> row4 = table.createRow(12);
             cell = row4.createCell(50, "Auditorium:");
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
             cell = row4.createCell(50, "6");
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
 
             table.draw();
 
