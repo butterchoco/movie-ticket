@@ -2,9 +2,8 @@ package com.adpro;
 
 import static org.mockito.Mockito.mock;
 
-import com.adpro.movie.MovieSessionCreator;
+import com.adpro.movie.Scheduler;
 import com.adpro.movie.tmdb.TMDBRepository;
-import com.adpro.seat.TheatreRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +25,8 @@ public class TestConfig {
 
     @Bean
     @Primary
-    MovieSessionCreator getMovieSessionCreator() {
-        return mock(MovieSessionCreator.class);
+    Scheduler getScheduler() {
+        return mock(Scheduler.class);
     }
 
 }
