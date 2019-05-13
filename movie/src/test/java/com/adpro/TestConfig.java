@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
 @ComponentScan
-@EnableAsync
 public class TestConfig {
 
     /**

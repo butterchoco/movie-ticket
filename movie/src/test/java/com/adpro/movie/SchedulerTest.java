@@ -133,12 +133,8 @@ public class SchedulerTest {
     }
 
     @Test
-    public void givenUpdateMovieSessionList_thenDoAllOperations() {
+    public void givenUpdateMovieSessionList_thenCreateMovieSession() {
         scheduler.updateMovieSessionList();
-        verify(scheduler)
-                .updateMovieList();
-        verify(scheduler)
-                .checkExistOrCreateTheatre();
         verify(scheduler)
                 .checkExistOrCreateMovieSession();
     }

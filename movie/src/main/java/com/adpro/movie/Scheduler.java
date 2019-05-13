@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -49,7 +48,6 @@ public class Scheduler {
         checkExistOrCreateMovieSession();
     }
 
-    @Async
     public CompletableFuture<Void> updateMovieList() {
         List<PartialTMDBMovie> movies = tmdbRepository.getLastMovies();
         List<Long> movieIds = new ArrayList<>();
@@ -101,8 +99,7 @@ public class Scheduler {
         }
     }
 
-    @Async
-    public CompletableFuture<Void> createMovieSession(List<Movie> movies) {
+    void createMovieSession(List<Movie> movies) {
         LocalDate dateNow = LocalDate.now();
         List<MovieSession> willBeInsertedMovieSession = new ArrayList<>();
         Map<Integer, List<Theatre>> availableTheatreOfShowTime = new HashMap<>();
@@ -131,10 +128,8 @@ public class Scheduler {
             }
         }
         movieSessionRepository.saveAll(willBeInsertedMovieSession);
-        return CompletableFuture.completedFuture(null);
     }
 
-    @Async
     public CompletableFuture<Void> checkExistOrCreateTheatre() {
         long count = theatreRepository.count();
         if (count == 0) {
