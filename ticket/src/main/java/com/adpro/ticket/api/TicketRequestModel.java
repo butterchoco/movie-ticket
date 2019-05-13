@@ -13,9 +13,13 @@ import java.util.List;
 public class TicketRequestModel {
     private Long sessionId;
     private List<String> seatIds;
+    private String email;
+    private int price;
 
-    public TicketRequestModel(Long sessionId, String seatId) {
+    public TicketRequestModel(Long sessionId, String seatId, String email, int price) {
         this.sessionId = sessionId;
         this.seatIds = Collections.singletonList(seatId);
+        this.email = email;
+        this.price = price;
     }
 }
