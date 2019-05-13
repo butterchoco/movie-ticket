@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <h1>Enjoy your movie</h1>
+    <dl>
+        <dt>Movie:</dt>
+        <dd th:text="${booking.movieSession.movie.name}">Fairuzi Adventures</dd>
+        <dt>Start Time:</dt>
+        <dd>
+            <span th:text="${#temporals.format(booking.movieSession.startTime, 'HH:mm')}">19:25</span>
+            WIB
+        </dd>
+    </dl>
+    <p>Thank you for choosing us. Your E-Tickets are attached below.</p>
+</body>
+</html>

@@ -1,7 +1,7 @@
 package com.adpro.ticket;
 
-import com.adpro.movie.Movie;
-import com.adpro.movie.MovieSession;
+import com.adpro.ticket.api.Movie;
+import com.adpro.ticket.api.MovieSession;
 import com.adpro.seat.Theatre;
 import com.adpro.ticket.api.BookingData;
 import com.adpro.ticket.model.Booking;
@@ -14,10 +14,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-public class BookingDataTests {
+public class APITests {
     @Test
     public void testBookingData() {
-        Booking booking = new Booking(1L, Booking.Status.VERIFIED, Set.of(new Ticket("1A")));
+        Booking booking = new Booking(1L, Booking.Status.VERIFIED, Set.of(new Ticket("1A")), "ramadistra@gmail.com", 12999);
         Movie movie = Movie.builder()
                 .name("Fairuzi Adventures")
                 .description("Petualangan seorang Fairuzi")
@@ -26,8 +26,7 @@ public class BookingDataTests {
                 .releaseDate(LocalDate.now())
                 .id(1L)
                 .build();
-        Theatre theatre = new Theatre("A", 50);
-        MovieSession movieSession = new MovieSession(movie, LocalDateTime.now(), theatre);
+        MovieSession movieSession = new MovieSession(movie, LocalDateTime.now());
 
         BookingData bookingData = new BookingData(booking, movieSession);
 
@@ -35,5 +34,20 @@ public class BookingDataTests {
         Assert.assertEquals(booking.getStatus(), bookingData.getStatus());
         Assert.assertEquals(movieSession, bookingData.getMovieSession());
         Assert.assertEquals(booking.getTickets(), bookingData.getTickets());
+        Assert.assertEquals(booking.getPrice(), bookingData.getPrice());
+    }
+
+    @Test
+    public void testMovie() {
+        Movie movie = Movie.builder()
+                .name("Fairuzi Adventures")
+                .description("Petualangan seorang Fairuzi")
+                .posterUrl("sdada")
+                .releaseDate(LocalDate.now())
+                .id(1L)
+                .build();
+        movie.setDuration("01:30:00");
+
+        Assert.assertEquals(movie.getDuration(), Duration.ofMinutes(90));
     }
 }

@@ -1,6 +1,5 @@
 package com.adpro.ticket.api;
 
-import com.adpro.movie.MovieSession;
 import com.adpro.ticket.model.Booking;
 import com.adpro.ticket.model.Ticket;
 import lombok.AllArgsConstructor;
@@ -26,5 +25,13 @@ public class BookingData {
 
     public Set<Ticket> getTickets() {
         return booking.getTickets();
+    }
+
+    public String getEmail() {
+        return booking.getEmail();
+    }
+
+    public int getPrice() {
+        return booking.getPrice();
     }
 }
