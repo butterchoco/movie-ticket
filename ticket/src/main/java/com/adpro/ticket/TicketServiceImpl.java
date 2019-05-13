@@ -23,7 +23,8 @@ public class TicketServiceImpl implements TicketService {
     private MovieService movieService;
 
     @Autowired
-    public TicketServiceImpl(TicketRepository ticketRepository, BookingRepository bookingRepository, MovieService movieService) {
+    public TicketServiceImpl(TicketRepository ticketRepository, BookingRepository bookingRepository,
+            MovieService movieService) {
         this.ticketRepository = ticketRepository;
         this.bookingRepository = bookingRepository;
         this.movieService = movieService;
@@ -31,16 +32,17 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public boolean canOrderTicket(TicketRequestModel r) {
-        return ticketRepository.findBySessionIdAndSeatIdsAndStatus(r.getSessionId(), r.getSeatIds(), Booking.Status.VERIFIED).isEmpty();
+        return ticketRepository
+                .findBySessionIdAndSeatIdsAndStatus(r.getSessionId(), r.getSeatIds(), Booking.Status.VERIFIED)
+                .isEmpty();
     }
 
     @Override
     public Optional<Booking> orderTicket(TicketRequestModel r) {
         if (canOrderTicket(r)) {
-            Set<Ticket> tickets = r.getSeatIds().stream()
-                    .map(Ticket::new)
-                    .collect(Collectors.toSet());
-            Booking booking = bookingRepository.save(new Booking(r.getSessionId(), Booking.Status.PENDING, tickets, r.getEmail(), r.getPrice()));
+            Set<Ticket> tickets = r.getSeatIds().stream().map(Ticket::new).collect(Collectors.toSet());
+            Booking booking = bookingRepository
+                    .save(new Booking(r.getSessionId(), Booking.Status.PENDING, tickets, r.getEmail(), r.getPrice()));
             return Optional.of(booking);
         }
         return Optional.empty();
@@ -65,8 +67,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public CompletableFuture<BookingData> getBookingData(Booking booking) {
-        return movieService.getMovieSessionById(booking.getSessionId()).thenApply(
-               session -> new BookingData(booking, session)
-        );
+        return movieService.getMovieSessionById(booking.getSessionId())
+                .thenApply(session -> new BookingData(booking, session));
     }
 }

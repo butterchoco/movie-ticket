@@ -2,7 +2,6 @@ package com.adpro.ticket.web;
 
 import com.adpro.ticket.api.BookingData;
 import com.adpro.ticket.api.Movie;
-import com.adpro.ticket.api.MovieService;
 import com.adpro.ticket.api.MovieSession;
 import com.adpro.ticket.api.TicketRequestModel;
 import com.adpro.ticket.api.TicketService;
@@ -66,18 +65,16 @@ public class TicketsController {
     @PostMapping
     @RequestMapping("/tickets/{ticketId}/verify")
     public ResponseEntity<Booking> verify(@PathVariable(name = "ticketId") Long ticketId) throws Exception {
-        var ticketOptional = ticketService.verifyTicket(ticketId);
+        var ticket = ticketService.verifyTicket(ticketId).orElse(null);
 
-        if (!ticketOptional.isPresent()) {
+        if (ticket == null) {
             return ResponseEntity.badRequest().body(null);
         }
 
-        var ticket = ticketOptional.get();
+        if (ticket.getStatus() == Booking.Status.VERIFIED) {
+            ticketService.getBookingData(ticket).thenAcceptAsync(userNotificationService::sendBookingData);
+        }
 
-        ticketService.getBookingData(ticket).thenAcceptAsync(bookingData -> {
-            userNotificationService.sendBookingData(bookingData);
-        }).get();
-
-        return ResponseEntity.ok(ticketOptional.get());
+        return ResponseEntity.ok(ticket);
     }
 }
