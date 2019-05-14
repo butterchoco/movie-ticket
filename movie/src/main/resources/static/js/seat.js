@@ -49,14 +49,16 @@
             });
         }
 
-        function ajaxMovie() {
+        function ajaxMovie(id) {
+            $(".time div button#"+id).prop("disabled", true);
+            var theatreId = $(".cinema").attr("id").split("-")[1];
+
             $.ajax({
                 method: "GET",
                 url: "/bookings-saved",
                 success: function(data) {
-                    console.log(true)
                     for (let i = 0; i < data.length; i++) {
-                        if ($("#theatreId").text() == data[i].theatre.id && $("#time button:disabled").attr("id") == data[i].movieSession.id) {
+                        if (theatreId == data[i].movieSession.theatre.id && id == data[i].movieSession.id) {
                             $("#sqr"+data[i].seat.seatNumber).prop("disabled", true);
                         } else {
                             $("#sqr"+data[i].seat.seatNumber).prop("disabled", false);
@@ -67,14 +69,16 @@
         }
 
         $(document).ready(function () {
+            ajaxSeat();
+
             $(window).load(function () {
                 $('.footer').hide();
-                $('#time button').click(function() {
-                    $('#time button').prop("disabled", false);
-                    $(this).prop("disabled", true);
-                    ajaxMovie();
+                $('.time div button').click(function() {
+                    $('.time div button').prop("disabled", false);
+                    ajaxMovie($(this).attr("id"));
                 });
 
-                ajaxSeat();
+                const sessionId = $(".time").attr("id").split("-")[1];
+                ajaxMovie(sessionId);
             });
         });

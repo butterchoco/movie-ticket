@@ -1,40 +1,52 @@
 package com.adpro.movie;
 
-import com.adpro.movie.tmdb.TMDBClient;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- * Cache the result from DB into memory for at least 5 minutes for every unique parameter given.
+ * Cache the result from DB into memory.
  */
+@Component
 public class MovieListProxy implements MovieListRepository {
-
-    private final static int MIN_DELAY = 5;
-
     private MovieRepository movieRepository;
-    private Map<LocalDate, List<Movie>> lastMovies;
-    private Map<LocalDate, LocalDateTime> lastUpdate;
+    private List<Movie> lastShowingMovies;
+    private List<Movie> lastUpcomingMovies;
+    private LocalDateTime lastUpdate;
+
+    public static final int DAYS_SHOWED = 7;
 
     @Autowired
     public MovieListProxy(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
-        lastMovies = new HashMap<>();
-        lastUpdate = new HashMap<>();
+        lastShowingMovies = new ArrayList<>();
+        lastUpcomingMovies = new ArrayList<>();
+        lastUpdate = LocalDateTime.MIN;
+    }
+
+    private void updateAllMovieList() {
+        lastUpcomingMovies = movieRepository.findMoviesByReleaseDateAfter(LocalDate.now());
+        lastShowingMovies = movieRepository.findMoviesByReleaseDateAfterAndReleaseDateBefore(
+                LocalDate.now().minusDays(DAYS_SHOWED), LocalDate.now());
+        lastUpdate = LocalDateTime.now();
     }
 
     public List<Movie> findMoviesByReleaseDateAfter(LocalDate date) {
-        LocalDateTime dateLastUpdate = this.lastUpdate.getOrDefault(date, LocalDateTime.MIN);
-        if (Duration.between(dateLastUpdate, LocalDateTime.now()).toMinutes() > MIN_DELAY) {
-            List<Movie> result = movieRepository.findMoviesByReleaseDateAfter(date);
-            lastMovies.put(date, result);
-            lastUpdate.put(date, LocalDateTime.now());
+        if (Duration.between(lastUpdate, LocalDateTime.now()).toDays() >= 1) {
+            updateAllMovieList();
         }
-        return lastMovies.get(date);
+        return lastUpcomingMovies;
+    }
+
+    public List<Movie> findMoviesByReleaseDateAfterAndReleaseDateBefore(
+            LocalDate after, LocalDate before) {
+        if (Duration.between(lastUpdate, LocalDateTime.now()).toDays() >= 1) {
+            updateAllMovieList();
+        }
+        return lastShowingMovies;
     }
 }

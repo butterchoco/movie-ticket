@@ -21,27 +21,27 @@ import retrofit2.mock.Calls;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestConfig.class)
-public class TMDBRepositoryTest {
+public class TmdbRepositoryTest {
 
     @MockBean
-    private TMDBClient tmdbClient;
+    private TmdbClient tmdbClient;
 
-    private TMDBRepository tmdbRepository;
+    private TmdbRepository tmdbRepository;
 
     private ObjectMapper mapper;
 
     @Before
     public void init() {
         mapper = new ObjectMapper();
-        tmdbRepository = new TMDBRepository(tmdbClient);
+        tmdbRepository = new TmdbRepository(tmdbClient);
     }
 
     @Test
     public void givenValidMovieId_thenDontThrowException() throws Exception {
-        FullTMDBMovie fullTMDBMovie = mapper.readValue("{\"id\": 1," +
+        FullTmdbMovie fullTmdbMovie = mapper.readValue("{\"id\": 1," +
                 "\"original_title\": \"Fairuzi Adventures\"," +
-                "\"runtime\": 120}", FullTMDBMovie.class);
-        Call<FullTMDBMovie> fullTMDBMovieResponse = Calls.response(fullTMDBMovie);
+                "\"runtime\": 120}", FullTmdbMovie.class);
+        Call<FullTmdbMovie> fullTMDBMovieResponse = Calls.response(fullTmdbMovie);
         given(tmdbClient.movie(any(), any()))
                 .willReturn(fullTMDBMovieResponse);
 
@@ -54,7 +54,7 @@ public class TMDBRepositoryTest {
 
     @Test
     public void givenInvalidMovieId_thenThrowException() {
-        Call<FullTMDBMovie> nullResponse = Calls.response(Response.success(null));
+        Call<FullTmdbMovie> nullResponse = Calls.response(Response.success(null));
         given(tmdbClient.movie(eq(1L), any()))
                 .willReturn(nullResponse);
 
@@ -66,20 +66,20 @@ public class TMDBRepositoryTest {
 
     @Test
     public void givenNoRuntimeMovie_thenSetDefault() throws Exception {
-        FullTMDBMovie fullTMDBMovie = mapper.readValue("{\"id\": 1," +
+        FullTmdbMovie fullTmdbMovie = mapper.readValue("{\"id\": 1," +
                 "\"original_title\": \"Fairuzi Adventures\"," +
-                "\"runtime\": null, \"poster_path\": \"fairuzi.jpg\"}", FullTMDBMovie.class);
-        Call<FullTMDBMovie> fullTMDBMovieResponse = Calls.response(fullTMDBMovie);
+                "\"runtime\": null, \"poster_path\": \"fairuzi.jpg\"}", FullTmdbMovie.class);
+        Call<FullTmdbMovie> fullTmdbMovieResponse = Calls.response(fullTmdbMovie);
         given(tmdbClient.movie(any(), any()))
-                .willReturn(fullTMDBMovieResponse);
+                .willReturn(fullTmdbMovieResponse);
 
-        FullTMDBMovie movie = tmdbRepository.getMovie(1L);
-        assertEquals(FullTMDBMovie.DEFAULT_DURATION, movie.getDuration());
+        FullTmdbMovie movie = tmdbRepository.getMovie(1L);
+        assertEquals(FullTmdbMovie.DEFAULT_DURATION, movie.getDuration());
     }
 
     @Test
     public void givenValidMovieListResponse_thenDontThrowException() throws Exception {
-        Page<PartialTMDBMovie> validMovieListJSON = mapper.readValue("{\"page\": 1," +
+        Page<PartialTmdbMovie> validMovieListJSON = mapper.readValue("{\"page\": 1," +
                 "\"total_results\": 2," +
                 "\"total_pages\": 1," +
                 "\"results\": [" +
@@ -87,8 +87,8 @@ public class TMDBRepositoryTest {
                 "\"runtime\": 120}," +
                 "{\"original_title\": \"[BUKAN] Fairuzi Adventures\"," +
                 "\"runtime\": 121}" +
-                "]}", new TypeReference<Page<PartialTMDBMovie>>(){});
-        Call<Page<PartialTMDBMovie>> validMoveListResponse = Calls.response(validMovieListJSON);
+                "]}", new TypeReference<Page<PartialTmdbMovie>>(){});
+        Call<Page<PartialTmdbMovie>> validMoveListResponse = Calls.response(validMovieListJSON);
         given(tmdbClient.discover(any(), any()))
                 .willReturn(validMoveListResponse);
 
@@ -101,7 +101,7 @@ public class TMDBRepositoryTest {
 
     @Test
     public void givenNullMovieListResponse_thenThrowException() {
-        Call<Page<PartialTMDBMovie>> nullResponse = Calls.response(Response.success(null));
+        Call<Page<PartialTmdbMovie>> nullResponse = Calls.response(Response.success(null));
         given(tmdbClient.discover(any(), any()))
                 .willReturn(nullResponse);
 
@@ -113,14 +113,14 @@ public class TMDBRepositoryTest {
 
     @Test
     public void givenNoPosterPathMovie_thenSetNoPosterUrl() throws Exception {
-        FullTMDBMovie fullTMDBMovie = mapper.readValue("{\"id\": 1," +
+        FullTmdbMovie fullTMDBMovie = mapper.readValue("{\"id\": 1," +
                 "\"original_title\": \"Fairuzi Adventures\"," +
-                "\"poster_path\": null}", FullTMDBMovie.class);
-        Call<FullTMDBMovie> fullTMDBMovieResponse = Calls.response(fullTMDBMovie);
+                "\"poster_path\": null}", FullTmdbMovie.class);
+        Call<FullTmdbMovie> fullTMDBMovieResponse = Calls.response(fullTMDBMovie);
         given(tmdbClient.movie(any(), any()))
                 .willReturn(fullTMDBMovieResponse);
 
-        FullTMDBMovie movie = tmdbRepository.getMovie(1L);
-        assertEquals(FullTMDBMovie.NO_POSTER_URL, movie.getPosterPath());
+        FullTmdbMovie movie = tmdbRepository.getMovie(1L);
+        assertEquals(FullTmdbMovie.NO_POSTER_URL, movie.getPosterPath());
     }
 }

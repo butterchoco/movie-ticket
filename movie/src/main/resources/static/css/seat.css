@@ -297,7 +297,7 @@ option {
           justify-content: center;
 }
 
-#time button:disabled {
+.time div button:disabled {
     background-color: #f34573;
     color: white;
     cursor: default;

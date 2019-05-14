@@ -1,6 +1,6 @@
 package com.adpro.movie;
 
-import com.adpro.movie.tmdb.FullTMDBMovie;
+import com.adpro.movie.tmdb.FullTmdbMovie;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
@@ -50,7 +50,7 @@ public class Movie implements Serializable {
     @NotNull
     private Duration duration;
 
-    public static Movie fromTMDBMovie(@NotNull FullTMDBMovie movie) {
+    public static Movie fromTmdbMovie(@NotNull FullTmdbMovie movie) {
         return new MovieBuilder()
                 .tmdbId(movie.getId())
                 .name(movie.getOriginalTitle())
@@ -62,7 +62,7 @@ public class Movie implements Serializable {
     }
 
     /**
-     * A hackish trick to format duration as HH:MM:SS
+     * A hackish trick to format duration as HH:MM:SS.
      * @return the LocalTime representation of duration
      */
     @JsonProperty("duration")

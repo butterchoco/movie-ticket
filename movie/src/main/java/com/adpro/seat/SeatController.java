@@ -37,7 +37,9 @@ public class SeatController {
     }
 
     @GetMapping("/seat")
-    public @ResponseBody List<Theatre> seatAPI() { return this.theatreRepository.findAll(); }
+    public @ResponseBody List<Theatre> seatApi() {
+        return this.theatreRepository.findAll();
+    }
 
     @GetMapping("/bookings-saved")
     public @ResponseBody
@@ -46,21 +48,19 @@ public class SeatController {
     @PostMapping("/saving-booking")
     public @ResponseBody SavedBooking saveBooking(Long movieSessionId, Integer seatId, Integer theatreId) {
         MovieSession MovieSessionTemp = this.movieSessionRepository.findById(movieSessionId).get();
-        Theatre TheatreTemp = this.theatreRepository.findById(theatreId).get();
         Seat SeatTemp = this.seatRepository.findById(seatId).get();
-        SavedBooking savedBooking = new SavedBooking(MovieSessionTemp, TheatreTemp, SeatTemp);
+        SavedBooking savedBooking = new SavedBooking(MovieSessionTemp, SeatTemp);
         return this.savedBookingRepository.save(savedBooking);
     }
 
-    @GetMapping("/showing-seat/{theatreId}/{movieId}")
-    public ModelAndView showSeat(@PathVariable Integer theatreId, @PathVariable Long movieId, Model model) {
+    @GetMapping("/showing-seat/{sessionId}")
+    public ModelAndView showSeat(@PathVariable Long sessionId) {
         ModelAndView view = new ModelAndView("show-seat");
         LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
-        List<MovieSession> movieSessions = movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(movieId, midnight);
-        Theatre theatre = theatreRepository.findById(theatreId).get();
-        Movie movie = movieRepository.findMovieById(movieId);
-        view.addAllObjects(Map.of("theatre", theatre, "movieSessions",movieSessions,"movie",movie));
-        if (movieSessions.size() != 0)  return view;
+        MovieSession session = movieSessionRepository.findById(sessionId).get();
+        List<MovieSession> movieSessions = movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(session.getMovie().getId(), midnight);
+        view.addAllObjects(Map.of( "movieSessions",movieSessions, "movie", session.getMovie(), "theatre", session.getTheatre(), "sessionId", session.getId()));
+        if (session != null)  return view;
         else return new ModelAndView("redirect:/movies");
     }
 

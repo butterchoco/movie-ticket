@@ -1,14 +1,16 @@
 package com.adpro.seat;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import lombok.Data;
 
-import javax.persistence.*;
 
 @Data
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
-public class FarSeat extends Seat{
-
+@Inheritance(strategy = InheritanceType.JOINED)
+public class FarSeat extends Seat {
     @Column(name = "Cost")
     private static int cost;
 
@@ -23,7 +25,7 @@ public class FarSeat extends Seat{
     }
 
     public static void setCost(int cost) {
-        cost = cost;
+        FarSeat.cost = cost;
     }
 
 }

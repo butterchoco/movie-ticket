@@ -27,16 +27,12 @@ public class SavedBooking {
     @Fetch(FetchMode.JOIN)
     private Seat seat;
 
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name= "TheatreId", updatable=false)
-    @Fetch(FetchMode.JOIN)
-    private Theatre theatre;
-
-    public SavedBooking(MovieSession movieSession, Theatre theatre, Seat seat) {
+    public SavedBooking(MovieSession movieSession, Seat seat) {
         this.movieSession = movieSession;
-        this.theatre = theatre;
         this.seat = seat;
     }
+
+    public SavedBooking() {}
 
     public MovieSession getMovieSession() {
         return movieSession;
