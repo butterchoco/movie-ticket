@@ -6,17 +6,19 @@ import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Get TMDBMovie from TMDB API.
  */
-public class TMDBRepository {
+@Component
+public class TmdbRepository {
     private static final String KEY = "8d14316a3ad3955af1670a00e39e50ab";
 
-    private TMDBClient tmdbClient;
+    private TmdbClient tmdbClient;
 
     @Autowired
-    public TMDBRepository(TMDBClient tmdbClient) {
+    public TmdbRepository(TmdbClient tmdbClient) {
         this.tmdbClient = tmdbClient;
     }
 
@@ -26,23 +28,23 @@ public class TMDBRepository {
      * @return the FullMovie object
      */
     @SneakyThrows
-    public FullTMDBMovie getMovie(Long movieId) {
-        FullTMDBMovie fullTMDBMovie = tmdbClient.movie(movieId, KEY).execute().body();
+    public FullTmdbMovie getMovie(Long movieId) {
+        FullTmdbMovie fullTmdbMovie = tmdbClient.movie(movieId, KEY).execute().body();
 
-        if (fullTMDBMovie == null) {
+        if (fullTmdbMovie == null) {
             throw new RuntimeException("Got null from TMDB API");
         }
-        return fullTMDBMovie;
+        return fullTmdbMovie;
     }
 
     @SneakyThrows
-    public List<PartialTMDBMovie> getLastMovies() {
+    public List<PartialTmdbMovie> getLastMovies() {
         String lastDate = LocalDate.now().minusDays(7).format(DateTimeFormatter.ISO_LOCAL_DATE);
         var params = Map.of(
                 "primary_release_date.gte", lastDate,
                 "with_original_language", "en"
         );
-        Page<PartialTMDBMovie> movies = tmdbClient.discover(KEY, params).execute().body();
+        Page<PartialTmdbMovie> movies = tmdbClient.discover(KEY, params).execute().body();
         if (movies == null) {
             throw new RuntimeException("Got null from TMDB API");
         }

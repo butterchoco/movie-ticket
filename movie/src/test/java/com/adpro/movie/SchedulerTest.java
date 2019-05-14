@@ -9,9 +9,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import com.adpro.TestConfig;
-import com.adpro.movie.tmdb.FullTMDBMovie;
-import com.adpro.movie.tmdb.PartialTMDBMovie;
-import com.adpro.movie.tmdb.TMDBRepository;
+import com.adpro.movie.tmdb.FullTmdbMovie;
+import com.adpro.movie.tmdb.PartialTmdbMovie;
+import com.adpro.movie.tmdb.TmdbRepository;
 import com.adpro.seat.Theatre;
 import com.adpro.seat.TheatreRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class SchedulerTest {
 
     @MockBean
-    private TMDBRepository tmdbRepository;
+    private TmdbRepository tmdbRepository;
 
     @MockBean
     private MovieRepository movieRepository;
@@ -60,15 +60,15 @@ public class SchedulerTest {
     public void givenNewMovie_thenInsertToDB() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
-        PartialTMDBMovie oldTMDBMovie = mapper.readValue("{\"id\": 1, " +
-                "\"original_title\": \"Fairuzi Adventures\"}", PartialTMDBMovie.class);
+        PartialTmdbMovie oldTmdbMovie = mapper.readValue("{\"id\": 1, " +
+                "\"original_title\": \"Fairuzi Adventures\"}", PartialTmdbMovie.class);
 
-        PartialTMDBMovie newTMDBMovie = mapper.readValue("{\"id\": 2," +
-                "\"original_title\": \"[BUKAN] Fairuzi Adventures\"}", PartialTMDBMovie.class);
+        PartialTmdbMovie newTmdbMovie = mapper.readValue("{\"id\": 2," +
+                "\"original_title\": \"[BUKAN] Fairuzi Adventures\"}", PartialTmdbMovie.class);
 
-        FullTMDBMovie fullNewTMDBMovie = mapper.readValue("{\"id\": 2," +
+        FullTmdbMovie fullNewTmdbMovie = mapper.readValue("{\"id\": 2," +
                 "\"original_title\": \"[BUKAN] Fairuzi Adventures\"," +
-                "\"runtime\": 120}", FullTMDBMovie.class);
+                "\"runtime\": 120}", FullTmdbMovie.class);
 
         Movie oldMovie = Movie.builder()
                 .tmdbId(1L)
@@ -76,13 +76,13 @@ public class SchedulerTest {
                 .build();
 
         given(tmdbRepository.getLastMovies())
-                .willReturn(List.of(oldTMDBMovie, newTMDBMovie));
+                .willReturn(List.of(oldTmdbMovie, newTmdbMovie));
 
         given(movieRepository.findByTmdbIdIn(any()))
                 .willReturn(List.of(oldMovie));
 
         given(tmdbRepository.getMovie(2L))
-                .willReturn(fullNewTMDBMovie);
+                .willReturn(fullNewTmdbMovie);
 
         scheduler.updateMovieList();
 
@@ -170,11 +170,11 @@ public class SchedulerTest {
     @SneakyThrows
     public void givenMissingMovies_thenUpdateDBMovie() {
         ObjectMapper mapper = new ObjectMapper();
-        FullTMDBMovie fullTMDBMovie = mapper.readValue("{\"id\": 1," +
+        FullTmdbMovie fullTmdbMovie = mapper.readValue("{\"id\": 1," +
                 "\"original_title\": \"Fairuzi Adventures\"," +
-                "\"runtime\": 120}", FullTMDBMovie.class);
+                "\"runtime\": 120}", FullTmdbMovie.class);
         given(tmdbRepository.getMovie(any()))
-                .willReturn(fullTMDBMovie);
+                .willReturn(fullTmdbMovie);
 
         scheduler.getAndAddToDB(List.of(1L));
         then(movieRepository)

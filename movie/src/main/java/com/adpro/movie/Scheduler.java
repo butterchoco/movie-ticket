@@ -1,9 +1,9 @@
 package com.adpro.movie;
 
-import com.adpro.movie.tmdb.FullTMDBMovie;
-import com.adpro.movie.tmdb.PartialTMDBMovie;
-import com.adpro.movie.tmdb.TMDBMovie;
-import com.adpro.movie.tmdb.TMDBRepository;
+import com.adpro.movie.tmdb.FullTmdbMovie;
+import com.adpro.movie.tmdb.PartialTmdbMovie;
+import com.adpro.movie.tmdb.TmdbMovie;
+import com.adpro.movie.tmdb.TmdbRepository;
 import com.adpro.seat.Theatre;
 import com.adpro.seat.TheatreRepository;
 import java.time.LocalDate;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Scheduler {
 
-    private TMDBRepository tmdbRepository;
+    private TmdbRepository tmdbRepository;
     private MovieRepository movieRepository;
     private TheatreRepository theatreRepository;
     private MovieSessionRepository movieSessionRepository;
@@ -31,7 +31,7 @@ public class Scheduler {
     public static int[] NORMAL_SHOW_TIME = new int[]{13, 20};
 
     @Autowired
-    public Scheduler(TMDBRepository tmdbRepository,
+    public Scheduler(TmdbRepository tmdbRepository,
                      MovieRepository movieRepository,
                      TheatreRepository theatreRepository,
                      MovieSessionRepository movieSessionRepository) {
@@ -49,9 +49,9 @@ public class Scheduler {
     }
 
     public CompletableFuture<Void> updateMovieList() {
-        List<PartialTMDBMovie> movies = tmdbRepository.getLastMovies();
+        List<PartialTmdbMovie> movies = tmdbRepository.getLastMovies();
         List<Long> movieIds = new ArrayList<>();
-        for (TMDBMovie movie: movies) {
+        for (TmdbMovie movie: movies) {
             movieIds.add(movie.getId());
         }
 
@@ -61,7 +61,7 @@ public class Scheduler {
                 .collect(Collectors.toSet());
 
         List<Long> notExistMovieIds = new ArrayList<>();
-        for (PartialTMDBMovie movie: movies) {
+        for (PartialTmdbMovie movie: movies) {
             if (!existingMovieTmdbIds.contains(movie.getId())) {
                 notExistMovieIds.add(movie.getId());
             }
@@ -71,18 +71,18 @@ public class Scheduler {
     }
 
     void getAndAddToDB(List<Long> movieIds) {
-        List<CompletableFuture<FullTMDBMovie>> retrievedMovies = new ArrayList<>();
+        List<CompletableFuture<FullTmdbMovie>> retrievedMovies = new ArrayList<>();
         for (Long id: movieIds) {
             retrievedMovies.add(CompletableFuture.supplyAsync(() -> tmdbRepository.getMovie(id)));
         }
-        CompletableFuture.
-                allOf(retrievedMovies.toArray(new CompletableFuture[0]))
+        CompletableFuture
+                .allOf(retrievedMovies.toArray(new CompletableFuture[0]))
                 .join();
 
         List<Movie> movies = retrievedMovies
                 .stream()
                 .map(CompletableFuture::join)
-                .map(Movie::fromTMDBMovie)
+                .map(Movie::fromTmdbMovie)
                 .collect(Collectors.toList());
         movieRepository.saveAll(movies);
     }
@@ -91,8 +91,8 @@ public class Scheduler {
         List<Movie> movies = movieRepository.findMoviesByReleaseDateAfterAndReleaseDateBefore(
                 LocalDate.now().minusDays(14), LocalDate.now());
 
-        List<MovieSession> alreadyCreatedTodayMovieSession = movieSessionRepository.findMovieSessionsByStartTimeAfter(
-                LocalDate.now().atStartOfDay());
+        List<MovieSession> alreadyCreatedTodayMovieSession = movieSessionRepository
+                .findMovieSessionsByStartTimeAfter(LocalDate.now().atStartOfDay());
 
         if (alreadyCreatedTodayMovieSession.size() == 0) {
             createMovieSession(movies);
@@ -104,7 +104,8 @@ public class Scheduler {
         List<MovieSession> willBeInsertedMovieSession = new ArrayList<>();
         Map<Integer, List<Theatre>> availableTheatreOfShowTime = new HashMap<>();
         for (int showTime : PEAK_SHOW_TIME) {
-            availableTheatreOfShowTime.put(showTime, theatreRepository.findAllByOrderByDescriptionDesc());
+            availableTheatreOfShowTime.put(showTime,
+                    theatreRepository.findAllByOrderByDescriptionDesc());
         }
 
         for (Movie movie : movies) {

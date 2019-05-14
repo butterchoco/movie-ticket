@@ -3,12 +3,11 @@ package com.adpro;
 import static org.mockito.Mockito.mock;
 
 import com.adpro.movie.Scheduler;
-import com.adpro.movie.tmdb.TMDBRepository;
+import com.adpro.movie.tmdb.TmdbRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
 @ComponentScan
@@ -20,8 +19,8 @@ public class TestConfig {
      */
     @Bean
     @Primary
-    TMDBRepository getTMDBRepository() {
-        return mock(TMDBRepository.class);
+    TmdbRepository getTmdbRepository() {
+        return mock(TmdbRepository.class);
     }
 
     @Bean

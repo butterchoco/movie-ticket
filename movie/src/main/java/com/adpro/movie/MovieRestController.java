@@ -37,7 +37,8 @@ public class MovieRestController {
     @RequestMapping("/api/movie/{movieId}")
     public List<MovieSession> movieSessions(@PathVariable Long movieId) {
         LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
-        return movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(movieId, midnight);
+        return movieSessionRepository
+                .findMovieSessionsByMovieIdAndStartTimeAfter(movieId, midnight);
     }
 
     @RequestMapping("/api/movie/session/{movieSessionId}")

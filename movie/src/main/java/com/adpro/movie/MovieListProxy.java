@@ -6,17 +6,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Cache the result from DB into memory.
  */
+@Component
 public class MovieListProxy implements MovieListRepository {
     private MovieRepository movieRepository;
     private List<Movie> lastShowingMovies;
     private List<Movie> lastUpcomingMovies;
     private LocalDateTime lastUpdate;
 
-    public static final int DAYS_SHOWED= 7;
+    public static final int DAYS_SHOWED = 7;
 
     @Autowired
     public MovieListProxy(MovieRepository movieRepository) {
@@ -40,7 +42,8 @@ public class MovieListProxy implements MovieListRepository {
         return lastUpcomingMovies;
     }
 
-    public List<Movie> findMoviesByReleaseDateAfterAndReleaseDateBefore(LocalDate after, LocalDate before) {
+    public List<Movie> findMoviesByReleaseDateAfterAndReleaseDateBefore(
+            LocalDate after, LocalDate before) {
         if (Duration.between(lastUpdate, LocalDateTime.now()).toDays() >= 1) {
             updateAllMovieList();
         }
