@@ -45,4 +45,9 @@ public class MovieServiceImpl implements MovieService {
     public Movie getMovie(Long movieId) {
         return movieRepository.findMovieById(movieId);
     }
+
+    @Override
+    public MovieSession getMovieSession(Long movieSessionId) {
+        return movieSessionRepository.findById(movieSessionId).orElse(null);
+    }
 }
