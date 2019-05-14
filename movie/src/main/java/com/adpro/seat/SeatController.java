@@ -61,21 +61,15 @@ public class SeatController {
     @GetMapping("/showing-seat/{sessionId}")
     public ModelAndView showSeat(@PathVariable Long sessionId) {
         ModelAndView view = new ModelAndView("show-seat");
-        LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
         MovieSession session = movieSessionRepository.findById(sessionId).get();
         List<MovieSession> movieSessions = movieSessionRepository
-                .findMovieSessionsByMovieIdAndStartTimeAfter(
-                        session.getMovie().getId(), midnight);
+                .findMovieSessionsByMovieId(session.getMovie().getId());
         view.addAllObjects(Map.of(
                 "movieSessions", movieSessions,
                 "movie", session.getMovie(),
                 "theatre", session.getTheatre(),
                 "sessionId", session.getId()));
-        if (session != null) {
-            return view;
-        } else {
-            return new ModelAndView("redirect:/movies");
-        }
+        return view;
     }
 
 }

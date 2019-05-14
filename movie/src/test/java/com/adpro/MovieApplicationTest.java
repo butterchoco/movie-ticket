@@ -109,27 +109,27 @@ public class MovieApplicationTest {
 	}
 
     @Test
-    public void createTheatreAndSeat() {
+    public void testCreateTheatreAndSeat() {
         Theatre theatre1 = new Theatre("A", 50);
         Seat seat = new MiddleSeat();
         theatre1.addSeatToRow(seat);
     }
 
 	@Test
-	public void checkSetSeatCost() {
+	public void testSetSeatCost() {
 		FarSeat.setCost(FarSeat.getCost()+10000);
 		MiddleSeat.setCost(MiddleSeat.getCost()+10000);
 	}
 
 	@Test
-    public void checkBookingSeatAvailable() {
+    public void testBookingSeatAvailable() {
         Theatre theatre1 = new Theatre("A", 50);
         Seat seat = new MiddleSeat();
         theatre1.addSeatToRow(seat);
     }
 
 	@Test
-    public void synchronizeAPIWithTheatreAndSeat() throws Exception {
+    public void testSynchronizeAPIWithTheatreAndSeat() throws Exception {
         Theatre theatre1 = new Theatre("CGV", 50);
         theatre1.setId(1);
         theatre1.createRows();
@@ -145,38 +145,6 @@ public class MovieApplicationTest {
                 .andExpect(jsonPath("$[0].rows[0].type", is(theatre1.getRows().get(0).getType())));
     }
 
-    @Test
-    public void ShowingSeat() throws Exception {
-		Theatre theatre1 = new Theatre("CGV", 50);
-		theatre1.setId(1);
-		theatre1.createRows();
-
-		Movie movie = Movie.builder()
-				.name("Fairuzi Adventures")
-				.description("Petualangan seorang Fairuzi")
-				.duration(Duration.ofMinutes(111))
-				.posterUrl("sdada")
-				.releaseDate(LocalDate.now())
-				.id(1L)
-				.build();
-
-		LocalDateTime dayTime = LocalDateTime.of(1999, 8, 10, 10, 0);
-		LocalDateTime nightTime = LocalDateTime.of(1999, 8, 10, 19, 0);
-		Theatre theatre = new Theatre("A", 50);
-		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
-		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
-
-		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
-				.willReturn(List.of(daySession, nightSession));
-		given(movieRepository.findMovieById(1L))
-				.willReturn(movie);
-
-		given(theatreRepository.findById(1).get())
-				.willReturn(theatre1);
-
-        this.mvc.perform(get("/showing-seat/1"))
-                .andExpect(status().isOk());
-    }
 
 	@Test
 	public void ShowingMoviesHtml() throws Exception {
