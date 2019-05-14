@@ -1,4 +1,4 @@
-package com.adpro.ticket;
+package com.adpro.ticket.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

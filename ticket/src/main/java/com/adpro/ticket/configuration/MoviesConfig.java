@@ -1,4 +1,4 @@
-package com.adpro.ticket;
+package com.adpro.ticket.configuration;
 
 import com.adpro.ticket.api.movies.MovieService;
 import org.springframework.context.annotation.Bean;
