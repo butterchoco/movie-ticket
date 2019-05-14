@@ -2,7 +2,6 @@ package com.adpro.ticket.services.bookings;
 
 import com.adpro.ticket.api.bookings.BookingRequestModel;
 import com.adpro.ticket.api.bookings.BookingService;
-import com.adpro.ticket.api.movies.MovieService;
 import com.adpro.ticket.model.Booking;
 import com.adpro.ticket.model.Ticket;
 import com.adpro.ticket.repository.BookingRepository;
