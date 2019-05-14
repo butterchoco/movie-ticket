@@ -113,7 +113,7 @@ public class MovieApplicationTest {
     @Test
     public void createTheatreAndSeat() throws Exception {
         Theatre theatre1 = new Theatre("A", 50);
-        Seat seat = new MiddleSeat(false);
+        Seat seat = new MiddleSeat();
         theatre1.addSeatToRow(seat);
     }
 
@@ -126,10 +126,8 @@ public class MovieApplicationTest {
 	@Test
     public void checkBookingSeatAvailable() throws Exception {
         Theatre theatre1 = new Theatre("A", 50);
-        Seat seat = new MiddleSeat(false);
+        Seat seat = new MiddleSeat();
         theatre1.addSeatToRow(seat);
-        theatre1.getRows().get(0).booked();
-        theatre1.getRows().get(0).unbooked();
     }
 
 	@Test
@@ -146,8 +144,7 @@ public class MovieApplicationTest {
                 .andExpect(jsonPath("$[0].id", is(theatre1.getId())))
                 .andExpect(jsonPath("$[0].description", is(theatre1.getDescription())))
                 .andExpect(jsonPath("$[0].seatCount", is(theatre1.getSeatCount())))
-                .andExpect(jsonPath("$[0].rows[0].type", is(theatre1.getRows().get(0).getType())))
-                .andExpect(jsonPath("$[0].rows[0].booked", is(theatre1.getRows().get(0).isBooked())));
+                .andExpect(jsonPath("$[0].rows[0].type", is(theatre1.getRows().get(0).getType())));
     }
 
     @Test
@@ -175,7 +172,7 @@ public class MovieApplicationTest {
 		given(movieRepository.findMovieById(1L))
 				.willReturn(movie);
 
-		given(theatreRepository.findTheatreById(1))
+		given(theatreRepository.findById(1).get())
 				.willReturn(theatre1);
 
         this.mvc.perform(get("/showing-seat/1/1"))

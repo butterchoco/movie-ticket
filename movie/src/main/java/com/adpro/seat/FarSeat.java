@@ -12,13 +12,11 @@ public class FarSeat extends Seat{
     @Column(name = "Cost")
     private static int cost;
 
-    public FarSeat(boolean isBooked) {
-        super(isBooked);
+    public FarSeat() {
+        super();
         cost = 40000;
         type = "Far";
     }
-
-    public FarSeat() {}
 
     public static int getCost() {
         return cost;
