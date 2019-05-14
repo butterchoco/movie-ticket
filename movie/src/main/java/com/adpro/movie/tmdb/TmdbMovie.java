@@ -12,7 +12,7 @@ import lombok.Data;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-public abstract class TMDBMovie {
+public abstract class TmdbMovie {
 
     static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/w500";
     static final String NO_POSTER_URL = "/img/no-poster.png";
