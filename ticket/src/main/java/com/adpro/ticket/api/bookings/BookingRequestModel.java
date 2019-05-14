@@ -1,4 +1,4 @@
-package com.adpro.ticket.api;
+package com.adpro.ticket.api.bookings;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +10,16 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TicketRequestModel {
+public class BookingRequestModel {
     private Long sessionId;
     private List<String> seatIds;
+    private String email;
+    private int price;
 
-    public TicketRequestModel(Long sessionId, String seatId) {
+    public BookingRequestModel(Long sessionId, String seatId, String email, int price) {
         this.sessionId = sessionId;
         this.seatIds = Collections.singletonList(seatId);
+        this.email = email;
+        this.price = price;
     }
 }
