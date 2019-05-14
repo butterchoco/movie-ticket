@@ -1,11 +1,11 @@
 package com.adpro.ticket;
 
-import com.adpro.ticket.api.EmailClient;
-import com.adpro.ticket.api.MessageResponse;
-import com.adpro.ticket.api.Movie;
-import com.adpro.ticket.api.MovieService;
-import com.adpro.ticket.api.MovieSession;
-import com.adpro.ticket.api.TicketRequestModel;
+import com.adpro.ticket.services.email.EmailClient;
+import com.adpro.ticket.api.notifications.MessageResponse;
+import com.adpro.ticket.api.movies.Movie;
+import com.adpro.ticket.api.movies.MovieService;
+import com.adpro.ticket.api.movies.MovieSession;
+import com.adpro.ticket.api.bookings.BookingRequestModel;
 import com.adpro.ticket.model.Booking;
 import com.adpro.ticket.model.Ticket;
 import com.adpro.ticket.repository.BookingRepository;
@@ -66,8 +66,8 @@ public class TicketApplicationTests {
 
     @Test
     public void testCanOrderSeat() throws Exception {
-        String json = new ObjectMapper().writeValueAsString(new TicketRequestModel(1L, "1B", "ramadistra@gmail.com", 12222));
-        this.mvc.perform(post("/tickets").contentType(MediaType.APPLICATION_JSON).content(json))
+        String json = new ObjectMapper().writeValueAsString(new BookingRequestModel(1L, "1B", "ramadistra@gmail.com", 12222));
+        this.mvc.perform(post("/bookings").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(jsonPath("$.status", is("PENDING")))
                 .andExpect(status().isOk());
     }
@@ -75,8 +75,8 @@ public class TicketApplicationTests {
     @Test
     public void testCannotOrderBookedSeat() throws Exception {
         var booking = createBooking(1L, Booking.Status.VERIFIED);
-        String json = new ObjectMapper().writeValueAsString(new TicketRequestModel(1L, "1A", "ramadistra@gmail.com", 12222));
-        this.mvc.perform(post("/tickets").contentType(MediaType.APPLICATION_JSON).content(json))
+        String json = new ObjectMapper().writeValueAsString(new BookingRequestModel(1L, "1A", "ramadistra@gmail.com", 12222));
+        this.mvc.perform(post("/bookings").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -93,7 +93,7 @@ public class TicketApplicationTests {
                     lock.countDown();
                     return new MessageResponse("1", "Success!");
                 }));
-        this.mvc.perform(post("/tickets/" + booking.getId() + "/verify"))
+        this.mvc.perform(post("/bookings/" + booking.getId() + "/verify"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status", is("VERIFIED")));
 
@@ -104,13 +104,13 @@ public class TicketApplicationTests {
     @Test
     public void testCancelledTicketNotVerified() throws Exception {
         Booking booking = createBooking(3L, Booking.Status.CANCELLED);
-        this.mvc.perform(post("/tickets/" + booking.getId() + "/verify"))
+        this.mvc.perform(post("/bookings/" + booking.getId() + "/verify"))
                 .andExpect(jsonPath("$.status", is("CANCELLED")));
     }
 
     @Test
     public void testVerifyInvalidTicket() throws Exception {
-        this.mvc.perform(post("/tickets/12321/verify"))
+        this.mvc.perform(post("/bookings/12321/verify"))
                 .andExpect(status().is4xxClientError());
     }
 }

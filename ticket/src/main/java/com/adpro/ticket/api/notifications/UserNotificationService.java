@@ -1,4 +1,6 @@
-package com.adpro.ticket.api;
+package com.adpro.ticket.api.notifications;
+
+import com.adpro.ticket.api.bookings.BookingData;
 
 import java.util.concurrent.CompletableFuture;
 
