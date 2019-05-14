@@ -36,7 +36,7 @@ public class BookingsController {
 
     @PostMapping
     @RequestMapping("/bookings/{bookingId}/verify")
-    public ResponseEntity<Booking> verify(@PathVariable(name = "bookingId") Long bookingId) throws Exception {
+    public ResponseEntity<Booking> verify(@PathVariable(name = "bookingId") Long bookingId) {
         var booking = bookingService.verifyBooking(bookingId).orElse(null);
 
         if (booking == null) {
