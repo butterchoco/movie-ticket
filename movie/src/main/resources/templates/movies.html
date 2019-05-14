@@ -20,11 +20,11 @@
                 <h3 class="main-color" th:text="${title}"></h3>
                 <div class="row">
                     <div class="col-6 col-lg-4 my-2" th:each="movie : ${movies}">
-                        <a class="main-color main-color-zoom" th:href="@{'/showing-seat/' + ${movie.id}}">
+                        <a class="main-color main-color-zoom" th:href="@{'/movie/' + ${movie.id}}">
                             <img class="img-thumbnail" src="/default.jpg"
                                  th:attr="src=${movie.posterUrl},title=${movie.name},alt=${movie.name}" />
                         </a>
-                        <a class="main-color main-color-zoom" th:href="@{'/showing-seat/' + ${movie.id}}"
+                        <a class="main-color main-color-zoom" th:href="@{'/movie/' + ${movie.id}}"
                            th:text="${movie.name}"></a>
                     </div>
                 </div>

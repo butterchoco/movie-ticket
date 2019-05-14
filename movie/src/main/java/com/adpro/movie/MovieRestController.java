@@ -34,6 +34,13 @@ public class MovieRestController {
         return movieListProxy.findMoviesByReleaseDateAfter(LocalDate.now());
     }
 
+    @RequestMapping("/api/movie/{movieId}")
+    public List<MovieSession> movieSessions(@PathVariable Long movieId) {
+        LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        return movieSessionRepository
+                .findMovieSessionsByMovieIdAndStartTimeAfter(movieId, midnight);
+    }
+
     @RequestMapping("/api/movie/session/{movieSessionId}")
     public MovieSession movieSession(@PathVariable Long movieSessionId) {
         return movieSessionRepository.findById(movieSessionId).orElse(null);

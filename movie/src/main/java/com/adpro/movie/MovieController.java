@@ -48,4 +48,15 @@ public class MovieController {
         model.addAttribute("movies", movies);
         return "movies";
     }
+
+    @RequestMapping("/movie/{movieId}")
+    public String movieSessions(@PathVariable Long movieId, Model model) {
+        LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        List<MovieSession> movieSessions = movieSessionRepository
+                .findMovieSessionsByMovieIdAndStartTimeAfter(movieId, midnight);
+        Movie movie = movieRepository.findMovieById(movieId);
+        model.addAttribute("movie", movie);
+        model.addAttribute("movieSessions", movieSessions);
+        return "movie";
+    }
 }

@@ -108,6 +108,34 @@ public class MovieApplicationTest {
 				.andExpect(redirectedUrl("/movies/showing"));
 	}
 
+	@Test
+	public void testGetMovieSessions() throws Exception {
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(111))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now())
+				.id(1L)
+				.build();
+
+		LocalDateTime dayTime = LocalDateTime.of(1999, 8, 10, 10, 0);
+		LocalDateTime nightTime = LocalDateTime.of(1999, 8, 10, 19, 0);
+		Theatre theatre = new Theatre("A", 50);
+		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
+		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
+
+		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
+				.willReturn(List.of(daySession, nightSession));
+
+		mvc.perform(get("/api/movie/1"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].startTime",
+						is(dayTime.format(DateTimeFormatter.ISO_DATE_TIME))))
+				.andExpect(jsonPath("$[1].startTime",
+						is(nightTime.format(DateTimeFormatter.ISO_DATE_TIME))));
+	}
+
     @Test
     public void createTheatreAndSeat() {
         Theatre theatre1 = new Theatre("A", 50);
@@ -214,6 +242,32 @@ public class MovieApplicationTest {
 				.willReturn(List.of(movie));
 
 		this.mvc.perform(get("/movies/upcoming"))
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void MovieHtml() throws Exception {
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(111))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now())
+				.id(1L)
+				.build();
+
+		LocalDateTime dayTime = LocalDateTime.of(1999, 8, 10, 10, 0);
+		LocalDateTime nightTime = LocalDateTime.of(1999, 8, 10, 19, 0);
+		Theatre theatre = new Theatre("A", 50);
+		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
+		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
+
+		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
+				.willReturn(List.of(daySession, nightSession));
+		given(movieRepository.findMovieById(1L))
+				.willReturn(movie);
+
+		this.mvc.perform(get("/movie/1"))
 				.andExpect(status().isOk());
 	}
 
