@@ -9,6 +9,14 @@
     <div class="container my-5">
         <div class="row justify-content-md-center">
             <div class="col-12 col-md-9 col-xl-6">
+                <div class="row mb-5 justify-content-center">
+                    <div class="col-6 col-md-3">
+                        <img class="img-fluid" th:src="@{/img/logo.jpeg}">
+                    </div>
+                    <div class="col-12 col-md-9">
+                        <h5 class="text-center my-4"><em>Beli tiket bioskop dengan mudah dan cepat</em></h5>
+                    </div>
+                </div>
                 <h3 class="main-color" th:text="${title}"></h3>
                 <div class="row">
                     <div class="col-6 col-lg-4 my-2" th:each="movie : ${movies}">
