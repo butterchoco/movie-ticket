@@ -1,6 +1,5 @@
 package com.adpro.ticket.services.bookings;
 
-import com.adpro.ticket.api.bookings.BookingData;
 import com.adpro.ticket.api.bookings.BookingRequestModel;
 import com.adpro.ticket.api.bookings.BookingService;
 import com.adpro.ticket.api.movies.MovieService;
@@ -9,26 +8,21 @@ import com.adpro.ticket.model.Ticket;
 import com.adpro.ticket.repository.BookingRepository;
 import com.adpro.ticket.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
 public class BookingsServiceImpl implements BookingService {
     private TicketRepository ticketRepository;
     private BookingRepository bookingRepository;
-    private MovieService movieService;
 
     @Autowired
-    public BookingsServiceImpl(TicketRepository ticketRepository, BookingRepository bookingRepository,
-                               MovieService movieService) {
+    public BookingsServiceImpl(TicketRepository ticketRepository, BookingRepository bookingRepository) {
         this.ticketRepository = ticketRepository;
         this.bookingRepository = bookingRepository;
-        this.movieService = movieService;
     }
 
     @Override
@@ -78,12 +72,5 @@ public class BookingsServiceImpl implements BookingService {
         }
 
         return Optional.of(bookingRepository.save(booking));
-    }
-
-    @Override
-    @Async("asyncExecutor")
-    public CompletableFuture<BookingData> getBookingData(Booking booking) {
-        return movieService.getMovieSessionById(booking.getSessionId())
-                .thenApply(session -> new BookingData(booking, session));
     }
 }
