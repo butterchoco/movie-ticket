@@ -47,10 +47,9 @@ public class Theatre implements Serializable {
     public void createRows() {
         for (int seatNum = 1; seatNum <= seatCount; seatNum++) {
             Seat oneSeat;
-            if (seatNum < seatCount*2/3) {
+            if (seatNum < seatCount * 2 / 3) {
                 oneSeat = new MiddleSeat();
-            }
-            else {
+            } else {
                 oneSeat = new FarSeat();
             }
             oneSeat.setTheatre(this);
