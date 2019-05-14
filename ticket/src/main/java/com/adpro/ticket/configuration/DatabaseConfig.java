@@ -1,4 +1,4 @@
-package com.adpro.ticket;
+package com.adpro.ticket.configuration;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

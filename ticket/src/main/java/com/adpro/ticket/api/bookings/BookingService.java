@@ -9,5 +9,4 @@ public interface BookingService {
     boolean canCreateBooking(BookingRequestModel r);
     Optional<Booking> createBooking(BookingRequestModel r);
     Optional<Booking> verifyBooking(Long ticketId);
-    CompletableFuture<BookingData> getBookingData(Booking booking);
 }
