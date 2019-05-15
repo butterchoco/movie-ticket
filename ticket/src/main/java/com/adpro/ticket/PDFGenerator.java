@@ -53,14 +53,14 @@ public class PDFGenerator {
             PDPageContentStream cos = new PDPageContentStream(doc, page);
 
             PDImageXObject img = PDImageXObject.createFromFile("src/main/resources/assets/logo.jpeg", doc);
-            cos.drawImage(img, 210, 210);
-
+            cos.drawImage(img, 50, 50);
+            cos.newLine();
             cos.beginText();
             cos.newLineAtOffset(25, 700);
             String line1 = "Booking.in";
             cos.setFont(fontBold, 30);
             cos.showText(line1);
-
+            cos.newLine();
             // creating table properties
             float margin = 50;
             // starting y position is whole page height subtracted by top and bottom margin
