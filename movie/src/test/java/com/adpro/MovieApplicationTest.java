@@ -185,13 +185,10 @@ public class MovieApplicationTest {
 		movie = movieRepository.save(movie);
 
 		LocalDateTime dayTime = LocalDateTime.now().withHour(10);
-		LocalDateTime nightTime = LocalDateTime.now().withHour(20);
 		Theatre theatre = theatreRepository.save(new Theatre("A", 50));
-
 		MovieSession daySession = movieSessionRepository.save(new MovieSession(movie, dayTime, theatre));
-		MovieSession nightSession = movieSessionRepository.save(new MovieSession(movie, nightTime, theatre));
 
-        this.mvc.perform(get("/showing-seat/" + movie.getId()))
+        this.mvc.perform(get("/showing-seat/" + daySession.getId()))
                 .andExpect(status().isOk());
     }
 
