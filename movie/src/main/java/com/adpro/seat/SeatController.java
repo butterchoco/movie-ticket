@@ -76,6 +76,8 @@ public class SeatController {
         model.addAttribute("movieSessions", todayMovieSessions);
         model.addAttribute("sessionId", movieSession.getId());
         model.addAttribute("movie", movieSession.getMovie());
+        model.addAttribute("premium", MiddleSeat.getCost());
+        model.addAttribute("vvip", FarSeat.getCost());
         model.addAttribute("theatre", theatre);
         return "show-seat";
     }

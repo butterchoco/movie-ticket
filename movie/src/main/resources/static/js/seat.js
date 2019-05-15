@@ -25,7 +25,7 @@
                             if (count == 0) {
                                 middle += "<div id='rowseat'>";
                             }
-                            middle += "<button onclick='createCallback("+(i+1)+")' id='sqr-" + (i+1) + "' class='square white'>" + (i+1) + "</button>";
+                            middle += "<button onclick='createCallback("+(i+1)+")' id='sqr-" + (i+1) + "' class='square white premium'>" + (i+1) + "</button>";
                             count += 1;
                             if (count == rowDivision || seat[i+1].type === "Far") {
                                 middle += "</div>";
@@ -35,7 +35,7 @@
                             if (count == 0) {
                                 far += "<div id='rowseat'>";
                             }
-                            far += "<button onclick='createCallback("+(i+1)+")' id='sqr-" + (i+1) + "' class='square white'>" + (i+1) + "</button>";
+                            far += "<button onclick='createCallback("+(i+1)+")' id='sqr-" + (i+1) + "' class='square white vvip'>" + (i+1) + "</button>";
                             count += 1;
                             if (count == rowDivision) {
                                 far += "</div>";
@@ -82,6 +82,13 @@
                 ajaxMovie(sessionId);
 
                 $(".accept").click(function() {
+                    var price = ""
+                    if ($(".pressed").hasClass('premium')) {
+                         price = $("#premium").text();
+                    } else {
+                         price = $("#vvip").text();
+                    }
+                    console.log(price)
                     var time = $(".time div button:disabled").attr("id");
                     var seat = document.getElementsByClassName("pressed");
                     var seatIds = "";
@@ -93,10 +100,11 @@
                     }
                     $.ajax({
                            method: "POST",
-                           url: "/bookings",
+                           url: "http://c8-tickets-api.herokuapp.com/bookings",
                            data: {
                                 "sessionId":time,
-                                "seatIds":seatIds
+                                "seatIds":seatIds,
+                                "price": price
                            },
                            success: function(data) {
                                 window.location.replace("/payment");
