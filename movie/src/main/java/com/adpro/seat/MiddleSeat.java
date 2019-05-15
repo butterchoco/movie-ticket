@@ -15,13 +15,10 @@ public class MiddleSeat extends Seat {
     @Column(name = "Cost")
     private static int cost;
 
-    public MiddleSeat(boolean isBooked) {
-        super(isBooked);
+    public MiddleSeat() {
+        super();
         cost = 35000;
         type = "Middle";
-    }
-
-    public MiddleSeat() {
     }
 
     public static int getCost() {
