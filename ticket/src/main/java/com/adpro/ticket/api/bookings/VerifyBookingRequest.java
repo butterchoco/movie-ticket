@@ -10,4 +10,7 @@ public class VerifyBookingRequest {
     @Email
     @NotNull
     private String email;
+
+    @NotNull
+    private String apiKey;
 }

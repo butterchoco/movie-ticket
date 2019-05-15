@@ -57,6 +57,11 @@ public class BookingsController {
     @CrossOrigin(origins = "localhost:8080")
     public ResponseEntity<Booking> verify(@PathVariable(name = "bookingId") Long bookingId,
                                           @Valid VerifyBookingRequest params) {
+
+        if (!params.getApiKey().equals("ceritanyabiaraman")) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
         var booking = bookingService.verifyBooking(bookingId, params.getEmail()).orElse(null);
 
         if (booking == null) {
