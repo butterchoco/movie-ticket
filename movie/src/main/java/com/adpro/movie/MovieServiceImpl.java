@@ -10,28 +10,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class MovieServiceImpl implements MovieService {
 
-    private MovieListProxy movieListProxy;
+    private MovieListRepository movieListRepository;
     private MovieSessionRepository movieSessionRepository;
     private MovieRepository movieRepository;
 
     @Autowired
-    public MovieServiceImpl(MovieListProxy movieListProxy,
+    public MovieServiceImpl(MovieListRepository movieListRepository,
                             MovieSessionRepository movieSessionRepository,
                             MovieRepository movieRepository) {
-        this.movieListProxy = movieListProxy;
+        this.movieListRepository = movieListRepository;
         this.movieSessionRepository = movieSessionRepository;
         this.movieRepository = movieRepository;
     }
 
     @Override
     public List<Movie> getTodayShowingMovies() {
-        return movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(
+        return movieListRepository.findMoviesByReleaseDateBetween(
                 LocalDate.now().minusDays(MovieListProxy.DAYS_SHOWED), LocalDate.now());
     }
 
     @Override
     public List<Movie> getTodayUpcomingMovies() {
-        return movieListProxy.findMoviesByReleaseDateAfter(LocalDate.now());
+        return movieListRepository.findMoviesByReleaseDateAfter(LocalDate.now());
     }
 
     @Override
