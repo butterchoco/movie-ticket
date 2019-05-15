@@ -3,7 +3,7 @@
             var count = $("#ticket-number").val();
             $(".pressed").removeClass("pressed");
             for (let cnt = 0; cnt < count; cnt++) {
-                $("#sqr"+(i+cnt)).addClass("pressed");
+                $("#sqr-"+(i+cnt)).addClass("pressed");
             }
             $('.footer').show();
         }
@@ -25,7 +25,7 @@
                             if (count == 0) {
                                 middle += "<div id='rowseat'>";
                             }
-                            middle += "<button onclick='createCallback("+i+")' id='sqr-" + i + "' class='square white'>" + (i+1) + "</button>";
+                            middle += "<button onclick='createCallback("+(i+1)+")' id='sqr-" + (i+1) + "' class='square white premium'>" + (i+1) + "</button>";
                             count += 1;
                             if (count == rowDivision || seat[i+1].type === "Far") {
                                 middle += "</div>";
@@ -35,7 +35,7 @@
                             if (count == 0) {
                                 far += "<div id='rowseat'>";
                             }
-                            far += "<button onclick='createCallback("+i+")' id='sqr-" + i + "' class='square white'>" + (i+1) + "</button>";
+                            far += "<button onclick='createCallback("+(i+1)+")' id='sqr-" + (i+1) + "' class='square white vvip'>" + (i+1) + "</button>";
                             count += 1;
                             if (count == rowDivision) {
                                 far += "</div>";
@@ -68,6 +68,21 @@
             })
         }
 
+        function ajaxVerify(sessionId) {
+        $.ajax({
+                                                       method: "POST",
+                                                       url: "http://c8-tickets-api.herokuapp.com/bookings/"+sessionId+"/verify",
+                                                       data: {
+                                                            "email":"ahmadsupri1999@gmail.com",
+                                                            "apiKey":"ceritanyabiaraman"
+                                                       },
+                                                       success: function(data) {
+                                                            alert("SUCCESS")
+                                                            window.location.replace("/");
+                                                       }
+                                                })
+        }
+
         $(document).ready(function () {
             ajaxSeat();
 
@@ -82,26 +97,35 @@
                 ajaxMovie(sessionId);
 
                 $(".accept").click(function() {
-                    var time = $(".time div button:disabled").attr("id").split("-")[1];
+                    var price = ""
+                    if ($(".pressed").hasClass('premium')) {
+                         price = $("#premium").text();
+                    } else {
+                         price = $("#vvip").text();
+                    }
+                    console.log(price)
+                    var time = $(".time div button:disabled").attr("id");
                     var seat = document.getElementsByClassName("pressed");
                     var seatIds = "";
                     for (let i = 0; i < seat.length; i++) {
-                        seatIds += seat[i];
-                        if (i == seat.length) {
+                        seatIds += seat[i].getAttribute("id").split("-")[1];
+                        if (i < seat.length-1) {
                             seatIds += ",";
                         }
                     }
                     $.ajax({
                            method: "POST",
-                           url: "/bookings",
+                           url: "http://c8-tickets-api.herokuapp.com/bookings",
                            data: {
                                 "sessionId":time,
-                                "seatIds":seatIds
+                                "seatIds":seatIds,
+                                "price": price
                            },
                            success: function(data) {
-                                alert("success")
+                                ajaxVerify(time)
                            }
                     })
+
                 })
             });
         });

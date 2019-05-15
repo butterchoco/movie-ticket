@@ -249,21 +249,9 @@ option {
   text-align: center;
 }
 
-#middle::before {
-  font-size: 14px;
-  font-weight: bolder;
-  content: "Premium";
-}
-
 #far {
   margin-bottom: 10px;
   text-align: center;
-}
-
-#far::before {
-  font-size: 14px;
-  font-weight: bolder;
-  content: "VIP";
 }
 
 #rowseat {
@@ -274,6 +262,18 @@ option {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+}
+
+.price {
+    font-size: 14px;
+    padding: 0;
+    margin-left: 4px;
+}
+
+.title-seat {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .square {

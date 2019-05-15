@@ -53,7 +53,12 @@ public class SeatController {
     @PostMapping("/saving-booking")
     public @ResponseBody Iterable<SavedBooking> saveBooking(
             @RequestParam("sessionId") Long sessionId,
-            @RequestParam("seatId") List<Integer> seatIds) {
+            @RequestParam("seatId") String seatIdStr) {
+        String[] seatIdList = seatIdStr.split(",");
+        List<Integer> seatIds = new ArrayList<>();
+        for (String seatId : seatIdList) {
+            seatIds.add(Integer.parseInt(seatId));
+        }
         MovieSession movieSessionTemp = this.movieSessionRepository.findById(sessionId).get();
         List<Seat> seatTemp = this.seatRepository.findAllById(seatIds);
         List<SavedBooking> seatBookList = new ArrayList<>();
@@ -65,11 +70,16 @@ public class SeatController {
 
     @GetMapping("/showing-seat/{movieSessionId}")
     public String showSeat(@PathVariable Long movieSessionId, Model model) {
-        List<MovieSession> todayMovieSessions = movieService.getTodayMovieSessions(movieSessionId);
         MovieSession movieSession = movieService.getMovieSession(movieSessionId);
-        Movie movie = movieSession.getMovie();
-        model.addAttribute("movie", movie);
-        model.addAttribute("movieSession", movieSession);
+        List<MovieSession> todayMovieSessions = movieService.getTodayMovieSessions(
+                movieSession.getMovie().getId());
+        Theatre theatre = movieSession.getTheatre();
+        model.addAttribute("movieSessions", todayMovieSessions);
+        model.addAttribute("sessionId", movieSession.getId());
+        model.addAttribute("movie", movieSession.getMovie());
+        model.addAttribute("premium", MiddleSeat.getCost());
+        model.addAttribute("vvip", FarSeat.getCost());
+        model.addAttribute("theatre", theatre);
         return "show-seat";
     }
 

@@ -33,6 +33,7 @@ public class BookingsController {
 
     @PostMapping
     @RequestMapping(name = "/bookings", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "http://localhost:8080")
     public ResponseEntity<Booking> bookingsJson(@RequestBody @Valid BookingRequestModel bookingRequest) {
         return handleBookings(bookingRequest);
 
@@ -40,6 +41,7 @@ public class BookingsController {
 
     @PostMapping
     @RequestMapping(name = "/bookings")
+    @CrossOrigin(origins = "localhost:8080")
     public ResponseEntity<Booking> bookingsUrlEncoded(@Valid BookingRequestModel bookingRequest) {
         return handleBookings(bookingRequest);
     }
@@ -52,6 +54,7 @@ public class BookingsController {
 
     @PostMapping
     @RequestMapping("/bookings/{bookingId}/verify")
+    @CrossOrigin(origins = "localhost:8080")
     public ResponseEntity<Booking> verify(@PathVariable(name = "bookingId") Long bookingId,
                                           @Valid VerifyBookingRequest params) {
 
