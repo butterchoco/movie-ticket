@@ -73,6 +73,19 @@ public class TicketApplicationTests {
     }
 
     @Test
+    public void testCanOrderSeatFormUrlEncoded() throws Exception {
+        this.mvc.perform(post("/bookings")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("sessionId", "1")
+                .param("seatIds", "3F")
+                .param("email", "ramadistra@gmail.com")
+                .param("price", "12222"))
+                .andExpect(jsonPath("$.status", is("PENDING")))
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
     public void testCannotOrderBookedSeat() throws Exception {
         var booking = createBooking(1L, Booking.Status.VERIFIED);
         String json = new ObjectMapper().writeValueAsString(new BookingRequestModel(1L, "1A", "ramadistra@gmail.com", 12222));
