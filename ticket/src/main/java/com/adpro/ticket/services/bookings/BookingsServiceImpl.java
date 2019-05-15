@@ -19,7 +19,8 @@ public class BookingsServiceImpl implements BookingService {
     private BookingRepository bookingRepository;
 
     @Autowired
-    public BookingsServiceImpl(TicketRepository ticketRepository, BookingRepository bookingRepository) {
+    public BookingsServiceImpl(TicketRepository ticketRepository,
+                               BookingRepository bookingRepository) {
         this.ticketRepository = ticketRepository;
         this.bookingRepository = bookingRepository;
     }
@@ -27,16 +28,19 @@ public class BookingsServiceImpl implements BookingService {
     @Override
     public boolean canCreateBooking(BookingRequestModel r) {
         return ticketRepository
-                .findBySessionIdAndSeatIdsAndStatus(r.getSessionId(), r.getSeatIds(), Booking.Status.VERIFIED)
-                .isEmpty();
+            .findBySessionIdAndSeatIdsAndStatus(r.getSessionId(), r.getSeatIds(),
+                Booking.Status.VERIFIED)
+            .isEmpty();
     }
 
     @Override
     public Optional<Booking> createBooking(BookingRequestModel r) {
         if (canCreateBooking(r)) {
-            Set<Ticket> tickets = r.getSeatIds().stream().map(Ticket::new).collect(Collectors.toSet());
+            Set<Ticket> tickets =
+                r.getSeatIds().stream().map(Ticket::new).collect(Collectors.toSet());
             Booking booking = bookingRepository
-                    .save(new Booking(r.getSessionId(), Booking.Status.PENDING, tickets, r.getEmail(), r.getPrice()));
+                .save(new Booking(r.getSessionId(), Booking.Status.PENDING, tickets, r.getEmail()
+                    , r.getPrice()));
             return Optional.of(booking);
         }
         return Optional.empty();
@@ -44,11 +48,11 @@ public class BookingsServiceImpl implements BookingService {
 
     private boolean isValid(Booking booking) {
         return ticketRepository
-                .findBySessionIdAndSeatIdsAndStatus(
-                        booking.getSessionId(),
-                        booking.getTickets().stream().map(Ticket::getSeatId).collect(Collectors.toList()),
-                        Booking.Status.VERIFIED)
-                .isEmpty();
+            .findBySessionIdAndSeatIdsAndStatus(
+                booking.getSessionId(),
+                booking.getTickets().stream().map(Ticket::getSeatId).collect(Collectors.toList()),
+                Booking.Status.VERIFIED)
+            .isEmpty();
     }
 
     @Override

@@ -19,7 +19,9 @@ public class BookingsController {
     private UserNotificationService userNotificationService;
     private MovieService movieService;
 
-    public BookingsController(BookingService bookingService, UserNotificationService userNotificationService, MovieService movieService) {
+    public BookingsController(BookingService bookingService,
+                              UserNotificationService userNotificationService,
+                              MovieService movieService) {
         this.bookingService = bookingService;
         this.userNotificationService = userNotificationService;
         this.movieService = movieService;
@@ -55,8 +57,8 @@ public class BookingsController {
 
         if (booking.getStatus() == Booking.Status.VERIFIED) {
             movieService.getMovieSessionById(booking.getSessionId())
-                    .thenApply(session -> new BookingData(booking, session))
-                    .thenCompose(userNotificationService::sendBookingData);
+                .thenApply(session -> new BookingData(booking, session))
+                .thenCompose(userNotificationService::sendBookingData);
         }
 
         return ResponseEntity.ok(booking);
