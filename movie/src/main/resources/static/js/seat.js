@@ -68,6 +68,21 @@
             })
         }
 
+        function ajaxVerify(sessionId) {
+        $.ajax({
+                                                       method: "POST",
+                                                       url: "http://c8-tickets-api.herokuapp.com/bookings/"+sessionId+"/verify",
+                                                       data: {
+                                                            "email":"ahmadsupri1999@gmail.com",
+                                                            "apiKey":"ceritanyabiaraman"
+                                                       },
+                                                       success: function(data) {
+                                                            alert("SUCCESS")
+                                                            window.location.replace("/");
+                                                       }
+                                                })
+        }
+
         $(document).ready(function () {
             ajaxSeat();
 
@@ -107,9 +122,10 @@
                                 "price": price
                            },
                            success: function(data) {
-                                window.location.replace("/payment");
+                                ajaxVerify(time)
                            }
                     })
+
                 })
             });
         });
