@@ -34,4 +34,12 @@ public class MovieSession {
         this.startTime = startTime;
         this.endTime = startTime.plus(movie.getDuration());
     }
+
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
 }

@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-
+import com.adpro.ticket.PDFGenerator;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -28,7 +28,7 @@ public class EmailUserNotificationService implements UserNotificationService {
     }
 
     private byte[] createAttachment(BookingData bookingData) {
-        return "Hello".getBytes();
+        return
     }
 
     @Override

@@ -1,64 +1,60 @@
 package com.adpro.ticket;
 
 import java.awt.*;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-
+import java.io.InputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.util.Set;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
-
+import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import be.quodlibet.boxable.*;
 import be.quodlibet.boxable.line.LineStyle;
-import be.quodlibet.boxable.text.WrappingFunction;
 
-import com.adpro.ticket.model.Booking;
 import com.adpro.ticket.model.Ticket;
+import com.adpro.ticket.api.bookings.BookingData;
+import com.adpro.ticket.api.movies.MovieSession;
 
 public class PDFGenerator {
-    public static void main(String[] args) throws IOException {
-        try {
-            PDDocument doc = new PDDocument();
-            PDFont fontPlain = PDType1Font.HELVETICA;
-            PDFont fontBold = PDType1Font.HELVETICA_BOLD;
-            PDFont fontItalic = PDType1Font.HELVETICA_OBLIQUE;
-            PDFont fontMono = PDType1Font.COURIER;
 
+    private static final PDFont fontPlain = PDType1Font.HELVETICA;
+    private static final PDFont fontBold = PDType1Font.HELVETICA_BOLD;
+    private static BookingData bookingData;
+    private static PDDocument doc = new PDDocument();
+
+    public byte[] generateTicket() throws IOException {
+        Set<Ticket> tickets = bookingData.getTickets();
+
+        int amount = tickets.size();
+
+        PDDocumentInformation pdd = doc.getDocumentInformation();
+
+        pdd.setAuthor("C8 Advance Programming Team");
+        pdd.setTitle(bookingData.getMovieSession() + " Ticket");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        for (int i = 0; i < amount; i++) {
             PDPage page = new PDPage();
             doc.addPage(page);
-            PDDocumentInformation pdd = doc.getDocumentInformation();
-
-            pdd.setAuthor("C8 Advance Programming Team");
-            pdd.setTitle("Avengers Ticket");
 
             // Start a new content stream which will "hold" the to be created content
             PDPageContentStream cos = new PDPageContentStream(doc, page);
 
             cos.beginText();
-            cos.newLineAtOffset(25,700);
+            cos.newLineAtOffset(25, 700);
             String line1 = "FASILKOM THEATRE";
             cos.setFont(fontBold, 30);
             cos.showText(line1);
 
-            //Dummy Table
+            // creating table properties
             float margin = 50;
             // starting y position is whole page height subtracted by top and bottom margin
             float yStartNewPage = page.getMediaBox().getHeight() - (2 * margin);
@@ -86,48 +82,51 @@ public class PDFGenerator {
             table.addHeaderRow(headerRow);
 
             Row<PDPage> row = table.createRow(12);
-            cell = row.createCell(50, "Movie:");
-            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
-            cell = row.createCell(50, "avengers");
-            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
+            createCellPlain(cell, row, fontPlain, "Movie:");
+            createCellBold(cell, row, fontBold, bookingData.getMovieSession().getMovie().getName());
 
             Row<PDPage> row1 = table.createRow(12);
-            cell = row1.createCell(50, "Date:");
-            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
-            cell = row1.createCell(50, "12-2-2012");
-            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
+            createCellPlain(cell, row, fontPlain, "Date:");
+            createCellBold(cell, row, fontBold, "12-02-2019");
 
             Row<PDPage> row2 = table.createRow(12);
-            cell = row2.createCell(50, "Showtime:");
-            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
-            cell = row2.createCell(50, "17:55");
-            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
+            createCellPlain(cell, row, fontPlain, "Showtime:");
+            createCellBold(cell, row, fontBold, bookingData.getMovieSession().getStartTime().toString());
 
             Row<PDPage> row3 = table.createRow(12);
-            cell = row3.createCell(50,"Seat/Row:");
-            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
-            cell = row3.createCell(50, "A1");
-            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
+            createCellPlain(cell, row, fontPlain, "Seat/Row:");
+            createCellBold(cell, row, fontBold, "A1");
 
             Row<PDPage> row4 = table.createRow(12);
-            cell = row4.createCell(50, "Auditorium:");
-            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
-            cell = row4.createCell(50, "6");
-            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
+            createCellPlain(cell, row, fontPlain, "Auditorium:");
+            createCellBold(cell, row, fontBold, "6");
+            cell.setFontSize(50);
 
             table.draw();
 
             cos.endText();
             cos.close();
-
-            doc.save("ticket.pdf");
-            doc.close();
-            System.out.println("ticket printed");
-
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
+
+        doc.save(baos);
+        doc.close();
+
+        InputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
+        byte[] bytes = IOUtils.toByteArray(inputStream);
+        return bytes;
+    }
+
+    public void createCellBold(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
+        cell = row.createCell(50, val);
+        cell.setAlign(HorizontalAlignment.CENTER);
+        cell.setFont(fontBold);
+        cell.setBorderStyle(new LineStyle(Color.WHITE, 0));
+    }
+
+    public void createCellPlain(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
+        cell = row.createCell(50, val);
+        cell.setFont(fontPlain);
+        cell.setBorderStyle(new LineStyle(Color.WHITE, 0));
     }
 
 }
