@@ -29,12 +29,13 @@ public class SeatController {
         return this.theatreRepository.findAll();
     }
 
-    @GetMapping("/showing-seat/{movieId}")
-    public String showSeat(@PathVariable Long movieId, Model model) {
-        List<MovieSession> todayMovieSessions = movieService.getTodayMovieSessions(movieId);
-        Movie movie = movieService.getMovie(movieId);
+    @GetMapping("/showing-seat/{movieSessionId}")
+    public String showSeat(@PathVariable Long movieSessionId, Model model) {
+        List<MovieSession> todayMovieSessions = movieService.getTodayMovieSessions(movieSessionId);
+        MovieSession movieSession = movieService.getMovieSession(movieSessionId);
+        Movie movie = movieSession.getMovie();
         model.addAttribute("movie", movie);
-        model.addAttribute("movieSessions", todayMovieSessions);
+        model.addAttribute("movieSession", movieSession);
         return "show-seat";
     }
 

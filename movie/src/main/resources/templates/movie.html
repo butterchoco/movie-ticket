@@ -19,13 +19,12 @@
                         <p th:text="${movie.description}"></p>
                     </div>
                 </div>
-                <div class="my-3" th:if="${not #lists.isEmpty(movieSessions)}">
-                    <h5 class="main-color">Show Time</h5>
-                    <div th:each="movieSession : ${movieSessions}">
-                        <span th:text="${#temporals.format(movieSession.startTime, 'HH:mm') + ' - ' +
-                            #temporals.format(movieSession.endTime, 'HH:mm')}"></span><br />
-                    </div>
-                    <a th:href="@{/showing-seat/{movieId}(movieId=${movie.id})}" class="btn white-color main-color-bg btn-lg btn-block my-2" role="button" aria-pressed="true">Buy Ticket Now</a>
+                <div class="my-5 text-center" th:if="${not #lists.isEmpty(movieSessions)}">
+                    <h4 class="main-color">Select your show time</h4>
+                    <th:block th:each="movieSession : ${movieSessions}">
+                        <a th:href="@{/showing-seat/{sessionId}(sessionId=${movieSession.id})}" class="btn btn-outline-main-color" role="button" aria-pressed="true"
+                           th:text="${#temporals.format(movieSession.startTime, 'HH:mm')}"></a>
+                    </th:block>
                 </div>
                 <div class="my-3" th:if="${#lists.isEmpty(movieSessions)}">
                     <h3 class="main-color text-center">Coming Soon</h3>
