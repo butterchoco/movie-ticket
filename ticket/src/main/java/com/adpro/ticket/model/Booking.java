@@ -5,13 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -31,10 +25,6 @@ public class Booking {
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private Set<Ticket> tickets;
 
-    public enum Status {
-        PENDING, VERIFIED, CANCELLED
-    }
-
     public Booking(Long sessionId, Status status, Set<Ticket> tickets, String email, int price) {
         this.sessionId = sessionId;
         this.status = status;
@@ -42,6 +32,10 @@ public class Booking {
         this.email = email;
         this.price = price;
         this.tickets.forEach(x -> x.setBooking(this));
+    }
+
+    public enum Status {
+        PENDING, VERIFIED, CANCELLED
     }
 
 

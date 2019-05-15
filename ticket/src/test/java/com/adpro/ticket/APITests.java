@@ -1,17 +1,16 @@
 package com.adpro.ticket;
 
+import com.adpro.ticket.api.bookings.BookingData;
 import com.adpro.ticket.api.movies.Movie;
 import com.adpro.ticket.api.movies.MovieSession;
-import com.adpro.ticket.api.bookings.BookingData;
 import com.adpro.ticket.model.Booking;
 import com.adpro.ticket.model.Ticket;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class APITests {
     @Test

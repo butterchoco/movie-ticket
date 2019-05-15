@@ -1,13 +1,19 @@
 package com.adpro.seat;
 
-import lombok.Data;
-
-import javax.persistence.*;
 import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
+import lombok.Data;
 
 @Data
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Seat")
 public class Seat implements Serializable {
 
@@ -23,12 +29,15 @@ public class Seat implements Serializable {
     public String type;
 
     public Seat(boolean isBooked) {
-        this.seatNumber = seatNumber;
+        this.isBooked = isBooked;
     }
 
-    public Seat() {}
+    public Seat() {
+    }
 
-    public Integer getSeatNumber() { return this.seatNumber;}
+    public Integer getSeatNumber() {
+        return this.seatNumber;
+    }
 
     public boolean isBooked() {
         return isBooked;
@@ -42,5 +51,7 @@ public class Seat implements Serializable {
         this.isBooked = false;
     }
 
-    public String getType() {return this.type;}
+    public String getType() {
+        return this.type;
+    }
 }

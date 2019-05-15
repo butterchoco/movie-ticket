@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title th:text="'Seat Available at ' + ${theatre}"></title>
+    <title th:text="'Seat Available for ' + ${movie.name}"></title>
     <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="/js/seat.js"></script>
     <link type="text/css" rel="stylesheet" href="/css/seat.css">
@@ -16,7 +16,7 @@
             <div id="description">
                 <h3 th:text="${movie.name}"><i>2D</i></h3>
                 <p>Tomorrow, 13 April, 03:50 PM</p>
-                <p th:text="${theatre.description + theatre.id}"></p>
+<!--                <p th:text="${theatre.description + theatre.id}"></p>-->
             </div>
             <div id="option">
                 <div class="segment">

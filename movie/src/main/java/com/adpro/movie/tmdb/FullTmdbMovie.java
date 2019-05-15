@@ -5,7 +5,7 @@ import java.time.Duration;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 
-public class FullTMDBMovie extends TMDBMovie {
+public class FullTmdbMovie extends TmdbMovie {
     static Duration DEFAULT_DURATION = Duration.ofMinutes(120);
 
     @NotNull
