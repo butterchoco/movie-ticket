@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 public class BookingsController {
 
@@ -25,14 +27,14 @@ public class BookingsController {
 
     @PostMapping
     @RequestMapping(name = "/bookings", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Booking> bookingsJson(@RequestBody BookingRequestModel bookingRequest) {
+    public ResponseEntity<Booking> bookingsJson(@RequestBody @Valid BookingRequestModel bookingRequest) {
         return handleBookings(bookingRequest);
 
     }
 
     @PostMapping
     @RequestMapping(name = "/bookings")
-    public ResponseEntity<Booking> bookingsUrlEncoded(BookingRequestModel bookingRequest) {
+    public ResponseEntity<Booking> bookingsUrlEncoded(@Valid BookingRequestModel bookingRequest) {
         return handleBookings(bookingRequest);
     }
 
