@@ -4,13 +4,13 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.adpro.movie.Movie;
-import com.adpro.movie.MovieListProxy;
-import com.adpro.movie.MovieRepository;
+import com.adpro.movie.MovieService;
 import com.adpro.movie.MovieSession;
-import com.adpro.movie.MovieSessionRepository;
 import com.adpro.seat.FarSeat;
 import com.adpro.seat.MiddleSeat;
 import com.adpro.seat.Seat;
@@ -21,7 +21,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,24 +36,10 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 public class MovieApplicationTest {
 
-	@Autowired
-	private MockMvc mvc;
+	@Autowired private MockMvc mvc;
 
-	@MockBean
-	private MovieListProxy movieListProxy;
-
-	@MockBean
-	private MovieSessionRepository movieSessionRepository;
-
-	@MockBean
-	private TheatreRepository theatreRepository;
-
-	@MockBean
-	private MovieRepository movieRepository;
-
-	@Test
-	public void contextLoads() {
-	}
+	@MockBean private MovieService movieService;
+	@MockBean private TheatreRepository theatreRepository;
 
 	@Test
 	public void testGetShowingMovies() throws Exception {
@@ -67,7 +52,7 @@ public class MovieApplicationTest {
 				.id(1L)
 				.build();
 
-		given(movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
+		given(movieService.getTodayShowingMovies())
 				.willReturn(List.of(movie));
 
 		this.mvc.perform(get("/api/movies/showing"))
@@ -90,7 +75,7 @@ public class MovieApplicationTest {
 				.id(1L)
 				.build();
 
-		given(movieListProxy.findMoviesByReleaseDateAfter(any()))
+		given(movieService.getTodayUpcomingMovies())
 				.willReturn(List.of(movie));
 
 		this.mvc.perform(get("/api/movies/upcoming"))
@@ -125,7 +110,7 @@ public class MovieApplicationTest {
 		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
 		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
 
-		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
+		given(movieService.getTodayMovieSessions(any()))
 				.willReturn(List.of(daySession, nightSession));
 
 		mvc.perform(get("/api/movie/1"))
@@ -197,9 +182,9 @@ public class MovieApplicationTest {
 		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
 		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
 
-		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
+		given(movieService.getTodayMovieSessions(any()))
 				.willReturn(List.of(daySession, nightSession));
-		given(movieRepository.findMovieById(1L))
+		given(movieService.getMovie(any()))
 				.willReturn(movie);
 
 		given(theatreRepository.findTheatreById(1))
@@ -220,7 +205,7 @@ public class MovieApplicationTest {
 				.id(1L)
 				.build();
 
-		given(movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
+		given(movieService.getTodayShowingMovies())
 			.willReturn(List.of(movie));
 
 		this.mvc.perform(get("/movies/showing"))
@@ -238,7 +223,7 @@ public class MovieApplicationTest {
 				.id(1L)
 				.build();
 
-		given(movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
+		given(movieService.getTodayUpcomingMovies())
 				.willReturn(List.of(movie));
 
 		this.mvc.perform(get("/movies/upcoming"))
@@ -262,9 +247,9 @@ public class MovieApplicationTest {
 		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
 		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
 
-		given(movieSessionRepository.findMovieSessionsByMovieIdAndStartTimeAfter(any(), any()))
+		given(movieService.getTodayMovieSessions(any()))
 				.willReturn(List.of(daySession, nightSession));
-		given(movieRepository.findMovieById(1L))
+		given(movieService.getMovie(any()))
 				.willReturn(movie);
 
 		this.mvc.perform(get("/movie/1"))
@@ -287,7 +272,8 @@ public class MovieApplicationTest {
 		Theatre theatre = new Theatre("A", 50);
 		MovieSession movieSession = new MovieSession(movie, now, theatre);
 
-		given(movieSessionRepository.findById(any())).willReturn(Optional.of(movieSession));
+		given(movieService.getMovieSession(any()))
+				.willReturn(movieSession);
 
 		this.mvc.perform(get("/api/movie/session/1"))
 				.andExpect(status().isOk())

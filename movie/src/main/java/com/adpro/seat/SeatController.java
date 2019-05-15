@@ -1,12 +1,8 @@
 package com.adpro.seat;
 
 import com.adpro.movie.Movie;
-import com.adpro.movie.MovieRepository;
+import com.adpro.movie.MovieService;
 import com.adpro.movie.MovieSession;
-import com.adpro.movie.MovieSessionRepository;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,17 +13,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class SeatController {
+
     private TheatreRepository theatreRepository;
-    private MovieSessionRepository movieSessionRepository;
-    private MovieRepository movieRepository;
+    private MovieService movieService;
 
     @Autowired
     public SeatController(TheatreRepository theatreRepository,
-                          MovieSessionRepository movieSessionRepository,
-                          MovieRepository movieRepository) {
+                          MovieService movieService) {
         this.theatreRepository = theatreRepository;
-        this.movieSessionRepository = movieSessionRepository;
-        this.movieRepository = movieRepository;
+        this.movieService = movieService;
     }
 
     @GetMapping("/seat")
@@ -37,14 +31,10 @@ public class SeatController {
 
     @GetMapping("/showing-seat/{movieId}")
     public String showSeat(@PathVariable Long movieId, Model model) {
-        LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
-        List<MovieSession> movieSessions = movieSessionRepository
-                .findMovieSessionsByMovieIdAndStartTimeAfter(movieId, midnight);
-        List<Theatre> theatres = theatreRepository.findAll();
-        Movie movie = movieRepository.findMovieById(movieId);
+        List<MovieSession> todayMovieSessions = movieService.getTodayMovieSessions(movieId);
+        Movie movie = movieService.getMovie(movieId);
         model.addAttribute("movie", movie);
-        model.addAttribute("movieSessions", movieSessions);
-        model.addAttribute("theatres", theatres);
+        model.addAttribute("movieSessions", todayMovieSessions);
         return "show-seat";
     }
 
