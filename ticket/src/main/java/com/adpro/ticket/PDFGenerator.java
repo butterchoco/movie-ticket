@@ -54,8 +54,8 @@ public class PDFGenerator implements TicketGenerator {
 
             PDImageXObject img = PDImageXObject.createFromFile("src/main/resources/assets/logo.jpeg", doc);
             cos.drawImage(img, 50, 50);
-            cos.newLine();
             cos.beginText();
+            cos.newLine();
             cos.newLineAtOffset(25, 700);
             String line1 = "Booking.in";
             cos.setFont(fontBold, 30);
