@@ -1,16 +1,18 @@
 package com.adpro;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.adpro.movie.Movie;
+import com.adpro.movie.MovieListProxy;
+import com.adpro.movie.MovieListRepository;
+import com.adpro.movie.MovieRepository;
 import com.adpro.movie.MovieService;
 import com.adpro.movie.MovieSession;
+import com.adpro.movie.MovieSessionRepository;
 import com.adpro.seat.FarSeat;
 import com.adpro.seat.MiddleSeat;
 import com.adpro.seat.Seat;
@@ -21,12 +23,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -38,8 +40,18 @@ public class MovieApplicationTest {
 
 	@Autowired private MockMvc mvc;
 
-	@MockBean private MovieService movieService;
-	@MockBean private TheatreRepository theatreRepository;
+	@Autowired private TheatreRepository theatreRepository;
+	@Autowired private MovieService movieService;
+	@Autowired private MovieRepository movieRepository;
+	@Autowired private MovieSessionRepository movieSessionRepository;
+	@Autowired private MovieListRepository movieListRepository;
+
+	@Before
+	public void init() {
+		movieSessionRepository.deleteAll();
+		theatreRepository.deleteAll();
+		movieRepository.deleteAll();
+	}
 
 	@Test
 	public void testGetShowingMovies() throws Exception {
@@ -48,16 +60,17 @@ public class MovieApplicationTest {
 				.description("Petualangan seorang Fairuzi")
 				.duration(Duration.ofMinutes(111))
 				.posterUrl("sdada")
-				.releaseDate(LocalDate.now())
-				.id(1L)
+				.releaseDate(LocalDate.now().minusDays(1))
+				.tmdbId(1L)
 				.build();
-
-		given(movieService.getTodayShowingMovies())
-				.willReturn(List.of(movie));
+		movie = movieRepository.save(movie);
+		System.out.println(movieRepository.findMoviesByReleaseDateBetween(
+				LocalDate.now().minusDays(MovieListProxy.DAYS_SHOWED), LocalDate.now()) + " showing");
+		System.out.println(movieService.getTodayShowingMovies() + " showing");
 
 		this.mvc.perform(get("/api/movies/showing"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].id", is(1)))
+				.andExpect(jsonPath("$[0].id", is(movie.getId().intValue())))
 				.andExpect(jsonPath("$[0].description", is(movie.getDescription())))
 				.andExpect(jsonPath("$[0].posterUrl", is(movie.getPosterUrl())))
 				.andExpect(jsonPath("$[0].releaseDate", is(movie.getReleaseDate().toString())))
@@ -72,15 +85,13 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(111))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now().plusDays(7))
-				.id(1L)
+				.tmdbId(1L)
 				.build();
-
-		given(movieService.getTodayUpcomingMovies())
-				.willReturn(List.of(movie));
+		movie = movieRepository.save(movie);
 
 		this.mvc.perform(get("/api/movies/upcoming"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].id", is(1)))
+				.andExpect(jsonPath("$[0].id", is(movie.getId().intValue())))
 				.andExpect(jsonPath("$[0].description", is(movie.getDescription())))
 				.andExpect(jsonPath("$[0].posterUrl", is(movie.getPosterUrl())))
 				.andExpect(jsonPath("$[0].releaseDate", is(movie.getReleaseDate().toString())))
@@ -101,19 +112,19 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(111))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now())
-				.id(1L)
+				.tmdbId(1L)
 				.build();
+		movie = movieRepository.save(movie);
 
-		LocalDateTime dayTime = LocalDateTime.of(1999, 8, 10, 10, 0);
-		LocalDateTime nightTime = LocalDateTime.of(1999, 8, 10, 19, 0);
-		Theatre theatre = new Theatre("A", 50);
-		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
-		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
+		LocalDateTime dayTime = LocalDateTime.now().withHour(10);
+		LocalDateTime nightTime = LocalDateTime.now().withHour(20);
+		Theatre theatre = theatreRepository.save(new Theatre("A", 50));
 
-		given(movieService.getTodayMovieSessions(any()))
-				.willReturn(List.of(daySession, nightSession));
+		MovieSession daySession = movieSessionRepository.save(new MovieSession(movie, dayTime, theatre));
+		MovieSession nightSession = movieSessionRepository.save(new MovieSession(movie, nightTime, theatre));
+		movieSessionRepository.saveAll(List.of(daySession, nightSession));
 
-		mvc.perform(get("/api/movie/1"))
+		mvc.perform(get("/api/movie/" + movie.getId()))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].startTime",
 						is(dayTime.format(DateTimeFormatter.ISO_DATE_TIME))))
@@ -145,12 +156,8 @@ public class MovieApplicationTest {
 
 	@Test
     public void synchronizeAPIWithTheatreAndSeat() throws Exception {
-        Theatre theatre1 = new Theatre("CGV", 50);
-        theatre1.setId(1);
+        Theatre theatre1 = theatreRepository.save(new Theatre("CGV", 50));
         theatre1.createRows();
-
-		given(theatreRepository.findAll())
-				.willReturn(List.of(theatre1));
 
         this.mvc.perform(get("/seat"))
                 .andExpect(status().isOk())
@@ -173,24 +180,18 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(111))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now())
-				.id(1L)
+				.tmdbId(1L)
 				.build();
+		movie = movieRepository.save(movie);
 
-		LocalDateTime dayTime = LocalDateTime.of(1999, 8, 10, 10, 0);
-		LocalDateTime nightTime = LocalDateTime.of(1999, 8, 10, 19, 0);
-		Theatre theatre = new Theatre("A", 50);
-		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
-		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
+		LocalDateTime dayTime = LocalDateTime.now().withHour(10);
+		LocalDateTime nightTime = LocalDateTime.now().withHour(20);
+		Theatre theatre = theatreRepository.save(new Theatre("A", 50));
 
-		given(movieService.getTodayMovieSessions(any()))
-				.willReturn(List.of(daySession, nightSession));
-		given(movieService.getMovie(any()))
-				.willReturn(movie);
+		MovieSession daySession = movieSessionRepository.save(new MovieSession(movie, dayTime, theatre));
+		MovieSession nightSession = movieSessionRepository.save(new MovieSession(movie, nightTime, theatre));
 
-		given(theatreRepository.findTheatreById(1))
-				.willReturn(theatre1);
-
-        this.mvc.perform(get("/showing-seat/1"))
+        this.mvc.perform(get("/showing-seat/" + movie.getId()))
                 .andExpect(status().isOk());
     }
 
@@ -202,11 +203,9 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(111))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now())
-				.id(1L)
+				.tmdbId(1L)
 				.build();
-
-		given(movieService.getTodayShowingMovies())
-			.willReturn(List.of(movie));
+		movie = movieRepository.save(movie);
 
 		this.mvc.perform(get("/movies/showing"))
 				.andExpect(status().isOk());
@@ -220,11 +219,9 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(111))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now().plusDays(7))
-				.id(1L)
+				.tmdbId(1L)
 				.build();
-
-		given(movieService.getTodayUpcomingMovies())
-				.willReturn(List.of(movie));
+		movie = movieRepository.save(movie);
 
 		this.mvc.perform(get("/movies/upcoming"))
 				.andExpect(status().isOk());
@@ -238,21 +235,18 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(111))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now())
-				.id(1L)
+				.tmdbId(1L)
 				.build();
+		movie = movieRepository.save(movie);
 
-		LocalDateTime dayTime = LocalDateTime.of(1999, 8, 10, 10, 0);
-		LocalDateTime nightTime = LocalDateTime.of(1999, 8, 10, 19, 0);
-		Theatre theatre = new Theatre("A", 50);
-		MovieSession daySession = new MovieSession(movie, dayTime, theatre);
-		MovieSession nightSession = new MovieSession(movie, nightTime, theatre);
+		LocalDateTime dayTime = LocalDateTime.now().withHour(10);
+		LocalDateTime nightTime = LocalDateTime.now().withHour(20);
+		Theatre theatre = theatreRepository.save(new Theatre("A", 50));
 
-		given(movieService.getTodayMovieSessions(any()))
-				.willReturn(List.of(daySession, nightSession));
-		given(movieService.getMovie(any()))
-				.willReturn(movie);
+		MovieSession daySession = movieSessionRepository.save(new MovieSession(movie, dayTime, theatre));
+		MovieSession nightSession = movieSessionRepository.save(new MovieSession(movie, nightTime, theatre));
 
-		this.mvc.perform(get("/movie/1"))
+		this.mvc.perform(get("/movie/" + movie.getId()))
 				.andExpect(status().isOk());
 	}
 
@@ -265,17 +259,15 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(duration))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now())
-				.id(1L)
+				.tmdbId(1L)
 				.build();
+		movie = movieRepository.save(movie);
 
 		LocalDateTime now = LocalDateTime.now();
-		Theatre theatre = new Theatre("A", 50);
-		MovieSession movieSession = new MovieSession(movie, now, theatre);
+		Theatre theatre = theatreRepository.save(new Theatre("A", 50));
+		MovieSession movieSession = movieSessionRepository.save(new MovieSession(movie, now, theatre));
 
-		given(movieService.getMovieSession(any()))
-				.willReturn(movieSession);
-
-		this.mvc.perform(get("/api/movie/session/1"))
+		this.mvc.perform(get("/api/movie/session/" + movieSession.getId()))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.movie.name", is("Fairuzi Adventures")));
 	}
