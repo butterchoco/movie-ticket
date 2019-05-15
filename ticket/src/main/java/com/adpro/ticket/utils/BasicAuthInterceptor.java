@@ -15,8 +15,8 @@ public class BasicAuthInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         var request = chain.request()
-                .newBuilder()
-                .addHeader("Authorization", Credentials.basic(username, password));
+            .newBuilder()
+            .addHeader("Authorization", Credentials.basic(username, password));
         return chain.proceed(request.build());
     }
 }
