@@ -8,10 +8,7 @@ import com.adpro.ticket.api.notifications.UserNotificationService;
 import com.adpro.ticket.model.Booking;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BookingsController {
@@ -30,7 +27,7 @@ public class BookingsController {
     @RequestMapping(name = "/bookings",
         consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE}
     )
-    public ResponseEntity<Booking> bookings(BookingRequestModel requestTicket) {
+    public ResponseEntity<Booking> bookings(@RequestBody BookingRequestModel requestTicket) {
         return bookingService.createBooking(requestTicket)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().body(null));
