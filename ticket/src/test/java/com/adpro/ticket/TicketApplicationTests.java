@@ -114,7 +114,7 @@ public class TicketApplicationTests {
                 new MessageResponse("1", "Success!")
             ));
         this.mvc.perform(post("/bookings/" + booking.getId() +"/verify")
-                .param("apikey", "ceritanyabiaraman")
+                .param("apiKey", "ceritanyabiaraman")
                 .param("email", "ramadistragmail"))
                 .andExpect(status().is4xxClientError());
     }
@@ -142,7 +142,7 @@ public class TicketApplicationTests {
                     return new MessageResponse("1", "Success!");
                 }));
         this.mvc.perform(post("/bookings/" + booking.getId() + "/verify")
-            .param("apikey", "ceritanyabiaraman")
+            .param("apiKey", "ceritanyabiaraman")
             .param("email", "ramadistra@gmail.com"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.status", is("VERIFIED")));
@@ -164,12 +164,12 @@ public class TicketApplicationTests {
         Booking booking2 = createBooking(3, Booking.Status.PENDING);
 
         this.mvc.perform(post("/bookings/" + booking1.getId() + "/verify")
-            .param("apikey", "ceritanyabiaraman")
+            .param("apiKey", "ceritanyabiaraman")
             .param("email", "ramadistra@gmail.com"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.status", is("VERIFIED")));
         this.mvc.perform(post("/bookings/" + booking2.getId() + "/verify")
-            .param("apikey", "ceritanyabiaraman")
+            .param("apiKey", "ceritanyabiaraman")
             .param("email", "ramadistra@gmail.com"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.status", is("CANCELLED")));
@@ -179,7 +179,7 @@ public class TicketApplicationTests {
     public void testCancelledTicketNotVerified() throws Exception {
         Booking booking = createBooking(5, Booking.Status.CANCELLED);
         this.mvc.perform(post("/bookings/" + booking.getId() + "/verify")
-            .param("apikey", "ceritanyabiaraman")
+            .param("apiKey", "ceritanyabiaraman")
             .param("email", "ramadistra@gmail.com"))
                 .andExpect(jsonPath("$.status", is("CANCELLED")));
     }
@@ -187,7 +187,7 @@ public class TicketApplicationTests {
     @Test
     public void testVerifyInvalidTicket() throws Exception {
         this.mvc.perform(post("/bookings/12321/verify")
-                .param("apikey", "ceritanyabiaraman")
+                .param("apiKey", "ceritanyabiaraman")
                 .param("email", "valid@email.com"))
                 .andExpect(status().is4xxClientError());
     }
