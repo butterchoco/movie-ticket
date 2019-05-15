@@ -25,7 +25,7 @@
                             if (count == 0) {
                                 middle += "<div id='rowseat'>";
                             }
-                            middle += "<button onclick='createCallback("+i+")' id='sqr" + i + "' class='square white'>" + (i+1) + "</button>";
+                            middle += "<button onclick='createCallback("+i+")' id='sqr-" + i + "' class='square white'>" + (i+1) + "</button>";
                             count += 1;
                             if (count == rowDivision || seat[i+1].type === "Far") {
                                 middle += "</div>";
@@ -35,7 +35,7 @@
                             if (count == 0) {
                                 far += "<div id='rowseat'>";
                             }
-                            far += "<button onclick='createCallback("+i+")' id='sqr" + i + "' class='square white'>" + (i+1) + "</button>";
+                            far += "<button onclick='createCallback("+i+")' id='sqr-" + i + "' class='square white'>" + (i+1) + "</button>";
                             count += 1;
                             if (count == rowDivision) {
                                 far += "</div>";
@@ -59,9 +59,9 @@
                 success: function(data) {
                     for (let i = 0; i < data.length; i++) {
                         if (theatreId == data[i].movieSession.theatre.id && id == data[i].movieSession.id) {
-                            $("#sqr"+data[i].seat.seatNumber).prop("disabled", true);
+                            $("#sqr-"+data[i].seat.seatNumber).prop("disabled", true);
                         } else {
-                            $("#sqr"+data[i].seat.seatNumber).prop("disabled", false);
+                            $("#sqr-"+data[i].seat.seatNumber).prop("disabled", false);
                         }
                     }
                 }
@@ -80,5 +80,21 @@
 
                 const sessionId = $(".time").attr("id").split("-")[1];
                 ajaxMovie(sessionId);
+
+                $(".accept").click(function() {
+                    var time = $(".time div button:disabled").attr("id").split("-")[1];
+                    var seat = $(".pressed").attr("id").split("-")[1];
+                    $.ajax({
+                           method: "POST",
+                           url: "/bookings",
+                           data: {
+                                "sessionId":time,
+                                "seatIds":seat
+                           },
+                           success: function(data) {
+                                alert("success")
+                           }
+                    })
+                })
             });
         });
