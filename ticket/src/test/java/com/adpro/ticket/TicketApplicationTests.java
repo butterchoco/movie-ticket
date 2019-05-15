@@ -1,6 +1,7 @@
 package com.adpro.ticket;
 
 import com.adpro.ticket.api.bookings.BookingRequestModel;
+import com.adpro.ticket.api.bookings.TicketGenerator;
 import com.adpro.ticket.api.movies.Movie;
 import com.adpro.ticket.api.movies.MovieService;
 import com.adpro.ticket.api.movies.MovieSession;
@@ -10,6 +11,7 @@ import com.adpro.ticket.model.Ticket;
 import com.adpro.ticket.repository.BookingRepository;
 import com.adpro.ticket.services.email.EmailClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -21,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,6 +49,13 @@ public class TicketApplicationTests {
     private EmailClient mockEmailClient;
     @MockBean
     private MovieService mockMovieService;
+    @MockBean
+    private TicketGenerator mockTicketGenerator;
+
+    @Before
+    public void setUp() throws IOException {
+        Mockito.when(mockTicketGenerator.generateTicket(Mockito.any())).thenAnswer(i -> "Hi".getBytes());
+    }
 
     private MovieSession createMovieSession() {
         Movie movie = Movie.builder()
@@ -96,12 +106,15 @@ public class TicketApplicationTests {
 
     @Test
     public void testInvalidEmail() throws Exception {
-        this.mvc.perform(post("/bookings")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("sessionId", "1")
-                .param("seatIds", "3F")
-                .param("email", "ramadistragmail")
-                .param("price", "12222"))
+        Booking booking = createBooking(99, Booking.Status.PENDING);
+        Mockito.when(mockMovieService.getMovieSessionById(Mockito.any()))
+            .thenReturn(CompletableFuture.completedFuture(createMovieSession()));
+        Mockito.when(mockEmailClient.sendEmail(Mockito.any()))
+            .thenReturn(CompletableFuture.completedFuture(
+                new MessageResponse("1", "Success!")
+            ));
+        this.mvc.perform(post("/bookings/" + booking.getId() +"/verify")
+                .param("email", "ramadistragmail"))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -127,9 +140,10 @@ public class TicketApplicationTests {
                     lock.countDown();
                     return new MessageResponse("1", "Success!");
                 }));
-        this.mvc.perform(post("/bookings/" + booking.getId() + "/verify"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status", is("VERIFIED")));
+        this.mvc.perform(post("/bookings/" + booking.getId() + "/verify")
+            .param("email", "ramadistra@gmail.com"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.status", is("VERIFIED")));
 
         lock.await();
         Mockito.verify(mockEmailClient, Mockito.atLeastOnce()).sendEmail(Mockito.any());
@@ -146,11 +160,13 @@ public class TicketApplicationTests {
 
         Booking booking1 = createBooking(3, Booking.Status.PENDING);
         Booking booking2 = createBooking(3, Booking.Status.PENDING);
-        
-        this.mvc.perform(post("/bookings/" + booking1.getId() + "/verify"))
+
+        this.mvc.perform(post("/bookings/" + booking1.getId() + "/verify")
+            .param("email", "ramadistra@gmail.com"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.status", is("VERIFIED")));
-        this.mvc.perform(post("/bookings/" + booking2.getId() + "/verify"))
+        this.mvc.perform(post("/bookings/" + booking2.getId() + "/verify")
+            .param("email", "ramadistra@gmail.com"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.status", is("CANCELLED")));
     }
@@ -158,13 +174,15 @@ public class TicketApplicationTests {
     @Test
     public void testCancelledTicketNotVerified() throws Exception {
         Booking booking = createBooking(5, Booking.Status.CANCELLED);
-        this.mvc.perform(post("/bookings/" + booking.getId() + "/verify"))
+        this.mvc.perform(post("/bookings/" + booking.getId() + "/verify")
+            .param("email", "ramadistra@gmail.com"))
                 .andExpect(jsonPath("$.status", is("CANCELLED")));
     }
 
     @Test
     public void testVerifyInvalidTicket() throws Exception {
-        this.mvc.perform(post("/bookings/12321/verify"))
+        this.mvc.perform(post("/bookings/12321/verify")
+                .param("email", "valid@email.com"))
                 .andExpect(status().is4xxClientError());
     }
 }

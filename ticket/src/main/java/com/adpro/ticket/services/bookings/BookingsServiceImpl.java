@@ -39,7 +39,7 @@ public class BookingsServiceImpl implements BookingService {
             Set<Ticket> tickets =
                 r.getSeatIds().stream().map(Ticket::new).collect(Collectors.toSet());
             Booking booking = bookingRepository
-                .save(new Booking(r.getSessionId(), Booking.Status.PENDING, tickets, r.getEmail()
+                .save(new Booking(r.getSessionId(), Booking.Status.PENDING, tickets, null
                     , r.getPrice()));
             return Optional.of(booking);
         }
@@ -56,7 +56,7 @@ public class BookingsServiceImpl implements BookingService {
     }
 
     @Override
-    public synchronized Optional<Booking> verifyBooking(Long bookingId) {
+    public synchronized Optional<Booking> verifyBooking(Long bookingId, String email) {
         Optional<Booking> bookingOptional = bookingRepository.findById(bookingId);
 
         if (!bookingOptional.isPresent()) {
@@ -70,6 +70,7 @@ public class BookingsServiceImpl implements BookingService {
 
         if (isValid(booking)) {
             booking.setStatus(Booking.Status.VERIFIED);
+            booking.setEmail(email);
         } else {
             booking.setStatus(Booking.Status.CANCELLED);
         }
