@@ -71,7 +71,8 @@ public class SeatController {
     @GetMapping("/showing-seat/{movieSessionId}")
     public String showSeat(@PathVariable Long movieSessionId, Model model) {
         MovieSession movieSession = movieService.getMovieSession(movieSessionId);
-        List<MovieSession> todayMovieSessions = movieService.getTodayMovieSessions(movieSession.getMovie().getId());
+        List<MovieSession> todayMovieSessions = movieService.getTodayMovieSessions(
+                movieSession.getMovie().getId());
         Theatre theatre = movieSession.getTheatre();
         model.addAttribute("movieSessions", todayMovieSessions);
         model.addAttribute("sessionId", movieSession.getId());
