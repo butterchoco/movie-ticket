@@ -171,7 +171,8 @@ public class TicketApplicationTests {
 
     @Test
     public void testVerifyInvalidTicket() throws Exception {
-        this.mvc.perform(post("/bookings/12321/verify"))
+        this.mvc.perform(post("/bookings/12321/verify")
+                .param("email", "valid@email.com"))
                 .andExpect(status().is4xxClientError());
     }
 }
