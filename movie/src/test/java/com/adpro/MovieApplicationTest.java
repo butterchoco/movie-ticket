@@ -1,15 +1,19 @@
 package com.adpro;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.adpro.movie.Movie;
 import com.adpro.movie.MovieListProxy;
+import com.adpro.movie.MovieListRepository;
 import com.adpro.movie.MovieRepository;
+import com.adpro.movie.MovieService;
 import com.adpro.movie.MovieSession;
 import com.adpro.movie.MovieSessionRepository;
 import com.adpro.seat.*;
@@ -19,7 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,26 +40,23 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 public class MovieApplicationTest {
 
-	@Autowired
-	private MockMvc mvc;
+	@Autowired private MockMvc mvc;
 
-	@MockBean
-	private MovieListProxy movieListProxy;
-
-	@MockBean
-	private MovieSessionRepository movieSessionRepository;
-
-	@MockBean
-	private TheatreRepository theatreRepository;
-
-	@MockBean
-	private MovieRepository movieRepository;
-
-	@MockBean
-	private SavedBookingRepository savedBookingRepository;
+	@Autowired private TheatreRepository theatreRepository;
+	@Autowired private MovieService movieService;
+	@Autowired private MovieRepository movieRepository;
+	@Autowired private MovieSessionRepository movieSessionRepository;
+	@Autowired private MovieListRepository movieListRepository;
+	@MockBean private SavedBookingRepository savedBookingRepository;
 
 	@Test
-	public void contextLoads() {
+	public void contextLoads() {}
+
+	@Before
+	public void init() {
+		movieSessionRepository.deleteAll();
+		theatreRepository.deleteAll();
+		movieRepository.deleteAll();
 	}
 
 	@Test
@@ -65,16 +66,17 @@ public class MovieApplicationTest {
 				.description("Petualangan seorang Fairuzi")
 				.duration(Duration.ofMinutes(111))
 				.posterUrl("sdada")
-				.releaseDate(LocalDate.now())
-				.id(1L)
+				.releaseDate(LocalDate.now().minusDays(1))
+				.tmdbId(1L)
 				.build();
-
-		given(movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
-				.willReturn(List.of(movie));
+		movie = movieRepository.save(movie);
+		System.out.println(movieRepository.findMoviesByReleaseDateBetween(
+				LocalDate.now().minusDays(MovieListProxy.DAYS_SHOWED), LocalDate.now()) + " showing");
+		System.out.println(movieService.getTodayShowingMovies() + " showing");
 
 		this.mvc.perform(get("/api/movies/showing"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].id", is(1)))
+				.andExpect(jsonPath("$[0].id", is(movie.getId().intValue())))
 				.andExpect(jsonPath("$[0].description", is(movie.getDescription())))
 				.andExpect(jsonPath("$[0].posterUrl", is(movie.getPosterUrl())))
 				.andExpect(jsonPath("$[0].releaseDate", is(movie.getReleaseDate().toString())))
@@ -89,15 +91,13 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(111))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now().plusDays(7))
-				.id(1L)
+				.tmdbId(1L)
 				.build();
-
-		given(movieListProxy.findMoviesByReleaseDateAfter(any()))
-				.willReturn(List.of(movie));
+		movie = movieRepository.save(movie);
 
 		this.mvc.perform(get("/api/movies/upcoming"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].id", is(1)))
+				.andExpect(jsonPath("$[0].id", is(movie.getId().intValue())))
 				.andExpect(jsonPath("$[0].description", is(movie.getDescription())))
 				.andExpect(jsonPath("$[0].posterUrl", is(movie.getPosterUrl())))
 				.andExpect(jsonPath("$[0].releaseDate", is(movie.getReleaseDate().toString())))
@@ -111,11 +111,35 @@ public class MovieApplicationTest {
 	}
 
 	@Test
-	public void testCreateTheatreAndSeat() {
-		Theatre theatre1 = new Theatre("A", 50);
-		Seat seat = new MiddleSeat();
-		theatre1.addSeatToRow(seat);
+	public void testGetMovieSessions() throws Exception {
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(111))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now())
+				.tmdbId(1L)
+				.build();
+		movie = movieRepository.save(movie);
+
+		LocalDateTime dayTime = LocalDateTime.now().withHour(10);
+		LocalDateTime nightTime = LocalDateTime.now().withHour(20);
+		Theatre theatre = theatreRepository.save(new Theatre("A", 50));
+
+		MovieSession daySession = movieSessionRepository.save(new MovieSession(movie, dayTime, theatre));
+		MovieSession nightSession = movieSessionRepository.save(new MovieSession(movie, nightTime, theatre));
+		movieSessionRepository.saveAll(List.of(daySession, nightSession));
+
+		mvc.perform(get("/api/movie/" + movie.getId()))
+				.andExpect(status().isOk());
 	}
+
+    @Test
+    public void createTheatreAndSeat() {
+        Theatre theatre1 = new Theatre("A", 50);
+        Seat seat = new MiddleSeat();
+        theatre1.addSeatToRow(seat);
+    }
 
 	@Test
 	public void testSetSeatCost() {
@@ -131,20 +155,23 @@ public class MovieApplicationTest {
 	}
 
 	@Test
-	public void testSynchronizeAPIWithTheatreAndSeat() throws Exception {
+    public void synchronizeAPIWithTheatreAndSeat() throws Exception {
+        Theatre theatre1 = theatreRepository.save(new Theatre("CGV", 50));
+        theatre1.createRows();
+
+        this.mvc.perform(get("/seat"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(theatre1.getId())))
+                .andExpect(jsonPath("$[0].description", is(theatre1.getDescription())))
+                .andExpect(jsonPath("$[0].seatCount", is(theatre1.getSeatCount())))
+                .andExpect(jsonPath("$[0].rows[0].type", is(theatre1.getRows().get(0).getType())));
+    }
+
+    @Test
+    public void ShowingSeat() throws Exception {
 		Theatre theatre1 = new Theatre("CGV", 50);
 		theatre1.setId(1);
 		theatre1.createRows();
-
-		given(theatreRepository.findAll())
-				.willReturn(List.of(theatre1));
-
-		this.mvc.perform(get("/seat"))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].id", is(theatre1.getId())))
-				.andExpect(jsonPath("$[0].description", is(theatre1.getDescription())))
-				.andExpect(jsonPath("$[0].seatCount", is(theatre1.getSeatCount())))
-				.andExpect(jsonPath("$[0].rows[0].type", is(theatre1.getRows().get(0).getType())));
 	}
 
 	@Test
@@ -156,20 +183,17 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(duration))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now())
-				.id(1L)
+				.tmdbId(1L)
 				.build();
+		movie = movieRepository.save(movie);
 
-		LocalDateTime now = LocalDateTime.now();
-		Theatre theatre = new Theatre("A", 50);
-		MovieSession movieSession = new MovieSession(movie, now, theatre);
-		given(movieSessionRepository.findById(any()))
-				.willReturn(Optional.of(movieSession));
-		given(movieSessionRepository.findMovieSessionsByMovieId(1L))
-				.willReturn(List.of(movieSession));
+		LocalDateTime dayTime = LocalDateTime.now().withHour(10);
+		Theatre theatre = theatreRepository.save(new Theatre("A", 50));
+		MovieSession daySession = movieSessionRepository.save(new MovieSession(movie, dayTime, theatre));
 
-		this.mvc.perform(get("/showing-seat/1"))
-				.andExpect(status().is(302));
-	}
+        this.mvc.perform(get("/showing-seat/" + daySession.getId()))
+                .andExpect(status().isOk());
+    }
 
 	@Test
 	public void ShowingMoviesHtml() throws Exception {
@@ -179,11 +203,9 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(111))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now())
-				.id(1L)
+				.tmdbId(1L)
 				.build();
-
-		given(movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
-				.willReturn(List.of(movie));
+		movie = movieRepository.save(movie);
 
 		this.mvc.perform(get("/movies/showing"))
 				.andExpect(status().isOk());
@@ -197,13 +219,34 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(111))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now().plusDays(7))
-				.id(1L)
+				.tmdbId(1L)
 				.build();
-
-		given(movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
-				.willReturn(List.of(movie));
+		movie = movieRepository.save(movie);
 
 		this.mvc.perform(get("/movies/upcoming"))
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void MovieHtml() throws Exception {
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(111))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now())
+				.tmdbId(1L)
+				.build();
+		movie = movieRepository.save(movie);
+
+		LocalDateTime dayTime = LocalDateTime.now().withHour(10);
+		LocalDateTime nightTime = LocalDateTime.now().withHour(20);
+		Theatre theatre = theatreRepository.save(new Theatre("A", 50));
+
+		MovieSession daySession = movieSessionRepository.save(new MovieSession(movie, dayTime, theatre));
+		MovieSession nightSession = movieSessionRepository.save(new MovieSession(movie, nightTime, theatre));
+
+		this.mvc.perform(get("/movie/" + movie.getId()))
 				.andExpect(status().isOk());
 	}
 
@@ -216,16 +259,15 @@ public class MovieApplicationTest {
 				.duration(Duration.ofMinutes(duration))
 				.posterUrl("sdada")
 				.releaseDate(LocalDate.now())
-				.id(1L)
+				.tmdbId(1L)
 				.build();
+		movie = movieRepository.save(movie);
 
 		LocalDateTime now = LocalDateTime.now();
-		Theatre theatre = new Theatre("A", 50);
-		MovieSession movieSession = new MovieSession(movie, now, theatre);
+		Theatre theatre = theatreRepository.save(new Theatre("A", 50));
+		MovieSession movieSession = movieSessionRepository.save(new MovieSession(movie, now, theatre));
 
-		given(movieSessionRepository.findById(any())).willReturn(Optional.of(movieSession));
-
-		this.mvc.perform(get("/api/movie/session/1"))
+		this.mvc.perform(get("/api/movie/session/" + movieSession.getId()))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.movie.name", is("Fairuzi Adventures")));
 	}
@@ -252,6 +294,15 @@ public class MovieApplicationTest {
 
 		this.mvc.perform(get("/bookings-saved"))
 				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void testInvalidSavingBooking() throws Exception {
+		this.mvc.perform(post("/saving-booking")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("sessionId", "1")
+				.param("seatIds", "3F"))
+                .andExpect(status().is4xxClientError());
 	}
 
 }

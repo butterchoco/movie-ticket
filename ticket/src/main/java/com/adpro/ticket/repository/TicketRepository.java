@@ -11,9 +11,10 @@ import java.util.List;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    @Query("SELECT t FROM Ticket t , Booking b WHERE b.sessionId=:sessionId AND t.booking.id=b.id AND t.seatId IN :seatIds AND b.status=:status")
+    @Query("SELECT t FROM Ticket t , Booking b WHERE b.sessionId=:sessionId AND t.booking.id=b.id" +
+        " AND t.seatId IN :seatIds AND b.status=:status")
     List<Ticket> findBySessionIdAndSeatIdsAndStatus(
-            @Param("sessionId") Long sessionId,
-            @Param("seatIds") List<String> seatIds,
-            @Param("status") Booking.Status status);
+        @Param("sessionId") Long sessionId,
+        @Param("seatIds") List<String> seatIds,
+        @Param("status") Booking.Status status);
 }

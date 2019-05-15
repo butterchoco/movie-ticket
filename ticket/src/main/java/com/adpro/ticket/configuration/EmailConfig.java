@@ -1,4 +1,4 @@
-package com.adpro.ticket;
+package com.adpro.ticket.configuration;
 
 import com.adpro.ticket.services.email.EmailClient;
 import com.adpro.ticket.utils.BasicAuthInterceptor;
@@ -12,17 +12,18 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class EmailConfig {
     @Bean
     public EmailClient getEmailClient() {
-        final String BASE_URL = "https://api.mailgun.net/v3/sandboxcc639084c2a0431db7271570b5b5b421.mailgun.org/";
+        final String BASE_URL = "https://api.mailgun" +
+            ".net/v3/sandboxcc639084c2a0431db7271570b5b5b421.mailgun.org/";
         final String API_KEY = "51a76eda02d0eb75bb4825065d2747c8-059e099e-c62d7920";
         final OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new BasicAuthInterceptor("api", API_KEY))
-                .build();
+            .addInterceptor(new BasicAuthInterceptor("api", API_KEY))
+            .build();
         return new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(client)
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build()
-                .create(EmailClient.class);
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(JacksonConverterFactory.create())
+            .build()
+            .create(EmailClient.class);
     }
 
     @Bean

@@ -83,13 +83,20 @@
 
                 $(".accept").click(function() {
                     var time = $(".time div button:disabled").attr("id").split("-")[1];
-                    var seat = $(".pressed").attr("id").split("-")[1];
+                    var seat = document.getElementsByClassName("pressed");
+                    var seatIds = "";
+                    for (let i = 0; i < seat.length; i++) {
+                        seatIds += seat[i];
+                        if (i == seat.length) {
+                            seatIds += ",";
+                        }
+                    }
                     $.ajax({
                            method: "POST",
                            url: "/bookings",
                            data: {
                                 "sessionId":time,
-                                "seatIds":seat
+                                "seatIds":seatIds
                            },
                            success: function(data) {
                                 alert("success")

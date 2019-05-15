@@ -30,7 +30,7 @@ public class MovieListProxy implements MovieListRepository {
 
     private void updateAllMovieList() {
         lastUpcomingMovies = movieRepository.findMoviesByReleaseDateAfter(LocalDate.now());
-        lastShowingMovies = movieRepository.findMoviesByReleaseDateAfterAndReleaseDateBefore(
+        lastShowingMovies = movieRepository.findMoviesByReleaseDateBetween(
                 LocalDate.now().minusDays(DAYS_SHOWED), LocalDate.now());
         lastUpdate = LocalDateTime.now();
     }
@@ -42,7 +42,7 @@ public class MovieListProxy implements MovieListRepository {
         return lastUpcomingMovies;
     }
 
-    public List<Movie> findMoviesByReleaseDateAfterAndReleaseDateBefore(
+    public List<Movie> findMoviesByReleaseDateBetween(
             LocalDate after, LocalDate before) {
         if (Duration.between(lastUpdate, LocalDateTime.now()).toDays() >= 1) {
             updateAllMovieList();
