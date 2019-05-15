@@ -41,19 +41,4 @@ public class SavedBooking {
 
     public SavedBooking() {}
 
-    public MovieSession getMovieSession() {
-        return movieSession;
-    }
-
-    public void setMovieSession(MovieSession movieSession) {
-        this.movieSession = movieSession;
-    }
-
-    public Seat getSeat() {
-        return seat;
-    }
-
-    public void setSeat(Seat seat) {
-        this.seat = seat;
-    }
 }

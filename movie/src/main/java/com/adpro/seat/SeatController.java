@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 
 @Controller
@@ -50,8 +51,7 @@ public class SeatController {
 
     @PostMapping("/saving-booking")
     public @ResponseBody SavedBooking saveBooking(Long movieSessionId,
-                                                  Integer seatId,
-                                                  Integer theatreId) {
+                                                  Integer seatId) {
         MovieSession movieSessionTemp = this.movieSessionRepository.findById(movieSessionId).get();
         Seat seatTemp = this.seatRepository.findById(seatId).get();
         SavedBooking savedBooking = new SavedBooking(movieSessionTemp, seatTemp);
@@ -61,15 +61,19 @@ public class SeatController {
     @GetMapping("/showing-seat/{sessionId}")
     public ModelAndView showSeat(@PathVariable Long sessionId) {
         ModelAndView view = new ModelAndView("show-seat");
-        MovieSession session = movieSessionRepository.findById(sessionId).get();
-        List<MovieSession> movieSessions = movieSessionRepository
-                .findMovieSessionsByMovieId(session.getMovie().getId());
-        view.addAllObjects(Map.of(
-                "movieSessions", movieSessions,
-                "movie", session.getMovie(),
-                "theatre", session.getTheatre(),
-                "sessionId", session.getId()));
-        return view;
+        MovieSession session = movieSessionRepository.findMovieSessionsById(sessionId);
+        if (session != null) {
+            List<MovieSession> movieSessions = movieSessionRepository
+                    .findMovieSessionsByMovieId(session.getMovie().getId());
+            view.addAllObjects(Map.of(
+                    "movieSessions", movieSessions,
+                    "movie", session.getMovie(),
+                    "theatre", session.getTheatre(),
+                    "sessionId", session.getId()));
+            return view;
+        } else {
+            return new ModelAndView("redirect:/movies/showing");
+        }
     }
 
 }

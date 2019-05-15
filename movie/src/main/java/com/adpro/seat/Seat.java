@@ -49,10 +49,6 @@ public class Seat implements Serializable {
         return this.type;
     }
 
-    public Theatre getTheatre() {
-        return theatre;
-    }
-
     public void setTheatre(Theatre theatre) {
         this.theatre = theatre;
     }

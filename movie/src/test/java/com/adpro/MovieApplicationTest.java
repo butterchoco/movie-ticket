@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.adpro.movie.Movie;
@@ -11,11 +12,8 @@ import com.adpro.movie.MovieListProxy;
 import com.adpro.movie.MovieRepository;
 import com.adpro.movie.MovieSession;
 import com.adpro.movie.MovieSessionRepository;
-import com.adpro.seat.FarSeat;
-import com.adpro.seat.MiddleSeat;
-import com.adpro.seat.Seat;
-import com.adpro.seat.Theatre;
-import com.adpro.seat.TheatreRepository;
+import com.adpro.seat.*;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -51,6 +50,9 @@ public class MovieApplicationTest {
 
 	@MockBean
 	private MovieRepository movieRepository;
+
+	@MockBean
+	private SavedBookingRepository savedBookingRepository;
 
 	@Test
 	public void contextLoads() {
@@ -108,43 +110,66 @@ public class MovieApplicationTest {
 				.andExpect(redirectedUrl("/movies/showing"));
 	}
 
-    @Test
-    public void testCreateTheatreAndSeat() {
-        Theatre theatre1 = new Theatre("A", 50);
-        Seat seat = new MiddleSeat();
-        theatre1.addSeatToRow(seat);
-    }
-
 	@Test
-	public void testSetSeatCost() {
-		FarSeat.setCost(FarSeat.getCost()+10000);
-		MiddleSeat.setCost(MiddleSeat.getCost()+10000);
+	public void testCreateTheatreAndSeat() {
+		Theatre theatre1 = new Theatre("A", 50);
+		Seat seat = new MiddleSeat();
+		theatre1.addSeatToRow(seat);
 	}
 
 	@Test
-    public void testBookingSeatAvailable() {
-        Theatre theatre1 = new Theatre("A", 50);
-        Seat seat = new MiddleSeat();
-        theatre1.addSeatToRow(seat);
-    }
+	public void testSetSeatCost() {
+		FarSeat.setCost(FarSeat.getCost() + 10000);
+		MiddleSeat.setCost(MiddleSeat.getCost() + 10000);
+	}
 
 	@Test
-    public void testSynchronizeAPIWithTheatreAndSeat() throws Exception {
-        Theatre theatre1 = new Theatre("CGV", 50);
-        theatre1.setId(1);
-        theatre1.createRows();
+	public void testBookingSeatAvailable() {
+		Theatre theatre1 = new Theatre("A", 50);
+		Seat seat = new MiddleSeat();
+		theatre1.addSeatToRow(seat);
+	}
+
+	@Test
+	public void testSynchronizeAPIWithTheatreAndSeat() throws Exception {
+		Theatre theatre1 = new Theatre("CGV", 50);
+		theatre1.setId(1);
+		theatre1.createRows();
 
 		given(theatreRepository.findAll())
 				.willReturn(List.of(theatre1));
 
-        this.mvc.perform(get("/seat"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(theatre1.getId())))
-                .andExpect(jsonPath("$[0].description", is(theatre1.getDescription())))
-                .andExpect(jsonPath("$[0].seatCount", is(theatre1.getSeatCount())))
-                .andExpect(jsonPath("$[0].rows[0].type", is(theatre1.getRows().get(0).getType())));
-    }
+		this.mvc.perform(get("/seat"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id", is(theatre1.getId())))
+				.andExpect(jsonPath("$[0].description", is(theatre1.getDescription())))
+				.andExpect(jsonPath("$[0].seatCount", is(theatre1.getSeatCount())))
+				.andExpect(jsonPath("$[0].rows[0].type", is(theatre1.getRows().get(0).getType())));
+	}
 
+	@Test
+	public void testRedirectToMovies() throws Exception {
+		long duration = 111;
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(duration))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now())
+				.id(1L)
+				.build();
+
+		LocalDateTime now = LocalDateTime.now();
+		Theatre theatre = new Theatre("A", 50);
+		MovieSession movieSession = new MovieSession(movie, now, theatre);
+		given(movieSessionRepository.findById(any()))
+				.willReturn(Optional.of(movieSession));
+		given(movieSessionRepository.findMovieSessionsByMovieId(1L))
+				.willReturn(List.of(movieSession));
+
+		this.mvc.perform(get("/showing-seat/1"))
+				.andExpect(status().is(302));
+	}
 
 	@Test
 	public void ShowingMoviesHtml() throws Exception {
@@ -158,7 +183,7 @@ public class MovieApplicationTest {
 				.build();
 
 		given(movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(any(), any()))
-			.willReturn(List.of(movie));
+				.willReturn(List.of(movie));
 
 		this.mvc.perform(get("/movies/showing"))
 				.andExpect(status().isOk());
@@ -204,4 +229,29 @@ public class MovieApplicationTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.movie.name", is("Fairuzi Adventures")));
 	}
+
+	@Test
+	public void testSavedBookings() throws Exception {
+		long duration = 111;
+		Movie movie = Movie.builder()
+				.name("Fairuzi Adventures")
+				.description("Petualangan seorang Fairuzi")
+				.duration(Duration.ofMinutes(duration))
+				.posterUrl("sdada")
+				.releaseDate(LocalDate.now())
+				.id(1L)
+				.build();
+
+		LocalDateTime now = LocalDateTime.now();
+		Theatre theatre = new Theatre("A", 50);
+		theatre.createRows();
+		MovieSession movieSession = new MovieSession(movie, now, theatre);
+		SavedBooking savedBooking = new SavedBooking(movieSession, theatre.getRows().get(1));
+
+		given(savedBookingRepository.findAll()).willReturn(List.of(savedBooking));
+
+		this.mvc.perform(get("/bookings-saved"))
+				.andExpect(status().isOk());
+	}
+
 }
