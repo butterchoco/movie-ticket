@@ -24,13 +24,22 @@ public class BookingsController {
     }
 
     @PostMapping
-    @RequestMapping(name = "/bookings",
-        consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE}
-    )
-    public ResponseEntity<Booking> bookings(@RequestBody BookingRequestModel requestTicket) {
-        return bookingService.createBooking(requestTicket)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.badRequest().body(null));
+    @RequestMapping(name = "/bookings", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Booking> bookingsJson(@RequestBody BookingRequestModel bookingRequest) {
+        return handleBookings(bookingRequest);
+
+    }
+
+    @PostMapping
+    @RequestMapping(name = "/bookings")
+    public ResponseEntity<Booking> bookingsUrlEncoded(BookingRequestModel bookingRequest) {
+        return handleBookings(bookingRequest);
+    }
+
+    private ResponseEntity<Booking> handleBookings(BookingRequestModel bookingRequest) {
+        return bookingService.createBooking(bookingRequest)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.badRequest().body(null));
     }
 
     @PostMapping
