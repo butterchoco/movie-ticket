@@ -11,4 +11,6 @@ public interface MovieSessionRepository extends CrudRepository<MovieSession, Lon
             Long movieId, LocalDateTime dateTime);
 
     List<MovieSession> findMovieSessionsByMovieId(Long movieId);
+
+    MovieSession findMovieSessionsById(Long movieSessionId);
 }

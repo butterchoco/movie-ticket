@@ -13,7 +13,7 @@ import java.time.Duration;
 public class MoviesConfig {
     @Bean
     public MovieService getMovieService() {
-        final String BASE_URL_STRING = "http://ap-c8-movie.herokuapp.com/api/";
+        final String BASE_URL_STRING = "http://ap-c8-movie.herokuapp.com/";
         final OkHttpClient client = new OkHttpClient.Builder()
             .readTimeout(Duration.ofMinutes(1))
             .build();

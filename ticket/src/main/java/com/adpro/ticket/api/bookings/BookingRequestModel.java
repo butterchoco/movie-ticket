@@ -18,15 +18,11 @@ public class BookingRequestModel {
     @NotNull
     private List<String> seatIds;
     @NotNull
-    @Email
-    private String email;
-    @NotNull
     private int price;
 
     public BookingRequestModel(Long sessionId, String seatId, String email, int price) {
         this.sessionId = sessionId;
         this.seatIds = Collections.singletonList(seatId);
-        this.email = email;
         this.price = price;
     }
 }

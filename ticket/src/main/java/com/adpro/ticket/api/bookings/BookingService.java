@@ -9,5 +9,5 @@ public interface BookingService {
 
     Optional<Booking> createBooking(BookingRequestModel r);
 
-    Optional<Booking> verifyBooking(Long ticketId);
+    Optional<Booking> verifyBooking(Long ticketId, String email);
 }
