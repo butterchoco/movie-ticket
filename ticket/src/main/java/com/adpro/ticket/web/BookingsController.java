@@ -3,6 +3,7 @@ package com.adpro.ticket.web;
 import com.adpro.ticket.api.bookings.BookingData;
 import com.adpro.ticket.api.bookings.BookingRequestModel;
 import com.adpro.ticket.api.bookings.BookingService;
+import com.adpro.ticket.api.bookings.VerifyBookingRequest;
 import com.adpro.ticket.api.movies.MovieService;
 import com.adpro.ticket.api.notifications.UserNotificationService;
 import com.adpro.ticket.model.Booking;
@@ -11,8 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 @RestController
+@CrossOrigin
 public class BookingsController {
 
     private BookingService bookingService;
@@ -48,8 +52,9 @@ public class BookingsController {
 
     @PostMapping
     @RequestMapping("/bookings/{bookingId}/verify")
-    public ResponseEntity<Booking> verify(@PathVariable(name = "bookingId") Long bookingId) {
-        var booking = bookingService.verifyBooking(bookingId).orElse(null);
+    public ResponseEntity<Booking> verify(@PathVariable(name = "bookingId") Long bookingId,
+                                          @Valid VerifyBookingRequest params) {
+        var booking = bookingService.verifyBooking(bookingId, params.getEmail()).orElse(null);
 
         if (booking == null) {
             return ResponseEntity.badRequest().body(null);
