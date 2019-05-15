@@ -88,7 +88,7 @@ public class Scheduler {
     }
 
     void checkExistOrCreateMovieSession() {
-        List<Movie> movies = movieRepository.findMoviesByReleaseDateAfterAndReleaseDateBefore(
+        List<Movie> movies = movieRepository.findMoviesByReleaseDateBetween(
                 LocalDate.now().minusDays(14), LocalDate.now());
 
         List<MovieSession> alreadyCreatedTodayMovieSession = movieSessionRepository

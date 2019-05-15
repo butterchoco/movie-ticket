@@ -1,8 +1,5 @@
 package com.adpro.movie;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,17 +11,11 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class MovieController {
 
-    private MovieRepository movieRepository;
-    private MovieSessionRepository movieSessionRepository;
-    private MovieListProxy movieListProxy;
+    private MovieService movieService;
 
     @Autowired
-    public MovieController(MovieRepository movieRepository,
-                           MovieSessionRepository movieSessionRepository,
-                           MovieListProxy movieListProxy) {
-        this.movieRepository = movieRepository;
-        this.movieSessionRepository = movieSessionRepository;
-        this.movieListProxy = movieListProxy;
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
     }
 
     @RequestMapping("/")
@@ -33,19 +24,27 @@ public class MovieController {
     }
 
     @RequestMapping("/movies/showing")
-    public String movies(Model model) {
-        List<Movie> movies = movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(
-                LocalDate.now().minusDays(MovieListProxy.DAYS_SHOWED), LocalDate.now());
+    public String todayShowingMovies(Model model) {
+        List<Movie> showingMovies = movieService.getTodayShowingMovies();
         model.addAttribute("title", "Now Showing");
-        model.addAttribute("movies", movies);
+        model.addAttribute("movies", showingMovies);
         return "movies";
     }
 
     @RequestMapping("/movies/upcoming")
-    public String upcomingMovies(Model model) {
-        List<Movie> movies = movieListProxy.findMoviesByReleaseDateAfter(LocalDate.now());
+    public String todayUpcomingMovies(Model model) {
+        List<Movie> upcomingMovies = movieService.getTodayUpcomingMovies();
         model.addAttribute("title", "Upcoming Movies");
-        model.addAttribute("movies", movies);
+        model.addAttribute("movies", upcomingMovies);
         return "movies";
+    }
+
+    @RequestMapping("/movie/{movieId}")
+    public String movieAndTodaySessions(@PathVariable Long movieId, Model model) {
+        List<MovieSession> todayMovieSessions = movieService.getTodayMovieSessions(movieId);
+        Movie movie = movieService.getMovie(movieId);
+        model.addAttribute("movie", movie);
+        model.addAttribute("movieSessions", todayMovieSessions);
+        return "movie";
     }
 }

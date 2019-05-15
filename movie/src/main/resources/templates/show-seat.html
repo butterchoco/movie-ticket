@@ -31,10 +31,13 @@
                 <div class="segment">
                     <p>SHOWTIME</p>
                     <div class="row">
-                        <div id="time" th:each="movieSession : ${movieSessions}">
+<!--                        <div id="time" th:each="movieSession : ${movieSessions}">-->
                             <button th:text="${#temporals.format(movieSession.startTime, 'HH:mm')}"></button>
-                        </div>
+<!--                        </div>-->
                     </div>
+                </div>
+                <div class="segment">
+                    <p th:text="'THEATRE ' + ${movieSession.theatre.description}"></p>
                 </div>
             </div>
         </div>
