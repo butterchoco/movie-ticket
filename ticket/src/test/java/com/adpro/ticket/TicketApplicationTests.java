@@ -11,6 +11,7 @@ import com.adpro.ticket.model.Ticket;
 import com.adpro.ticket.repository.BookingRepository;
 import com.adpro.ticket.services.email.EmailClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -22,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,6 +51,11 @@ public class TicketApplicationTests {
     private MovieService mockMovieService;
     @MockBean
     private TicketGenerator mockTicketGenerator;
+
+    @Before
+    public void setUp() throws IOException {
+        Mockito.when(mockTicketGenerator.generateTicket(Mockito.any())).thenAnswer(i -> "Hi".getBytes());
+    }
 
     private MovieSession createMovieSession() {
         Movie movie = Movie.builder()
