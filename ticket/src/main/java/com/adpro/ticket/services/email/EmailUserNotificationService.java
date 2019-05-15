@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import com.adpro.ticket.PDFGenerator;
+
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -28,7 +30,11 @@ public class EmailUserNotificationService implements UserNotificationService {
     }
 
     private byte[] createAttachment(BookingData bookingData) {
-        return
+        try {
+            return PDFGenerator.generateTicket(bookingData);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

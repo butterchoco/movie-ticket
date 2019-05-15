@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.util.Set;
 
+import com.adpro.ticket.model.Booking;
 import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
@@ -21,15 +22,18 @@ import be.quodlibet.boxable.line.LineStyle;
 import com.adpro.ticket.model.Ticket;
 import com.adpro.ticket.api.bookings.BookingData;
 import com.adpro.ticket.api.movies.MovieSession;
+import com.adpro.ticket.api.movies.Theater;
 
 public class PDFGenerator {
 
     private static final PDFont fontPlain = PDType1Font.HELVETICA;
     private static final PDFont fontBold = PDType1Font.HELVETICA_BOLD;
-    private static BookingData bookingData;
+    private BookingData bookingData;
     private static PDDocument doc = new PDDocument();
+    private static byte[] bytes;
 
-    public byte[] generateTicket() throws IOException {
+
+    public static byte[] generateTicket(BookingData bookingData) throws IOException {
         Set<Ticket> tickets = bookingData.getTickets();
 
         int amount = tickets.size();
@@ -41,7 +45,7 @@ public class PDFGenerator {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        for (int i = 0; i < amount; i++) {
+        for (Ticket x : tickets) {
             PDPage page = new PDPage();
             doc.addPage(page);
 
@@ -62,7 +66,6 @@ public class PDFGenerator {
             float tableWidth = page.getMediaBox().getWidth() - (2 * margin);
 
             boolean drawContent = true;
-            float yStart = yStartNewPage;
             float bottomMargin = 70;
             // y position is your coordinate of top left corner of the table
             float yPosition = 550;
@@ -85,21 +88,17 @@ public class PDFGenerator {
             createCellPlain(cell, row, fontPlain, "Movie:");
             createCellBold(cell, row, fontBold, bookingData.getMovieSession().getMovie().getName());
 
-            Row<PDPage> row1 = table.createRow(12);
-            createCellPlain(cell, row, fontPlain, "Date:");
-            createCellBold(cell, row, fontBold, "12-02-2019");
-
             Row<PDPage> row2 = table.createRow(12);
-            createCellPlain(cell, row, fontPlain, "Showtime:");
-            createCellBold(cell, row, fontBold, bookingData.getMovieSession().getStartTime().toString());
+            createCellPlain(cell, row2, fontPlain, "Showtime:");
+            createCellBold(cell, row2, fontBold, bookingData.getMovieSession().getStartTime().toString());
 
             Row<PDPage> row3 = table.createRow(12);
-            createCellPlain(cell, row, fontPlain, "Seat/Row:");
-            createCellBold(cell, row, fontBold, "A1");
+            createCellPlain(cell, row3, fontPlain, "Seat/Row:");
+            createCellBold(cell, row3, fontBold, x.getSeatId());
 
             Row<PDPage> row4 = table.createRow(12);
-            createCellPlain(cell, row, fontPlain, "Auditorium:");
-            createCellBold(cell, row, fontBold, "6");
+            createCellPlain(cell, row4, fontPlain, "Auditorium:");
+            createCellBold(cell, row4, fontBold, bookingData.getMovieSession().getTheatre().getId().toString());
             cell.setFontSize(50);
 
             table.draw();
@@ -112,18 +111,18 @@ public class PDFGenerator {
         doc.close();
 
         InputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
-        byte[] bytes = IOUtils.toByteArray(inputStream);
+        bytes = IOUtils.toByteArray(inputStream);
         return bytes;
     }
 
-    public void createCellBold(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
+    public static void createCellBold(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
         cell = row.createCell(50, val);
         cell.setAlign(HorizontalAlignment.CENTER);
         cell.setFont(fontBold);
         cell.setBorderStyle(new LineStyle(Color.WHITE, 0));
     }
 
-    public void createCellPlain(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
+    public static void createCellPlain(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
         cell = row.createCell(50, val);
         cell.setFont(fontPlain);
         cell.setBorderStyle(new LineStyle(Color.WHITE, 0));
