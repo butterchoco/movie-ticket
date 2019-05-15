@@ -17,8 +17,7 @@
         <div id="movie">
             <div id="description">
                 <h3 th:text="${movie.name}"><i>2D</i></h3>
-                <p th:id="'theatre-' + ${theatre.id}" class="cinema"
-                    th:text="'Cinema '+ ${theatre.description} + ${theatre.id}"></p>
+                <p th:id="'theatre-' + ${theatre.id}" class="cinema" th:text="'THEATRE ' + ${theatre.description}"></p>
             </div>
             <div id="option">
                 <div class="segment">
@@ -39,9 +38,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="segment">
-                    <p th:text="'THEATRE ' + ${movieSession.theatre.description}"></p>
-                </div>
             </div>
         </header>
         <section id="seats">
@@ -51,7 +47,7 @@
                 <div id="far"></div>
             </div>
         </section>
-        <a th:href="@{/movies/}"><img id="cancel" src="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/cross-24-512.png" alt="cross"></a>
+        <a th:href="@{'/movie/'+${movie.id} }"><img id="cancel" src="https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/cross-24-512.png" alt="cross"></a>
         <div class="footer">
             <button class="accept" type="submit">CHECKOUT</button>
         </div>
