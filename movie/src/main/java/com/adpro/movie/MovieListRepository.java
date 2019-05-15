@@ -6,5 +6,5 @@ import java.util.List;
 public interface MovieListRepository {
     List<Movie> findMoviesByReleaseDateAfter(LocalDate after);
 
-    List<Movie> findMoviesByReleaseDateAfterAndReleaseDateBefore(LocalDate after, LocalDate before);
+    List<Movie> findMoviesByReleaseDateBetween(LocalDate after, LocalDate before);
 }

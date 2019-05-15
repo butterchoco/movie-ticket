@@ -13,3 +13,18 @@
 .main-color-zoom:hover {
     color: #f34573;
 }
+
+.btn-outline-main-color {
+    background-color: #fff;
+    color: #f34573;
+    border-color: #f34573;
+}
+
+.btn-outline-main-color:hover {
+    background-color: #f34573;
+    color: #fff;
+}
+
+.border-main-color {
+    border-color: #f34573;
+}

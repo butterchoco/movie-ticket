@@ -36,13 +36,13 @@ public class MovieListProxyTest {
 
     @Test
     public void givenShowingUpdatedRecently_thenReturnFromMemory() {
-        movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(
+        movieListProxy.findMoviesByReleaseDateBetween(
                 LocalDate.now(), LocalDate.now());
 
-        movieListProxy.findMoviesByReleaseDateAfterAndReleaseDateBefore(
+        movieListProxy.findMoviesByReleaseDateBetween(
                 LocalDate.now(), LocalDate.now());
         verify(movieRepository, times(1))
-                .findMoviesByReleaseDateAfterAndReleaseDateBefore(
+                .findMoviesByReleaseDateBetween(
                         LocalDate.now().minusDays(MovieListProxy.DAYS_SHOWED), LocalDate.now());
     }
 }
