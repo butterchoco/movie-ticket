@@ -195,6 +195,7 @@ public class TicketApplicationTests {
     @Test
     public void noAPIKey() throws Exception {
         this.mvc.perform(post("/bookings/12321/verify")
+            .param("apiKey", "bukankeynya")
             .param("email", "valid@email.com"))
             .andExpect(status().is4xxClientError());
     }
