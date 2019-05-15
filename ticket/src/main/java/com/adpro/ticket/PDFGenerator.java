@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.File;
 import java.util.Set;
 
 import com.adpro.ticket.model.Booking;
@@ -15,6 +16,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import be.quodlibet.boxable.*;
 import be.quodlibet.boxable.line.LineStyle;
@@ -50,9 +52,12 @@ public class PDFGenerator {
             // Start a new content stream which will "hold" the to be created content
             PDPageContentStream cos = new PDPageContentStream(doc, page);
 
+            PDImageXObject img = PDImageXObject.createFromFile("src/main/resources/assets/logo.jpeg", doc);
+            cos.drawImage(img, 210, 210);
+
             cos.beginText();
             cos.newLineAtOffset(25, 700);
-            String line1 = "FASILKOM THEATRE";
+            String line1 = "Booking.in";
             cos.setFont(fontBold, 30);
             cos.showText(line1);
 
@@ -79,7 +84,7 @@ public class PDFGenerator {
             // vertical alignment
             cell.setValign(VerticalAlignment.MIDDLE);
             // border style
-            cell.setBorderStyle(new LineStyle(Color.WHITE, 10));
+            cell.setBorderStyle(new LineStyle(Color.WHITE, 0));
             table.addHeaderRow(headerRow);
 
             Row<PDPage> row = table.createRow(12);
@@ -116,6 +121,8 @@ public class PDFGenerator {
     public static void createCellBold(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
         cell = row.createCell(50, val);
         cell.setAlign(HorizontalAlignment.CENTER);
+        cell.setValign(VerticalAlignment.MIDDLE);
+        cell.setFontSize(15);
         cell.setFont(fontBold);
         cell.setBorderStyle(new LineStyle(Color.WHITE, 0));
     }
@@ -123,6 +130,8 @@ public class PDFGenerator {
     public static void createCellPlain(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
         cell = row.createCell(50, val);
         cell.setFont(fontPlain);
+        cell.setFontSize(15);
+        cell.setValign(VerticalAlignment.MIDDLE);
         cell.setBorderStyle(new LineStyle(Color.WHITE, 0));
     }
 

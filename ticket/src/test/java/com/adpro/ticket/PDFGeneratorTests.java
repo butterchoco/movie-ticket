@@ -69,6 +69,6 @@ public class PDFGeneratorTests {
 
         byte[] pdfData = PDFGenerator.generateTicket(bookingData);
 
-        Assert.assertTrue(extractPdfText(pdfData).contains("FASILKOM THEATRE"));
+        Assert.assertTrue(extractPdfText(pdfData).contains("Booking.in"));
     }
 }
