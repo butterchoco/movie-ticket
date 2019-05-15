@@ -29,11 +29,9 @@ public class PDFGenerator {
     private static final PDFont fontPlain = PDType1Font.HELVETICA;
     private static final PDFont fontBold = PDType1Font.HELVETICA_BOLD;
     private BookingData bookingData;
-    private static PDDocument doc = new PDDocument();
-    private static byte[] bytes;
-
 
     public static byte[] generateTicket(BookingData bookingData) throws IOException {
+        PDDocument doc = new PDDocument();
         Set<Ticket> tickets = bookingData.getTickets();
 
         int amount = tickets.size();
@@ -111,7 +109,7 @@ public class PDFGenerator {
         doc.close();
 
         InputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
-        bytes = IOUtils.toByteArray(inputStream);
+        byte[] bytes = IOUtils.toByteArray(inputStream);
         return bytes;
     }
 
