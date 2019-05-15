@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.File;
 import java.util.Set;
 
+import com.adpro.ticket.api.bookings.TicketGenerator;
 import com.adpro.ticket.model.Booking;
 import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -25,18 +26,17 @@ import com.adpro.ticket.model.Ticket;
 import com.adpro.ticket.api.bookings.BookingData;
 import com.adpro.ticket.api.movies.MovieSession;
 import com.adpro.ticket.api.movies.Theater;
+import org.springframework.stereotype.Component;
 
-public class PDFGenerator {
+@Component
+public class PDFGenerator implements TicketGenerator {
 
     private static final PDFont fontPlain = PDType1Font.HELVETICA;
     private static final PDFont fontBold = PDType1Font.HELVETICA_BOLD;
-    private BookingData bookingData;
 
-    public static byte[] generateTicket(BookingData bookingData) throws IOException {
+    public byte[] generateTicket(BookingData bookingData) throws IOException {
         PDDocument doc = new PDDocument();
         Set<Ticket> tickets = bookingData.getTickets();
-
-        int amount = tickets.size();
 
         PDDocumentInformation pdd = doc.getDocumentInformation();
 
@@ -118,7 +118,7 @@ public class PDFGenerator {
         return bytes;
     }
 
-    public static void createCellBold(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
+    private static void createCellBold(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
         cell = row.createCell(50, val);
         cell.setAlign(HorizontalAlignment.CENTER);
         cell.setValign(VerticalAlignment.MIDDLE);
@@ -127,7 +127,7 @@ public class PDFGenerator {
         cell.setBorderStyle(new LineStyle(Color.WHITE, 0));
     }
 
-    public static void createCellPlain(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
+    private static void createCellPlain(Cell<PDPage> cell, Row<PDPage> row, PDFont font, String val) {
         cell = row.createCell(50, val);
         cell.setFont(fontPlain);
         cell.setFontSize(15);

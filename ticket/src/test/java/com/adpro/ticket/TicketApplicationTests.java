@@ -1,6 +1,7 @@
 package com.adpro.ticket;
 
 import com.adpro.ticket.api.bookings.BookingRequestModel;
+import com.adpro.ticket.api.bookings.TicketGenerator;
 import com.adpro.ticket.api.movies.Movie;
 import com.adpro.ticket.api.movies.MovieService;
 import com.adpro.ticket.api.movies.MovieSession;
@@ -46,6 +47,8 @@ public class TicketApplicationTests {
     private EmailClient mockEmailClient;
     @MockBean
     private MovieService mockMovieService;
+    @MockBean
+    private TicketGenerator mockTicketGenerator;
 
     private MovieSession createMovieSession() {
         Movie movie = Movie.builder()

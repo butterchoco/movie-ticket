@@ -67,7 +67,7 @@ public class PDFGeneratorTests {
         movieSession.setTheatre(theater);
         BookingData bookingData = new BookingData(booking, movieSession);
 
-        byte[] pdfData = PDFGenerator.generateTicket(bookingData);
+        byte[] pdfData = new PDFGenerator().generateTicket(bookingData);
 
         Assert.assertTrue(extractPdfText(pdfData).contains("Booking.in"));
     }

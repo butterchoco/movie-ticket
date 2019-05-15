@@ -1,16 +1,17 @@
 package com.adpro.ticket.services.email;
 
 import com.adpro.ticket.api.bookings.BookingData;
+import com.adpro.ticket.api.bookings.TicketGenerator;
 import com.adpro.ticket.api.notifications.MessageResponse;
 import com.adpro.ticket.api.notifications.UserNotificationService;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-import com.adpro.ticket.PDFGenerator;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -21,17 +22,21 @@ public class EmailUserNotificationService implements UserNotificationService {
     private String senderAddress;
     private EmailClient emailClient;
     private SpringTemplateEngine templateEngine;
+    private TicketGenerator ticketGenerator;
 
+    @Autowired
     public EmailUserNotificationService(String senderAddress, EmailClient emailClient,
-                                        SpringTemplateEngine templateEngine) {
+                                        SpringTemplateEngine templateEngine,
+                                        TicketGenerator ticketGenerator) {
         this.senderAddress = senderAddress;
         this.emailClient = emailClient;
         this.templateEngine = templateEngine;
+        this.ticketGenerator = ticketGenerator;
     }
 
     private byte[] createAttachment(BookingData bookingData) {
         try {
-            return PDFGenerator.generateTicket(bookingData);
+            return ticketGenerator.generateTicket(bookingData);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
