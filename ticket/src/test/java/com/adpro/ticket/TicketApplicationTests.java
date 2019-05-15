@@ -84,6 +84,26 @@ public class TicketApplicationTests {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void testRequiredFieldsNotIncluded() throws Exception {
+        this.mvc.perform(post("/bookings")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("sessionId", "1")
+                .param("email", "ramadistra@gmail.com")
+                .param("price", "12222"))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testInvalidEmail() throws Exception {
+        this.mvc.perform(post("/bookings")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("sessionId", "1")
+                .param("seatIds", "3F")
+                .param("email", "ramadistragmail")
+                .param("price", "12222"))
+                .andExpect(status().is4xxClientError());
+    }
 
     @Test
     public void testCannotOrderBookedSeat() throws Exception {
