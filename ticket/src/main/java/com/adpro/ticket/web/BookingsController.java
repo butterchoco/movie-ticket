@@ -6,10 +6,10 @@ import com.adpro.ticket.api.bookings.BookingService;
 import com.adpro.ticket.api.movies.MovieService;
 import com.adpro.ticket.api.notifications.UserNotificationService;
 import com.adpro.ticket.model.Booking;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,8 +27,10 @@ public class BookingsController {
     }
 
     @PostMapping
-    @RequestMapping("/bookings")
-    public ResponseEntity<Booking> bookings(@RequestBody BookingRequestModel requestTicket) {
+    @RequestMapping(name = "/bookings",
+        consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE}
+    )
+    public ResponseEntity<Booking> bookings(BookingRequestModel requestTicket) {
         return bookingService.createBooking(requestTicket)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().body(null));
