@@ -21,7 +21,7 @@ import lombok.Data;
 public class Theatre implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "Description")
@@ -48,10 +48,11 @@ public class Theatre implements Serializable {
         for (int seatNum = 1; seatNum <= seatCount; seatNum++) {
             Seat oneSeat;
             if (seatNum < seatCount * 2 / 3) {
-                oneSeat = new MiddleSeat(false);
+                oneSeat = new MiddleSeat();
             } else {
-                oneSeat = new FarSeat(false);
+                oneSeat = new FarSeat();
             }
+            oneSeat.setTheatre(this);
             addSeatToRow(oneSeat);
         }
     }

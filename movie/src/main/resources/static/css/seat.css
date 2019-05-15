@@ -297,6 +297,12 @@ option {
           justify-content: center;
 }
 
+.time div button:disabled {
+    background-color: #f34573;
+    color: white;
+    cursor: default;
+}
+
 .square:hover {
   background-color: #f34573;
   color: white;
@@ -305,6 +311,13 @@ option {
 .pressed{
     background-color: #f34573;
     color: white;
+}
+
+.square:disabled {
+    background-color: #aaa;
+    color: white;
+    cursor: default;
+    border:1px solid transparent;
 }
 
 div.row {
