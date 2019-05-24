@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Mamang Kesbor">
+    <meta name="Description" content="Mamang Kesbor's Resume">
+    <meta name="Keywords" content="mamangkesbor, resume">
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{css/resume.css}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title th:text="${pageTitle}"></title>
+</head>
+
+<body>
+<nav class="navbar navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Mamang Kesbor's Resume</a>
+</nav>
+<br>
+<div id="main-container" class="container-fluid">
+    <div class="row">
+        <div class=".col-6 .col-md-4 center gap3">
+            <div class="card border-info center">
+                <div class="center">
+                    <div class="profile-avatar">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2 id="card-name" class="card-title">Mamang Kesbor</h2>
+                    <h3 id="card-aboutme">a DJ and Music Producer</h3>
+                </div>
+                <div class="card-footer text-muted">
+                    <div id="card-socialbox" class="container-fluid">
+                        <ul class="social-icons">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card text-white bg-info" style="width: 18rem;">
+                <div class="card-header">
+                    <h5>Contact Me</h5>
+                </div>
+                <div class="card-body">
+                    <div class="contactme-detail">
+                        <i class="fa fa-phone" aria-hidden="true"> +1600400664</i>
+                        <i class="fa fa-envelope" aria-hidden="true"> www.instagram.com/mardialmiuziek</i>
+                        <br>
+                        <i class="fa fa-birthday-cake" aria-hidden="true"> Jakarta, 29 Oktober 1995</i>
+                        <i class="fa fa-home" aria-hidden="true"> Jayapura, Papua</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class=".col-12 .col-sm-6 .col-md-8
+      center">
+            <div class="card border-info center gap2">
+                <section>
+                    <h2 class="section-title">
+                        Summary
+                    </h2>
+                    <p class="section-description tab">
+                        Dengan beatnya yang terkesan “edgy”, produser muda ini telah berhasil membuktikan bahwa kolaborasi, baik dengan rapper senior maupun rapper yang baru menapakkan kakinya di dunia hip hop Indonesia, dapat menghasilkan karya yang bernilai tinggi dan disukai masyarakat.
+                    </p>
+                </section>
+            </div>
+            <br>
+            <div class="card border-success center gap1">
+                <div id="work-education-card" class="container-fluid">
+                    <div class="card border-primary gap1">
+                        <div class="gap1">
+                            <i class="fa fa-briefcase big" aria-hidden="true"> Experience</i>
+                            <br>
+                            <article class="work">
+                                <h2 hidden>Experience</h2>
+                                <br>
+                                <ul class="tab-ul">
+                                    <li>
+                                        <div class="block">
+                                            <h3 class="title">DJ and Music Producer</h3>
+                                            <h4 class="subtitle">Rap as Marlo Copo</h4>
+                                            <p class="paragraph">Berkolaborasi dengan grup band D'Masiv dalam acara The Remix.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </article>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card border-primary gap1">
+                        <div class="gap1">
+                            <i class="fa fa-graduation-cap big" aria-hidden="true"> Education</i>
+                            <br>
+                            <article class="education">
+                                <br>
+                                <h2 hidden>Education</h2>
+                                <ul class="tab-ul">
+                                    <li>
+                                        <div class="block">
+                                            <h3 class="title">-</h3>
+                                            <h4 class="subtitle">-</h4>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<footer class="footer">
+    <p>S © 2017</p>
+</footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

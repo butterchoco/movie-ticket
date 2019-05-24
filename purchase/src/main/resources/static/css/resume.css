@@ -1,0 +1,148 @@
+body {
+    padding: 20px;
+}
+
+#card-name {
+    font-size: 25px;
+    text-align: center;
+}
+
+#card-aboutme {
+    font-size: 14px;
+    text-align: center;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#card-socialbox {
+    text-align: center;
+}
+
+.rounded-img {
+    border-radius: 50%;
+}
+
+.card-profilepicture {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile-avatar {
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    height: 200px;
+    width: 200px;
+    overflow: hidden;
+    margin: 15px 30px 15px 30px;
+    border-radius: 50%;
+    border: 10px solid rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+}
+
+.profile-avatar:hover {
+    box-shadow: 0px 0px 0px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.profile-avatar img {
+    width: 120%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease;
+}
+
+.profile-avatar:hover img {
+    width: 130%;
+}
+
+.contactme-detail {
+    font-size: 14px;
+}
+
+.gap {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.gap1 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.gap2 {
+    padding: 20px;
+}
+
+.gap3 {
+    padding-bottom: 20px;
+}
+
+.block {
+    margin-bottom: 30px;
+}
+
+.block .title {
+    font-size: 24px;
+}
+
+.block .subtitle {
+    font-size: 20px;
+}
+
+.tab {
+    padding-left: 20px;
+}
+
+.social-icons {
+    list-style: none;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.social-icons li {
+    float: left;
+}
+
+.social-icons li a {
+    display: block;
+    text-align: center;
+    padding: 6px;
+    text-decoration: none;
+}
+
+.big {
+    font-size: 30px;
+}
+
+.tab-ul {
+    padding-left: 60px;
+}
+
+#work-education-card {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.footer {
+    text-align: center;
+}

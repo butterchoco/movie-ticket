@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Online Payments Showcase</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+<hr width="800" />
+<h4>Stripe Checkout</h4>
+
+To see Checkout in action, click the button below, filling in the resulting form with:
+<br/>
+<ul>
+    <li>Random Email</li>
+    <li>Example Card 4242 4242 4242 4242</li>
+    <li>Any three digit CVC code</li>
+    <li>Any expiration date in the future</li>
+</ul>
+<form action="/stripe" method="POST">
+    <script th:inline="javascript"
+            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
+            data-currency="Rp"
+            data-amount="Rp.35000"
+            data-name="Checkout"
+            data-description="Pay"
+            data-locale="auto"
+            data-bitcoin="true"
+            data-alipay="true">
+
+    </script>
+</form>
+</body>
+</html>
